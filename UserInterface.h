@@ -32,6 +32,7 @@ private:
 		 if (IsAnyLayoutDisplayed()) {
 			 currentLayout->Down();
 		 }
+		 
 	 }
 	 void Up() {
 		 if (IsAnyLayoutDisplayed()) {

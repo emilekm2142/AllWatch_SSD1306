@@ -17,10 +17,10 @@ protected:
 	int GlobalX, GlobalY;
 public:
 	bool canBeActivated = false;
-	std::function<void()> onActivate;
+	void(*onActivate)();;
 	virtual void Draw(Renderer& renderer)=0;
-	virtual int GetHeight();
-	virtual int GetWidth();
+	virtual int GetHeight()=0;
+	virtual int GetWidth()=0;
 	
 	void setX(int x) {
 		this->x = x;

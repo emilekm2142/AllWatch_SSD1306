@@ -10,7 +10,7 @@
 #endif
 struct SimpleMenuRecord {
 	char* name;
-	std::function<void()> callback;
+	void(*callback)();
 };
 
 #endif

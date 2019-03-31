@@ -22,7 +22,7 @@ class Layout :public Widget
 	virtual void Up() = 0;
 	virtual void Ok() = 0;
 	virtual void Draw(Renderer& renderer) = 0;
-	virtual ~Layout()=0;
+	//virtual ~Layout()=0;
 	
 };
 

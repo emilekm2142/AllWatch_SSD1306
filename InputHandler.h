@@ -9,12 +9,12 @@
 	#include "WProgram.h"
 #endif
 //Implementation
-class InputHandler:AbstractInputHandler
+class InputHandler:public AbstractInputHandler
 {
 private:
-	HardwareSerial* Serial;
+	Stream* Serial;
 public:
-	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), HardwareSerial& Serial);
+	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(),Stream& Serial);
 	void OnLoop() override;
 };
 

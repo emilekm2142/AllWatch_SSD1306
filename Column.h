@@ -33,6 +33,12 @@ class Column:public Layout
 	 void Add(Widget& w) {
 		 widgets.add(&w);
 	 }
+	 virtual int GetHeight() override {
+
+	 }
+	 virtual int GetWidth() override {
+
+	 }
 	 virtual void Down() override {
 		 int ls = selection;
 		 int l = widgets.size();
@@ -72,7 +78,7 @@ class Column:public Layout
 		 if (elem->canBeActivated) elem->onActivate();
 	 }
 	 virtual ~Column() {
-		 for (int i = 0; i <= widgets.size; i++) {
+		 for (int i = 0; i <= widgets.size(); i++) {
 			 delete widgets.get(i);
 		 }
 		 widgets.clear();
@@ -83,7 +89,7 @@ class Column:public Layout
 	 virtual void CalculateLayout() override {
 		 int cursorY = 0;
 		 int cursorX = 0;
-		 for (int i = 0; i <= widgets.size; i++) {
+		 for (int i = 0; i <= widgets.size(); i++) {
 			 auto w = widgets.get(i);
 			 w->setX(cursorX);
 			 w->setY(cursorY);

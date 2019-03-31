@@ -11,7 +11,7 @@
 //Abstract, OnLoop has to be called in the main loop();
 class AbstractInputHandler
 {
-private:
+protected:
 	void(*OnOk)();
 	void(*OnUp)();
 	void(*OnDown)();

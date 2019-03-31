@@ -22,6 +22,12 @@ public:
 	virtual void Draw(Renderer& renderer) override {
 		renderer.DrawString(x, y, (char*)text.c_str());
 	}
+	virtual int GetHeight() override{
+		return 1;
+	}
+	virtual int GetWidth() override{
+		return 1;
+	}
 };
 #endif
 
