@@ -1,4 +1,4 @@
-// Column.h
+﻿// Column.h
 
 #ifndef _COLUMN_h
 #define _COLUMN_h
@@ -16,11 +16,9 @@ class Column:public Layout
 {
  protected:
 	 int selection=0;
-	 int spacing = 2;
-	 LinkedList<Widget*> widgets = LinkedList<Widget*>();
-	 virtual void ApplyGlobalCoordinates() override {
-
-	 }
+	 int spacing = 4;
+	 
+	 
  public:
 	 Column() {
 
@@ -30,18 +28,32 @@ class Column:public Layout
 	 }
 	
 
-	 void Add(Widget& w) {
-		 widgets.add(&w);
+	 
+	 virtual int CalculateHeight(Renderer& renderer) override {
+		 int cursorY = y;
+		 int cursorX = x;
+		 for (int i = 0; i < GetChildren()->size(); i++) {
+			 auto w = GetChildren()->get(i);
+			 cursorY += spacing + w->GetHeight(renderer);
+		 }
+		 return cursorY;
 	 }
-	 virtual int GetHeight() override {
+	 virtual int CalculateWidth(Renderer& renderer) override {
+		 int max = 0;
+		 for (int i = 0; i < GetChildren()->size(); i++) {
+			 auto w = GetChildren()->get(i);
+			 if (w->GetWidth(renderer) > max) {
+				 max = w->GetWidth(renderer);
+			 }
+		 }
+		 return max;
+	 }
+	 virtual void Back(Renderer& r) override {
 
 	 }
-	 virtual int GetWidth() override {
-
-	 }
-	 virtual void Down() override {
+	 virtual void Down(Renderer& renderer) override {
 		 int ls = selection;
-		 int l = widgets.size();
+		 int l = GetChildren()->size();
 		 for (;;) {
 			 ls++;
 			 if (ls < 0) {
@@ -50,15 +62,17 @@ class Column:public Layout
 			 if (ls >= l) {
 				 break;
 			 }
-			 if (widgets.get(ls)->canBeActivated) {
+			 if (GetChildren()->get(ls)->canBeActivated) {
 				 selection = ls;
+				 GetChildren()->get(ls)->isHighlighted = true;
+				 DrawWithState(renderer);
 				 break;
 			 }
 		 }
 	}
-	 virtual void Up() override {
+	 virtual void Up(Renderer& renderer) override {
 		 int ls = selection;
-		 int l = widgets.size();
+		 int l = GetChildren()->size();
 		 for (;;) {
 			 ls--;
 			 if (ls < 0) {
@@ -67,37 +81,54 @@ class Column:public Layout
 			 if (ls >= l) {
 				 break;
 			 }
-			 if (widgets.get(ls)->canBeActivated) {
+			 if (GetChildren()->get(ls)->canBeActivated) {
 				 selection = ls;
+				 GetChildren()->get(ls)->isHighlighted = true;
+				 DrawWithState(renderer);
 				 break;
 			 }
 		 }
 	 }
-	 virtual void Ok() override {
-		 auto elem = widgets.get(selection);
+	 virtual void Ok(Renderer& renderer) override {
+		 auto elem = GetChildren()->get(selection);
 		 if (elem->canBeActivated) elem->onActivate();
 	 }
 	 virtual ~Column() {
-		 for (int i = 0; i <= widgets.size(); i++) {
-			 delete widgets.get(i);
+		 for (int i = 0; i <= GetChildren()->size(); i++) {
+			 delete GetChildren()->get(i);
 		 }
-		 widgets.clear();
+		 GetChildren()->clear();
 	 }
 	 virtual void Draw(Renderer& renderer) override {
+		 
+		// Serial.println("Object type: Column");
+		 for (int i = 0; i < GetChildren()->size(); i++) {
+			 auto w = GetChildren()->get(i);
+			 w->DrawWithState(renderer);
+		 }
+		// renderer.Update();
+		 
 
 	 }
-	 virtual void CalculateLayout() override {
-		 int cursorY = 0;
-		 int cursorX = 0;
-		 for (int i = 0; i <= widgets.size(); i++) {
-			 auto w = widgets.get(i);
+	 
+	 virtual void CalculateLayout(Renderer& renderer) override {
+		 CalculateSizesPostOrderTreeWalk(renderer);
+
+		 int cursorY = y;
+		 int cursorX = x;
+		
+		 for (int i = 0; i < GetChildren()->size(); i++) {
+			
+			 auto w = GetChildren()->get(i);
 			 w->setX(cursorX);
 			 w->setY(cursorY);
 
 			 
-			 cursorY += spacing + w->GetHeight();
+			 cursorY += spacing + w->GetHeight(renderer);
 		 }
-		 height = cursorY;
+		 ApplyGlobalCoordinatesPreorderTreeWalk(this, renderer);
+		 Unmark();
+		
 	 }
 };
 

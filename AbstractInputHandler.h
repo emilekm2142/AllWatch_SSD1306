@@ -16,11 +16,18 @@ protected:
 	void(*OnUp)();
 	void(*OnDown)();
 	void(*OnDataIncoming)();
+	void(*OnBack)();
  protected:
 
 
  public:
-	 AbstractInputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)());
+	 AbstractInputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)()) {
+		 this->OnDown = OnDown;
+		 this->OnOk = OnOk;
+		 this->OnUp = OnUp;
+		 this->OnBack = OnBack;
+	 }
+
 	 virtual void OnLoop() = 0;
 };
 

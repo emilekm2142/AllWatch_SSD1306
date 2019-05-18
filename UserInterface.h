@@ -12,43 +12,159 @@
 #include "Widget.h"
 #include "Layout.h"
 #include "Renderer.h"
-class UserInterfaceClass
+#include "Animation.h"
+
+
+//#include "DependenciesHolder.h"
+class UserInterfaceClass//:public Dependency
 {
 private:
 	Renderer* renderer;
-	Layout* currentLayout;
+	Layout* mainLayout;
+	Layout* focusedLayout=nullptr;
+	LinkedList<Layout*> layouts = LinkedList<Layout*>();
+	LinkedList<Animation*> animations = LinkedList<Animation*>();
+
+	//Parenting
+	Layout* layoutThatWasInFocus;
+	Layout* parentLayout;
+	Layout* childLayout;
+	bool isChildBeingShown = false;
+
+	bool anyChangesStaged = false;
 	bool IsAnyLayoutDisplayed() {
-		return currentLayout != nullptr;
+		return mainLayout != nullptr;
 	}
  protected:
 	  
 	 
 	 
  public:
+	 //	DependenciesHolder* dependencies;
+	 char currentScreenName[50];
+	 void RegisterAnimation(Animation* animation) {
+		 animations.add(animation);
+	 }
+	 Layout* GetMainLayout() {
+		 return mainLayout;
+	 }
+	 void StageChanges() {
+		 anyChangesStaged = true;
+	 }
+	 void AddSecondaryLayout(Layout* l) {
+		 layouts.add(l);
+	 }
+	 void ReturnToParentLayout() {
+		 mainLayout = parentLayout;
+		 childLayout = NULL;
+		 ShowLayout(*mainLayout);
+		 isChildBeingShown = false;
+		 SetLayoutInFocues(*layoutThatWasInFocus);
+		 RedrawAll();
+	 }
+
+	 void OpenChildLayout(Layout* l) {
+		 layoutThatWasInFocus = focusedLayout;
+		 parentLayout = mainLayout;
+		 childLayout = l;
+		 SetLayoutInFocues(*l);
+		 ShowLayout(*l);
+		 isChildBeingShown = true;
+		 RedrawAll();
+
+	 }
+	 void OnLoop() {
+		 bool update = false;
+		 for (int i = 0; i < animations.size(); i++) {
+			 auto a = animations.get(i);
+			 if (a->ShouldStepBeTaken()) {
+				 a->ExecuteStep();
+				 update = true;
+			 }
+			 if (a->IsFinished()) {
+				 animations.remove(i);
+				 delete a;
+			 }
+		 }
+
+		 if (anyChangesStaged) {
+			 renderer->Clear();
+			 if (IsAnyLayoutDisplayed()) {
+				 update = true;
+			 }
+			 anyChangesStaged = false;
+		 }
+		 if (update) RedrawAll();
+	 }
 	 void SetRenderer(Renderer& rndr) {
 		 this->renderer = &rndr;
 	 }
 	 void Down() {
 		 if (IsAnyLayoutDisplayed()) {
-			 currentLayout->Down();
+			 focusedLayout->Down(*renderer);
 		 }
 		 
 	 }
 	 void Up() {
 		 if (IsAnyLayoutDisplayed()) {
-			 currentLayout->Up();
+			 focusedLayout->Up(*renderer);
 		 }
 	 }
 	 void Ok() {
 		 if (IsAnyLayoutDisplayed()) {
-			 currentLayout->Ok();
+			 focusedLayout->Ok(*renderer);
 		 }
 	 }
+	 void Back() {
+		 if (IsAnyLayoutDisplayed()) {
+			 focusedLayout->Back(*renderer);
+		 }
+	 }
+	 void RedrawAll() {
+		 renderer->Clear();
+
+		 if (!isChildBeingShown)
+			 ShowLayout(*mainLayout);
+		 else
+			 ShowLayout(*childLayout);
+		 DrawSecondaryLayouts();
+
+		 if (focusedLayout != nullptr) {
+			 focusedLayout->DrawActiveIndicator(*renderer);
+		 }
+
+
+		 renderer->Update();
+	 }
+	 void SetLayoutInFocues(Layout& layout) {
+		 focusedLayout = &layout;
+		 focusedLayout->OnGetInFocus(*renderer);
+		 layout.DrawActiveIndicator(*renderer);
+	 }
+	 void SetMainLayout(Layout& layout) {
+		 mainLayout = &layout;
+		 SetLayoutInFocues(layout);
+	 }
 	 void ShowLayout(Layout& layout) {
-		 currentLayout = &layout;
+		
+		
+		
+		 layout.CalculateLayout(*renderer);
+		 layout.DrawWithState(*renderer);
+		 if (focusedLayout == &layout) {
+			
+		//	 layout.DrawActiveIndicator(*renderer);
+		 }
+
 	}
+	 void DrawSecondaryLayouts() {
+		 for (int i = 0; i < layouts.size(); i++) {
+			 auto w = layouts.get(i);
+			 ShowLayout(*w);
+		 }
+	 }
 	 void ClearMemory() {
-		 delete currentLayout;
+		 delete mainLayout;
 	 }
 };
 

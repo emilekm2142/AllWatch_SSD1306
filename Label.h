@@ -18,16 +18,24 @@ public:
 	
 	Label(const char* a) {
 		this->text = String(a);
+		
+	}
+	virtual void DrawHighlighted(Renderer& renderer) override {
+		//Serial.println("Object type: Label (h)");
+		
+		renderer.DrawString(GlobalX+9, GlobalY, (char*)text.c_str(),true);
 	}
 	virtual void Draw(Renderer& renderer) override {
-		renderer.DrawString(x, y, (char*)text.c_str());
+		//Serial.println("Object type: Label");
+		renderer.DrawString(GlobalX, GlobalY, (char*)text.c_str(),true);
 	}
-	virtual int GetHeight() override{
-		return 1;
+	virtual int CalculateHeight(Renderer& renderer) override{
+		return renderer.GetLineHeight();
 	}
-	virtual int GetWidth() override{
-		return 1;
+	virtual int CalculateWidth(Renderer& renderer) override{
+		return renderer.GetStringWidth((char*)text.c_str());
 	}
+
 };
 #endif
 

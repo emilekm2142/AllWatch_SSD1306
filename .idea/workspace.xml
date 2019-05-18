@@ -9,7 +9,29 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6a793ec-675d-408b-a909-3105894c9504" name="Default Changelist" comment="" />
+    <list default="true" id="d6a793ec-675d-408b-a909-3105894c9504" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractInputHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractInputHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbstractInputHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/AbstractInputHandler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Column.h" beforeDir="false" afterPath="$PROJECT_DIR$/Column.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InputHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/InputHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InputHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/InputHandler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Label.h" beforeDir="false" afterPath="$PROJECT_DIR$/Label.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Layout.h" beforeDir="false" afterPath="$PROJECT_DIR$/Layout.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SSD1306Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/SSD1306Renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeKepper.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/TimeKepper.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeKepper.h" beforeDir="false" afterPath="$PROJECT_DIR$/TimeKepper.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniWatchSimple.ino" beforeDir="false" afterPath="$PROJECT_DIR$/UniWatchSimple.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniWatchSimple.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/UniWatchSimple.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniWatchSimple.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/UniWatchSimple.vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/UserInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Widget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Widget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__vm/.UniWatchSimple.vsarduino.h" beforeDir="false" afterPath="$PROJECT_DIR$/__vm/.UniWatchSimple.vsarduino.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__vm/Compile.vmps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/__vm/Compile.vmps.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__vm/Configuration.Debug.vmps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/__vm/Configuration.Debug.vmps.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__vm/Upload.vmps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/__vm/Upload.vmps.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,21 +39,56 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AbstractInputHandler.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+            <state relative-caret-position="136">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Animation.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/View_reader.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-204" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SettingsManager.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="611" />
-    <option name="y" value="40" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/SettingsManager.h" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="662" />
+    <option name="y" value="-8" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -83,22 +140,19 @@
       <option name="presentableId" value="Default" />
       <updated>1553359160607</updated>
       <workItem from="1553359161729" duration="12000" />
+      <workItem from="1558102906448" duration="128000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12000" />
+    <option name="totallyTimeSpent" value="140000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="611" y="40" width="1400" height="1000" extended-state="0" />
+    <frame x="54" y="-8" width="2514" height="1096" extended-state="6" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13854931" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -106,10 +160,14 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Database Changes" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,8 +176,27 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/AbstractInputHandler.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Animation.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View_reader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-204" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SettingsManager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>

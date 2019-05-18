@@ -9,13 +9,99 @@
 	#include "WProgram.h"
 #endif
 //Implementation
+
 class InputHandler:public AbstractInputHandler
 {
 private:
-	Stream* Serial;
+	Stream* Serial2;
+	
+	long longPressLimit = 500;
+
+	long downPressedStartTime = 0;
+	long upPressedStartTime = 0;
+
+	bool downPressed = false;
+	bool upPressed = false;
+
+	bool wasDownPressed = false;
+	bool wasUpPressed = false;
+
+	bool block = false;
+
+	bool isLongUpPress() {
+		return longPressLimit < abs(millis() - upPressedStartTime);
+	}
+	bool isLongDownPress() {
+		return longPressLimit < abs(millis() - downPressedStartTime);
+	}
+
 public:
-	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(),Stream& Serial);
-	void OnLoop() override;
+	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)(), Stream& Serial) :AbstractInputHandler(OnOk, OnUp, OnDown, OnBack) {
+
+		this->Serial2 = &Serial;
+	}
+	void OnLoop() override
+	{
+		downPressed = digitalRead(4) ? false : true;
+		upPressed = digitalRead(5) ? false : true;
+		if (block && !downPressed && !upPressed) {
+			block = false;
+			wasDownPressed = false;
+			downPressed = false;
+			wasUpPressed = false;
+			upPressed = false;
+			goto breaked;
+		}
+		if (!block) {
+			
+			if (downPressed && !wasDownPressed) { downPressedStartTime = millis(); }
+			if (upPressed && !wasUpPressed) { upPressedStartTime = millis(); }
+
+
+
+			if (downPressed && wasDownPressed && isLongDownPress()) {
+				OnOk();
+				wasDownPressed = false;
+				downPressed = false;
+				block = true;
+				goto breaked;
+			}
+			if (upPressed && wasUpPressed && isLongUpPress()) {
+				OnBack();
+				wasUpPressed = false;
+				upPressed = false;
+				block = true;
+				goto breaked;
+			}
+			if (!downPressed && wasDownPressed) {
+				OnDown();
+			}
+			if (!upPressed && wasUpPressed) {
+				OnUp();
+			}
+		}
+		
+		wasDownPressed = downPressed;
+		wasUpPressed = upPressed;
+		breaked:
+		if (Serial.available() > 0) {
+			auto d = (char)Serial.read();
+			if (d == 'd') {
+				this->OnDown();
+			}
+			if (d == 'u') {
+				this->OnUp();
+			}
+			if (d == 'o') {
+				this->OnOk();
+			}
+			if (d == 'b') {
+				this->OnBack();
+			}
+			// Serial->print(d);
+		}
+
+	}
 };
 
 

@@ -13,15 +13,28 @@
 #include "Widget.h"
 class Layout :public Widget
 {
- protected:
-	 virtual void ApplyGlobalCoordinates() = 0;
-
+private:
+	LinkedList<Widget*> widgets = LinkedList<Widget*>();
+	char* name;
+	
  public:
-	virtual void CalculateLayout() = 0;
-	virtual void Down() = 0;
-	virtual void Up() = 0;
-	virtual void Ok() = 0;
+	 virtual void OnGetInFocus(Renderer& renderer) {
+		 DrawActiveIndicator(renderer);
+	 };
+	virtual void Down(Renderer& renderer) = 0;
+	virtual void Up(Renderer& renderer) = 0;
+	virtual void Ok(Renderer& renderer) = 0;
+	virtual void DrawActiveIndicator(Renderer& renderer) {
+		
+	}
 	virtual void Draw(Renderer& renderer) = 0;
+	virtual void Back(Renderer& renderer) = 0;
+	void Add(Widget* w) {
+		widgets.add(w);
+	}
+	virtual LinkedList<Widget*>* GetChildren() override {
+		return &widgets;
+	}
 	//virtual ~Layout()=0;
 	
 };
