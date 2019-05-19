@@ -16,6 +16,7 @@
 */
 
 
+#include "SSH1106Renderer.h"
 #include "ConnectingScreen.h"
 #include "WeatherApp.h"
 #include "BuiltInApplication.h"

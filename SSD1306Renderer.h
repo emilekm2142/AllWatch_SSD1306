@@ -1,5 +1,5 @@
 ﻿// SSD1306Renderer.h
-
+//This class is responsible for both SSD1306 and SSH1106
 #ifndef _SSD1306RENDERER_h
 #define _SSD1306RENDERER_h
 
@@ -9,15 +9,28 @@
 #else
 	#include "WProgram.h"
 #endif
+
+#include "Config.h"
 #include "Renderer.h"
 //#include <brzo_i2c.h>
-#include <SSD1306Wire.h> 
+
+#ifdef Renderer_SSD1306
+	#include <SSD1306Wire.h> 
+#endif 
+
+#ifdef Renderer_SSH1106
+	#include <SH1106Wire.h> 
+#endif // SSH1106
+
+
+
 
 #include <U8g2lib.h>
 class SSD1306Renderer:public Renderer
 {
 private:
-	SSD1306Wire *d; 
+
+	OLEDDisplay *d;
 	
 	int currentColor = 1;
  protected:
@@ -25,7 +38,12 @@ private:
 
  public:
 	 void init() {
-		 d = new SSD1306Wire(0x3c, 0, 2);
+		#ifdef Renderer_SSD1306
+			d = new SSD1306Wire(0x3c, 0, 2);
+		#endif 
+		#ifdef Renderer_SSH1106
+			d = new SH1106Wire(0x3c, 0, 2);
+		#endif // SSH1106
 		 d->init();
 		 d->flipScreenVertically();
 		 d->setContrast(100);

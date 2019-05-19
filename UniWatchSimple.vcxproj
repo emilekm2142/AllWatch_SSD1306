@@ -136,6 +136,7 @@
     <ClInclude Include="Components_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="ConnectingScreen.h" />
     <ClInclude Include="CustomScreen.h" />
     <ClInclude Include="DataBinding_reader.h">
@@ -383,6 +384,7 @@
     </ClInclude>
     <ClInclude Include="SimpleMenuRecord.h" />
     <ClInclude Include="SSD1306Renderer.h" />
+    <ClInclude Include="SSH1106Renderer.h" />
     <ClInclude Include="StaticResources.h" />
     <ClInclude Include="Style_reader.h">
       <FileType>CppCode</FileType>
@@ -440,6 +442,7 @@
     <ClCompile Include="SettingsScreen.cpp" />
     <ClCompile Include="SimpleMenuRecord.cpp" />
     <ClCompile Include="SSD1306Renderer.cpp" />
+    <ClCompile Include="SSH1106Renderer.cpp" />
     <ClCompile Include="StaticResources.cpp" />
     <ClCompile Include="TimeKepper.cpp" />
     <ClCompile Include="TopBar.cpp" />
