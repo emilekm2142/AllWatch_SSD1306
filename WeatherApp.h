@@ -90,17 +90,19 @@ private:
 		 this->layout = l;
 		 this->tk = tk;
 		 this->name = "weather";
+		 if (!settingsManager->appsManager->KeyExists("weather", "city"))
+			settingsManager->appsManager->AppendKeyToConfig("weather", "city", "Warszawa");
 		 
 		
 	 }
 	 void OnOpen() override {
-		 //settingsManager->appsManager->AppendKeyToConfig("weather", "city", "Warszawa");
+		
 
 		 Serial.println("opening weather, connected?");
 		 if (settingsManager->appsManager->KeyExists("weather", "city")) {
 			 
 			
-			 //TODO: Dupnąc to bo pierdolca dostanę
+			
 			 settingsManager->appsManager->GetKeyFromConfig("weather", "city", config.city);
 			 
 	

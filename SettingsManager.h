@@ -42,7 +42,42 @@ private:
 		 AppsManager(SettingsManager* sm) {
 			 parent = sm;
 		 }
-		 fs::File GetConfigForApplication(char* appName) {
+		 void RedirectStreamOfApps(Print& s) {
+			 auto appsDir = parent->SPIFFS->openDir("/apps");
+			 while (appsDir.next()) {
+				 Serial.println(appsDir.fileName());
+				 s.println(appsDir.fileName());
+			 }
+		 }
+		 void RegisterApplication(char* name) {
+			 char filePath[32];
+			 snprintf_P(filePath,
+				 32,
+				 "/apps/%s",
+				 name
+			 );
+			 if (!parent->SPIFFS->exists(filePath)) {
+				 Serial.println("creating file: ");
+				 Serial.println(filePath);
+				auto f =  parent->SPIFFS->open(filePath, "a+");
+				f.close();
+			 }
+
+		 }
+		 void DeleteApplication(char* name) {
+			 char filePath[32];
+			 snprintf_P(filePath,
+				 32,
+				 "/apps/%s",
+				 name
+			 );
+			 if (parent->SPIFFS->exists(filePath)) {
+				  parent->SPIFFS->remove(filePath);
+				 
+			 }
+
+		 }
+		 fs::File GetConfigForApplication(char* appName, char* mode="a+") {
 			 char filePath[32];
 
 			 snprintf_P(filePath,
@@ -50,7 +85,7 @@ private:
 				 "/apps/%s",
 				 appName
 			 );
-			 auto f = parent->SPIFFS->open(filePath, "a+");
+			 auto f = parent->SPIFFS->open(filePath, mode);
 			 Serial.println();
 			 Serial.println(filePath);
 			 if (!f) { Serial.println("File was not opened"); }
@@ -174,6 +209,49 @@ private:
 			 f.print('\n');
 
 			 f.close();
+		 }
+		 void ClearList() {
+			 this->parent->SPIFFS->remove(filename);
+			 auto newF = parent->SPIFFS->open(filename, "a+");
+			 newF.close();
+		 }
+		 void RemoveWiFiNetwork(char* name) {
+			
+			 char filePathN[32];
+
+			 snprintf_P(filePathN,
+				 32,
+				 "%sN",
+				 filename
+			 );
+			 auto newF = parent->SPIFFS->open(filePathN, "a+");
+			 auto oldF = parent->SPIFFS->open(filename, "r");
+
+			 while (oldF.available()) {
+				 char nameBuffer[80];
+				 char passBuffer[80];
+				 auto nameLength = oldF.readBytesUntil('\r', nameBuffer, 80);
+				 auto passLength = oldF.readBytesUntil('\n', passBuffer, 80);
+				 nameBuffer[nameLength] = '\0';
+				 passBuffer[passLength] = '\0';
+
+				 if (strcmp(nameBuffer, name) == 0) {
+					
+				 }
+				 else {
+					 newF.print(nameBuffer);
+					 newF.print('\r');
+					 newF.print(passBuffer);
+					 newF.print('\n');
+				 }
+
+			 }
+
+
+			 oldF.close();
+			 newF.close();
+			 this->parent->SPIFFS->remove(filename);
+			 parent->SPIFFS->rename(filePathN, filename);
 		 }
 		 bool IsTheNetworkNearby(String& ssid, int networksAmount) {
 			 for (int i = 0; i < networksAmount; i++) {
@@ -334,9 +412,62 @@ private:
 		 });
 		 server->on("/requestWiFi", HTTP_GET, [this](AsyncWebServerRequest *request) {
 				//request->send()
-				 request->send(*SPIFFS, wifiManager->filename, "text/plain");
-			 
-			 request->send(200, "text/plain", "ERROR");
+			Serial.println("requestWifi");
+			request->send(200, "text/plain", "OK");
+			request->send(*SPIFFS, wifiManager->filename, "text/plain");
+	
+		 });
+		 server->on("/removeAllNetworks", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 wifiManager->ClearList();
+			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
+		 });
+		 server->on("/removeWiFiNetwork", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 wifiManager->RemoveWiFiNetwork((char*)request->getParam("name")->value().c_str());
+			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
+		 });
+		 server->on("/requestApps", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 AsyncResponseStream *response = request->beginResponseStream("text/html");
+			 appsManager->RedirectStreamOfApps(*response);
+			 request->send(response);
+		 });
+		 server->on("/updateAppConfig", HTTP_POST, [this](AsyncWebServerRequest *request) {
+			 if (request->hasParam("name"))
+				 Serial.println((char*)request->getParam("name")->value().c_str());
+			 auto f = appsManager->GetConfigForApplication((char*)request->getParam("name")->value().c_str(),"w");
+			 f.print((char*)request->getParam("cfg")->value().c_str());
+			 f.close();
+
+			 char filePath[32];
+
+			 snprintf_P(filePath,
+				 32,
+				 "/apps/%s",
+				 (char*)request->getParam("name")->value().c_str()
+			 );
+			 request->send(*SPIFFS, filePath, "text/plain");
+			
+		 });
+		 server->on("/requestAppSettings", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 if (request->hasParam("name")) {
+
+				 char filePath[32];
+
+				 snprintf_P(filePath,
+					 32,
+					 "/apps/%s",
+					 (char*)request->getParam("name")->value().c_str()
+				 );
+				 request->send(*SPIFFS, filePath, "text/plain");
+			 }
+			
+
+
+		 });
+		 server->on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 //request->send()
+			 request->send(*SPIFFS, "/index.html", "text/html");
+
+			
 		 });
 		 server->serveStatic("/", *SPIFFS, "/");
 		 server->begin();

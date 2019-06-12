@@ -127,7 +127,7 @@ auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
 void setup() {
 	
 	
-	
+	settingsManager.appsManager->RegisterApplication("weather");
 	pinMode(5, INPUT_PULLUP);
 	pinMode(4, INPUT_PULLUP);
 	pinMode(A0, INPUT);
