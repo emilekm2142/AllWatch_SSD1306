@@ -89,7 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\UniWatchSimple;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\EEPROM;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\ESP8266WiFi\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\ESP8266HTTPClient\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\Hash\src;$(ProjectDir)..\libraries\ESPAsyncWebServer-master\src;$(ProjectDir)..\libraries\ESPAsyncTCP-master\src;$(ProjectDir)..\libraries\Rtc_by_Makuna\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\Wire;$(ProjectDir)..\libraries\esp8266-oled-ssd1306-master\src;$(ProjectDir)..\libraries\brzo_i2c-master;$(ProjectDir)..\libraries\U8g2\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\SPI;$(ProjectDir)..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries;$(ProjectDir)..\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\avr;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\libb64;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\spiffs;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\umm_malloc;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\variants\d1;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\lwip2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\libc\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\lib\gcc\xtensa-lx106-elf\4.8.2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\UniWatchSimple;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\EEPROM;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\ESP8266WiFi\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\ESP8266HTTPClient\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\Hash\src;$(ProjectDir)..\libraries\ESPAsyncWebServer-master\src;$(ProjectDir)..\libraries\ESPAsyncTCP-master\src;$(ProjectDir)..\libraries\Rtc_by_Makuna\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\Wire;$(ProjectDir)..\libraries\esp8266-oled-ssd1306-master\src;$(ProjectDir)..\libraries\brzo_i2c-master;$(ProjectDir)..\libraries\U8g2\src;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries\SPI;$(ProjectDir)..\..\..\..\..\Program Files (x86)\Arduino\libraries\Bridge\src;$(ProjectDir)..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\libraries;$(ProjectDir)..\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\avr;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\libb64;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\spiffs;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\cores\esp8266\umm_malloc;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\variants\d1;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\lwip2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\libc\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\lib\gcc\xtensa-lx106-elf\4.8.2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.1\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.UniWatchSimple.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__ESP8266_ESp8266__;__ESP8266_ESP8266__;_VMDEBUG=1;__ets__;ICACHE_FLASH;NONOSDK221=1;F_CPU=80000000L;LWIP_OPEN_SRC;TCP_MSS=536;LWIP_FEATURES=1;LWIP_IPV6=0;DEBUG_ESP_PORT=Serial;ARDUINO=10808;ARDUINO_ESP8266_WEMOS_D1R1;ARDUINO_ARCH_ESP8266;FLASHMODE_DIO;ESP8266;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -342,6 +342,7 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="HomeScreen.h" />
+    <ClInclude Include="WatchHttpClient.h" />
     <ClInclude Include="Id_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -367,6 +368,7 @@
     <ClInclude Include="Open_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="PizzaApp.h" />
     <ClInclude Include="Profile_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -383,6 +385,7 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="SimpleMenuRecord.h" />
+    <ClInclude Include="SimpleRequestsApp.h" />
     <ClInclude Include="SSD1306Renderer.h" />
     <ClInclude Include="SSH1106Renderer.h" />
     <ClInclude Include="StaticResources.h" />
@@ -433,14 +436,17 @@
     <ClCompile Include="GenericMenuScreen.cpp" />
     <ClCompile Include="GenericTextScreen.cpp" />
     <ClCompile Include="HomeScreen.cpp" />
+    <ClCompile Include="WatchHttpClient.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="MainSlideLayout.cpp" />
+    <ClCompile Include="PizzaApp.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SettingsManager.cpp" />
     <ClCompile Include="SettingsScreen.cpp" />
     <ClCompile Include="SimpleMenuRecord.cpp" />
+    <ClCompile Include="SimpleRequestsApp.cpp" />
     <ClCompile Include="SSD1306Renderer.cpp" />
     <ClCompile Include="SSH1106Renderer.cpp" />
     <ClCompile Include="StaticResources.cpp" />

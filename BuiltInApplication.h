@@ -13,6 +13,8 @@
 #include "SettingsManager.h"
 class BuiltInApplication
 {
+private:
+	bool deleteOnExit = true;
  protected:
 	 SettingsManager* settingsManager;
 	 UserInterfaceClass* UI;
@@ -25,10 +27,11 @@ class BuiltInApplication
 		 this->layout = layout;
 		 this->UI = UI;
 		 this->settingsManager = sm;
-		 this->settingsManager->CreateBuildInApplication(name, this);
 	 }
 	 void Open() {
+		 Serial.println("opening app");
 		 OnOpen();
+		 Serial.println("after onOpen()");
 		 this->UI->OpenChildLayout(layout);
 	 }
 	 virtual void OnOpen()  {
@@ -38,10 +41,20 @@ class BuiltInApplication
 		 Serial.println("Exiting app");
 		 OnExit();
 		 this->UI->ShowLayout(*this->UI->GetMainLayout());
+		 if (deleteOnExit) delete this;
 	 }
 	 virtual void OnExit() {
 
 	 }
+	 void UpdateKeyInConfig(char* key, char* value){
+		 this->settingsManager->appsManager->UpdateKeyInConfig(this->name, key, value);
+	 }
+	bool KeyExists(char* key) {
+		return this->settingsManager->appsManager->KeyExists(this->name, key);
+	 }
+	void AppendKey(char* key, char* value) {
+		settingsManager->appsManager->AppendKeyToConfig(this->name, key, value);
+	}
 	
 };
 

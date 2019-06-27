@@ -16,6 +16,7 @@
 #include "UserInterface.h"
 #include "StaticResources.h"
 #include "SettingsScreen.h"
+
 class GenericMenuScreen:CustomScreen
 {
 protected:
@@ -36,10 +37,31 @@ public:
 	UserInterfaceClass* UI;
 	GenericMenuScreen(UserInterfaceClass* UI, LinkedList<char*> *options, LinkedList<std::function<void()>>* callbacks, int length) {
 		this->options=options;
+		this->UI = UI;
 		this->callbacks = callbacks;
 		offsets->add(new int(15));
 		for (int i = 0; i < length-1; i++) offsets->add(new int(0));
 
+
+	}
+	GenericMenuScreen(UserInterfaceClass* UI) {
+		options = new LinkedList<char*>();
+		callbacks = new LinkedList<std::function<void()>>();
+		this->UI = UI;
+
+
+	}
+	void AddOption(char* name, std::function<void()> callback) {
+		if (offsets->size() == 0) {
+			offsets->add(new int(15));
+		}
+		else {
+			offsets->add(new int(0));
+		}
+		optionsLength++;
+	
+		options->add(name);
+		callbacks->add(callback);
 
 	}
 	virtual int CalculateHeight(Renderer& renderer) override {
@@ -55,7 +77,7 @@ public:
 		}
 
 		currentIndex--;
-		if (currentIndex < 0) currentIndex = optionsLength - 1;
+		if (currentIndex < 0) currentIndex = options->size() - 1;
 
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
@@ -68,13 +90,15 @@ public:
 		UI->SetLayoutInFocues(*UI->GetMainLayout());
 	}
 	virtual void Down(Renderer& renderer) override {
+		Serial.println("downnnn");
 		if (*(offsets->get(currentIndex)) != 0) {
 			auto a = new Animation(*(offsets->get(currentIndex)), 0, delay, -step);
 			UI->RegisterAnimation(a);
 		}
 
 		currentIndex++;
-		if (currentIndex >= optionsLength) currentIndex = 0;
+		Serial.printf("%d == %d", currentIndex, options->size());
+		if (currentIndex >= options->size()) currentIndex = 0;
 
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
@@ -99,10 +123,14 @@ public:
 	virtual void Draw(Renderer& renderer) override {
 		int y = offset;
 		int x = 0;
-		for (int i = 0; i < optionsLength; i++) {
-			if (currentIndex != i)
+		
+		for (int i = 0; i < this->options->size(); i++) {
+			if (currentIndex != i) {
 				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y, options->get(i));
+				//renderer.DrawString(5, 50, options->get(i));
+			}
 			else {
+				//renderer.DrawString(5, 50, options->get(i));
 				renderer.DrawString(x + GlobalX + *offsets->get(i) - 10, GlobalY + y, ">");
 				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y, options->get(i));
 			}

@@ -90,8 +90,8 @@ private:
 		 this->layout = l;
 		 this->tk = tk;
 		 this->name = "weather";
-		 if (!settingsManager->appsManager->KeyExists("weather", "city"))
-			settingsManager->appsManager->AppendKeyToConfig("weather", "city", "Warszawa");
+		 if (!KeyExists("city"))
+			AppendKey("city", "Warszawa");
 		 
 		
 	 }
@@ -99,7 +99,7 @@ private:
 		
 
 		 Serial.println("opening weather, connected?");
-		 if (settingsManager->appsManager->KeyExists("weather", "city")) {
+		 if (KeyExists("city")) {
 			 
 			
 			
@@ -131,20 +131,13 @@ private:
 	 }
 	 void DownloadData() {
 		 
-		 HTTPClient http;
+		 
+
+	
 		 char buffer[100];
 		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/?city=%s", config.city);
-
-		 http.begin(buffer);
-		 Serial.println("URL:");
-		 Serial.println(buffer);
-		 http.addHeader("Content-Type", "text/plain");
-		
-		int	code = http.GET();
-		 Serial.println(code);
-		 Serial.println("Response:");
-		 Serial.println(http.getString());
-		 auto s = http.getStream();
+		 auto a = settingsManager->http->MakeGetRequest(buffer);
+		 auto s = a->getStream();
 		 s.readBytesUntil('\n', state, 15);
 		 state[strlen(state)] = '\0';
 		 char xd[3];
@@ -154,9 +147,7 @@ private:
 		 Serial.println("Request done!");
 		 Serial.println(temperature);
 		 Serial.println(state);
-
-
-		 http.end();
+		 settingsManager->http->EndRequest(a);
 		 
 	 }
 

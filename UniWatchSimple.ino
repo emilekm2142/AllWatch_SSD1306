@@ -1,4 +1,4 @@
-
+﻿
 /*
     Name:       UniWatchSimple.ino
     Created:	18-Mar-19 17:20:19
@@ -16,6 +16,13 @@
 */
 
 
+//TODO Built in trzyma tylko funkcje tworzące aplikację oraz ich nazwę. Jak się kliknie to wywołuje funkcje i daje onOpen()
+
+
+
+#include "HttpClient.h"
+#include "PizzaApp.h"
+#include "SimpleRequestsApp.h"
 #include "SSH1106Renderer.h"
 #include "ConnectingScreen.h"
 #include "WeatherApp.h"
@@ -59,7 +66,7 @@
 #include "TopBar.h"
 #include "FS.h"
 #include "GenericTextScreen.h"
-
+#include "PizzaApp.h"
 
 auto bm = BatteryManager(&UserInterface);
 
@@ -111,7 +118,7 @@ auto r = SSD1306Renderer();
 
 auto home = HomeScreen(UserInterface, &tk);
 auto MainLayout = MainSlideLayout();
-auto settingsManager = SettingsManager(&WiFi, &SPIFFS);
+auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk);
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 
 auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
@@ -127,7 +134,8 @@ auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
 void setup() {
 	
 	
-	settingsManager.appsManager->RegisterApplication("weather");
+	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
+	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
 	pinMode(5, INPUT_PULLUP);
 	pinMode(4, INPUT_PULLUP);
 	pinMode(A0, INPUT);

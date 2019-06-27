@@ -41,8 +41,7 @@ public:
 		this->UI = UI;
 		this->settingsManager = settingsManager;
 		this->offsets->add(new int(maxOffset));
-		for (int i = 1; i < settingsManager->appsManager->builtInApps->size(); i++)
-			this->offsets->add(new int(0));
+		
 
 	}
 	virtual int CalculateHeight(Renderer& renderer) override {
@@ -67,9 +66,6 @@ public:
 
 
 	}
-	virtual void DrawActiveIndicator(Renderer &renderer) override {
-	
-	}
 	virtual void Back(Renderer& r) override {
 		UI->SetLayoutInFocues(*UI->GetMainLayout());
 	}
@@ -92,18 +88,25 @@ public:
 
 	}
 	virtual void Ok(Renderer& renderer) override {
-		settingsManager->appsManager->builtInApps->get(currentIndex)->Open();
+		settingsManager->appsManager->builtInApps->get(currentIndex)->getApplication()->Open();
 		
 	}
 
 
 
 	virtual void Draw(Renderer& renderer) override {
+		while (offsets->size()< settingsManager->appsManager->builtInApps->size())
+				this->offsets->add(new int(0));
 		int y = offset;
 		int x = 0;
+		Serial.println(settingsManager->appsManager->builtInApps->size());
 		for (int i = 0; i < settingsManager->appsManager->builtInApps->size(); i++) {
-			if (currentIndex != i)
-				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y,settingsManager->appsManager->builtInApps->get(i)->name);
+			Serial.println(settingsManager->appsManager->builtInApps->get(i)->name);
+			if (currentIndex != i) {
+				
+					renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y,settingsManager->appsManager->builtInApps->get(i)->name);
+					
+			}
 			else {
 				renderer.DrawString(x + GlobalX + *offsets->get(i)- 10, GlobalY + y, ">");
 				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y, settingsManager->appsManager->builtInApps->get(i)->name);

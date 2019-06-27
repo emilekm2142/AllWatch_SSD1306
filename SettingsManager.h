@@ -18,7 +18,21 @@
 #include <ESPAsyncWebServer.h>
 #include "Dependency.h"
 class BuiltInApplication;
+class ApplicationDataHolder {
+public:
+	char* name;
+	std::function<BuiltInApplication*()> creatingFunction;
+	ApplicationDataHolder() {
 
+	}
+	ApplicationDataHolder(char* name, std::function<BuiltInApplication*()>  creatingFunction) {
+		this->name = name;
+		this->creatingFunction = creatingFunction;
+	}
+	BuiltInApplication* getApplication() {
+		return creatingFunction();
+	}
+};
 
 class SettingsManager//:public Dependency
 {
@@ -27,6 +41,39 @@ private:
 	
 	
  protected:
+
+	 class WatchHttpClient
+	 {
+	 protected:
+		 SettingsManager* parent;
+	 public:
+		 void _Connect() {
+			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
+		 }
+		 void _Disconnect() {
+			 parent->wifiManager->Disconnect();
+		 }
+		 WatchHttpClient(SettingsManager* sm) {
+			 parent = sm;
+		 }
+		 HTTPClient* MakeGetRequest(char* url) {
+			 
+			 if (!parent->wifiManager->WiFiConnected()) {
+				 _Connect();
+			 }
+			 HTTPClient http;
+
+			 http.begin(url);
+			 http.GET();
+
+			 return a;
+		 }
+		 void EndRequest(HTTPClient* r) {
+			 r->end();
+			 _Disconnect();
+		 }
+
+	 };
 	 class AppsManager {
 		 /*
 		 Format configu
@@ -38,7 +85,7 @@ private:
 		 
 	 public:
 		 SettingsManager* parent;
-		 LinkedList<BuiltInApplication*>* builtInApps = new LinkedList<BuiltInApplication*>();
+		 LinkedList<ApplicationDataHolder*>* builtInApps = new LinkedList<ApplicationDataHolder*>();
 		 AppsManager(SettingsManager* sm) {
 			 parent = sm;
 		 }
@@ -49,7 +96,7 @@ private:
 				 s.println(appsDir.fileName());
 			 }
 		 }
-		 void RegisterApplication(char* name) {
+		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction) {
 			 char filePath[32];
 			 snprintf_P(filePath,
 				 32,
@@ -62,6 +109,9 @@ private:
 				auto f =  parent->SPIFFS->open(filePath, "a+");
 				f.close();
 			 }
+			 auto m = new ApplicationDataHolder(name, creatingFunction);
+			 this->builtInApps->add(m);
+
 
 		 }
 		 void DeleteApplication(char* name) {
@@ -362,12 +412,14 @@ private:
 	 
 	 fs::FS* SPIFFS;
 	 ESP8266WiFiClass* w;
+	 WatchHttpClient* http = new AppsManager(this);
 	 AppsManager* appsManager = new AppsManager(this);
 	 WiFiManager* wifiManager = new WiFiManager(this);
-	
-	 SettingsManager(ESP8266WiFiClass* WiFi, fs::FS* SPIFFS) {
+	 TimeKepper* tk;
+	 SettingsManager(ESP8266WiFiClass* WiFi, fs::FS* SPIFFS, TimeKepper* tk) {
 		 
 		 this->SPIFFS = SPIFFS;
+		 this->tk = tk;
 		// SPIFFS->format();
 		 SPIFFS->begin();
 		
@@ -482,6 +534,40 @@ private:
 		
 	 }
 	 void SyncTime() {
+		 //https://time-watch-service.herokuapp.com/datetime
+		 HTTPClient http;
+		 char buffer[] = "https://time-watch-service.herokuapp.com/datetime";
+		 http.begin(buffer);
+		 http.addHeader("Content-Type", "text/plain");
+		 int code = http.GET();
+		 auto s = http.getStream();
+		 char buff[10];
+		 int read;
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int year = atoi(buff);
+
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int month = atoi(buff);
+
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int day = atoi(buff);
+
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int hour = atoi(buff);
+
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int minute = atoi(buff);
+
+		 read = s.readBytesUntil('\n', buff, 10);
+		 buff[read] = '\0';
+		 int second = atoi(buff);
+
+		 tk->SetDateTime(year, month, day, hour, minute, second);
 
 	 }
 	 //Na kartce
@@ -498,15 +584,7 @@ private:
 		for (int i = 0; i < f2.size(); i++)
 			Serial.print(f2.read());
 	 }
-	 void CreateWebApplication(char* name, LinkedList<char*>, LinkedList<char*> values, char* IP) {
 
-	 }
-	 void CreateBuildInApplication(char* name, BuiltInApplication* app) {
-		 appsManager ->builtInApps->add(app);
-	 }
-	 void DeleteApplication(char* name) {
-
-	 }
 };
 
 

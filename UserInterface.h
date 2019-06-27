@@ -70,6 +70,7 @@ private:
 		 SetLayoutInFocues(*l);
 		 ShowLayout(*l);
 		 isChildBeingShown = true;
+		 Serial.print("Opened child layout");
 		 RedrawAll();
 
 	 }

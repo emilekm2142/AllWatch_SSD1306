@@ -17,12 +17,13 @@
         </style>
     </head>
     <body>
+            
         <section id="app" class="container">
             <h1>Configuration</h1>
             <section class="overall s">
              
            
-                <p>Ogólne jakieś ustawienia :3</p>
+                <p>v 0.1B</p>
             </section>
 
             <section class="Wifi s">
@@ -64,7 +65,28 @@
                 Lista alarmów
             </section>
             <section class="Apps s">
-                    <h2>Apps</h2>
+                    <h2>Apps <div v-on:click="" class="btn  btn-outline-primary">App creator</div>  <div v-on:click="showAddAppModal=!showAddAppModal" class="btn  btn-outline-primary">Install new</div>
+                    </h2>
+                        <div v-if="showAddAppModal" class="form-group">
+                            <div class="row">
+                               
+                                <div class="col-sm-10">
+                                    <input class="form-control " placeholder="app name" v-model="addAppName">
+                                </div>
+                                <div class="col-sm-2">
+                                        <div v-on:click="" class="btn  btn-outline-primary">Add new</div>
+               
+                                </div>
+                               
+                                        
+                            </div>
+                            <div class="row">
+                               
+                                    <div style="margin-top:1em;opacity:0.4" class="col-sm-10">
+                                        <input class="form-control " placeholder="request (optional)" v-model="appRequest">
+                                    </div>
+                                    </div>
+                                   
                     <div class="app-entry" v-for="app in apps">
                        <div style="display:flex;"> <h3 style="display:block">{{app.name}}</h3>  <button type="button" class="btn btn-outline-primary" style="margin-left:2em;" v-on:click="()=>{app.show=!app.show; getNetworkDetails(app);}">Configure</button></div>
                         <div  style="width:80%;margin:auto;margin-top:2em;" v-if="app.show">
@@ -93,6 +115,9 @@
     var app = new Vue({
   el: '#app',
   data: {
+      showAddAppModal:false,
+      addAppName:'',
+    appRequest:'',
     networkName:"",
     apps:[],
     showAddMenu:false,

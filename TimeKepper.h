@@ -39,6 +39,11 @@ private:
 		 //if (now.Year()<2019)
 			 Rtc->SetDateTime(compiled);
 	 }
+	
+	 void SetDateTime(int year, int month, int day, int hour, int minute, int second) {
+		 RtcDateTime n = RtcDateTime(year, month, day, hour, minute, second);
+		 Rtc->SetDateTime(n);
+	 }
 	 void OnLoop() {
 		 if (1000  <= millis() - lastCheck) {
 			// Serial.println("Getting new time");
