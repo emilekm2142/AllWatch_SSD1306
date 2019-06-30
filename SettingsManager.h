@@ -75,14 +75,8 @@ private:
 
 	 };
 	 class AppsManager {
-		 /*
-		 Format configu
-		 a/NazwaApki
-		 Content:
-		 city=London
-		 mama=tata
-		 */
-		 
+		
+		
 	 public:
 		 SettingsManager* parent;
 		 LinkedList<ApplicationDataHolder*>* builtInApps = new LinkedList<ApplicationDataHolder*>();
