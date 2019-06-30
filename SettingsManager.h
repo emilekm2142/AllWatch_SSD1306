@@ -61,12 +61,12 @@ private:
 			 if (!parent->wifiManager->WiFiConnected()) {
 				 _Connect();
 			 }
-			 HTTPClient http;
+			 HTTPClient* http = new HTTPClient();
 
-			 http.begin(url);
-			 http.GET();
+			 http->begin(url);
+			 http->GET();
 
-			 return a;
+			 return http;
 		 }
 		 void EndRequest(HTTPClient* r) {
 			 r->end();
@@ -412,7 +412,7 @@ private:
 	 
 	 fs::FS* SPIFFS;
 	 ESP8266WiFiClass* w;
-	 WatchHttpClient* http = new AppsManager(this);
+	 WatchHttpClient* http = new WatchHttpClient(this);
 	 AppsManager* appsManager = new AppsManager(this);
 	 WiFiManager* wifiManager = new WiFiManager(this);
 	 TimeKepper* tk;
