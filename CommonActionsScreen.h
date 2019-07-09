@@ -18,6 +18,7 @@
 #include "StaticResources.h"
 #include "SettingsScreen.h"
 #include "ConnectingScreen.h"
+#include "BuiltInApplication.h"
 class CommonActionsScreen :public CustomScreen {
 protected:
 	int delay = 80;
@@ -26,11 +27,11 @@ protected:
 public:
 	int offset = 15;
 	int currentIndex = 0;
-	int optionsLength = 5;
+	int optionsLength = 6;
 	int spacing = 3;
 	bool connecting = false;
 	int lineHeight = 10;
-	char* options[8] = { "Notes", "Connect to WiFi","Sync time", "Settings", "Turn off", "mama4", "asdasf5", "asdasda" };
+	char* options[8] = { "Status", "Connect to WiFi","Sync time", "Settings", "Turn off", "Flashlight", "asdasf5", "asdasda" };
 	int offsets[8] = { maxOffset,0,0,0,0,0,0,0 };
 	
 	
@@ -88,8 +89,7 @@ public:
 
 		switch (currentIndex) {
 		case 0:
-			//TODO: Open built-in notes app
-			break;
+			settingsManager->appsManager->getBuiltInApplicationByName("Status")->getApplication()->Open();
 		case 1:
 		{
 			connecting = true;
@@ -120,6 +120,10 @@ public:
 			renderer.DisableScreen();
 			ESP.deepSleep(999999999 * 999999999U);
 			break;
+		case 5:
+		{
+			settingsManager->appsManager->getBuiltInApplicationByName("flashlight")->getApplication()->Open();
+		}
 		}
 	}
 

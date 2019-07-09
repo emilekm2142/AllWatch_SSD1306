@@ -17,17 +17,20 @@
 //#include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "Dependency.h"
+#include "ExtraPeripheralsManager.h"
 class BuiltInApplication;
 class ApplicationDataHolder {
 public:
 	char* name;
 	std::function<BuiltInApplication*()> creatingFunction;
+	bool showOnAppsList = true;
 	ApplicationDataHolder() {
 
 	}
-	ApplicationDataHolder(char* name, std::function<BuiltInApplication*()>  creatingFunction) {
+	ApplicationDataHolder(char* name, std::function<BuiltInApplication*()>  creatingFunction, bool show=true) {
 		this->name = name;
 		this->creatingFunction = creatingFunction;
+		this->showOnAppsList = show;
 	}
 	BuiltInApplication* getApplication() {
 		return creatingFunction();
@@ -80,8 +83,16 @@ private:
 	 public:
 		 SettingsManager* parent;
 		 LinkedList<ApplicationDataHolder*>* builtInApps = new LinkedList<ApplicationDataHolder*>();
+		 BuiltInApplication* currentApplication=NULL;
 		 AppsManager(SettingsManager* sm) {
 			 parent = sm;
+		 }
+		 ApplicationDataHolder* getBuiltInApplicationByName(char* name) {
+			 for (int i = 0; i < builtInApps->size(); i++) {
+				 if (strcmp(builtInApps->get(i)->name, name) == 0) {
+					 return builtInApps->get(i);
+				 }
+			 }
 		 }
 		 void RedirectStreamOfApps(Print& s) {
 			 auto appsDir = parent->SPIFFS->openDir("/apps");
@@ -90,7 +101,7 @@ private:
 				 s.println(appsDir.fileName());
 			 }
 		 }
-		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction) {
+		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, bool show=true) {
 			 char filePath[32];
 			 snprintf_P(filePath,
 				 32,
@@ -103,7 +114,7 @@ private:
 				auto f =  parent->SPIFFS->open(filePath, "a+");
 				f.close();
 			 }
-			 auto m = new ApplicationDataHolder(name, creatingFunction);
+			 auto m = new ApplicationDataHolder(name, creatingFunction, show);
 			 this->builtInApps->add(m);
 
 
@@ -137,6 +148,7 @@ private:
 			 Serial.println(f.size());
 			 return f;
 		 }
+		 
 		 bool GetKeyFromConfig(char* appName, char* key, char* buffer) {
 			 auto f = GetConfigForApplication(appName);
 			 while (f.available()) {
@@ -180,8 +192,7 @@ private:
 		 }
 		 void AppendKeyToConfig(char* appName, char* key, char* value) {
 			 auto f = GetConfigForApplication(appName);
-			 Serial.println("Appending to file: ");
-			 Serial.println(f.fullName());
+	
 			 f.print(key);
 			 f.print('=');
 			 f.print(value);
@@ -396,7 +407,7 @@ private:
 
  public:
 	 void TestSaveWiFi() {
-		 this->wifiManager->AppendWiFiNetwork(this->SPIFFS, "test", "123456789");
+		
 		 Serial.println("testing");
 		 this->wifiManager->ConnectToFirstFittingWiFiNetwork();
 		
@@ -409,9 +420,10 @@ private:
 	 WatchHttpClient* http = new WatchHttpClient(this);
 	 AppsManager* appsManager = new AppsManager(this);
 	 WiFiManager* wifiManager = new WiFiManager(this);
+	 ExtraPeripheralsManager* extraPeripheralsManager;
 	 TimeKepper* tk;
-	 SettingsManager(ESP8266WiFiClass* WiFi, fs::FS* SPIFFS, TimeKepper* tk) {
-		 
+	 SettingsManager(ESP8266WiFiClass* WiFi, fs::FS* SPIFFS, TimeKepper* tk, ExtraPeripheralsManager* e) {
+		 extraPeripheralsManager = e;
 		 this->SPIFFS = SPIFFS;
 		 this->tk = tk;
 		// SPIFFS->format();

@@ -13,8 +13,10 @@
 #include "Widget.h"
 #include "Animation.h"
 #include "UserInterface.h"
+#include <SSD1306Brzo.h> 
 class MainSlideLayout :public Layout {
 public:
+	int stepSize = 25;
 	int currentIndex = 0;
 	UserInterfaceClass* UI;
 	virtual int CalculateHeight(Renderer& renderer) override {
@@ -33,7 +35,8 @@ public:
 		UI->SetLayoutInFocues( *(Layout*)GetChildren()->get(currentIndex) );
 	}
 	virtual void DrawActiveIndicator(Renderer &r) override {
-
+		//TOOD: tests
+		DrawIndicators(r);
 	}
 	virtual void Back(Renderer& r) override {}
 	void NextScreen() {
@@ -42,14 +45,14 @@ public:
 			currentIndex = 0;
 		
 		
-			Animation* a = new Animation(GlobalX, 0, 1, 45);
+			Animation* a = new Animation(GlobalX, 0, 1, stepSize);
 			UI->RegisterAnimation(a);
 		}
 		else {
 			
 			//GlobalX -= 160;
 			currentIndex++;
-			Animation* a = new Animation(GlobalX, -currentIndex * 160, 1, -45);
+			Animation* a = new Animation(GlobalX, -currentIndex * 160, 1, -stepSize);
 			UI->RegisterAnimation(a);
 		}
 	}
@@ -58,13 +61,13 @@ public:
 		Serial.println(currentIndex);
 		if (currentIndex == 0) {
 			currentIndex = GetChildren()->size() - 1;
-			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, -45);
+			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, -stepSize);
 			UI->RegisterAnimation(a);
 		}
 		else {
 			
 			currentIndex--;
-			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, 45);
+			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, stepSize);
 			UI->RegisterAnimation(a);
 		}
 		Serial.print("After prev triggered: ");
@@ -77,6 +80,31 @@ public:
 			if (i >= GetChildren()->size()) break;
 			GetChildren()->get(i)->DrawWithState(renderer);
 		}
+		
+
+	}
+	void DrawIndicators(Renderer& r) {
+		//TODO: dodać abstrakcje do fontow
+
+		int centerH = r.GetScreenWidth() / 2;
+		int offsetFromCenterH = 5;
+		int indicatorY = r.GetScreenHeight() - 7;
+		int childrenSize = GetChildren()->size();
+		bool isEven = childrenSize % 2 == 0;
+		int centerPoint = childrenSize / 2 + 1;
+
+		int extraHOffset = isEven ? 5:0;
+
+		for (int i = 0; i < childrenSize; i++) {
+			if (i == currentIndex)
+				r.SetFont((uint8_t *)ArialMT_Plain_24);
+			else
+				r.SetFont((uint8_t *)ArialMT_Plain_10);
+
+			int positionsLeftToCenterPoint = i - centerPoint;
+			r.DrawString(centerH + positionsLeftToCenterPoint * offsetFromCenterH, indicatorY, ".");
+		}
+	
 	}
 	virtual void CalculateLayout(Renderer& renderer) override {
 		CalculateSizesPostOrderTreeWalk(renderer);

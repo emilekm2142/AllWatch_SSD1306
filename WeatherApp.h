@@ -62,6 +62,12 @@ private:
 			app->UI->ReturnToParentLayout();
 			this->app->Exit();
 		}
+		void Up(Renderer& r) override {
+			this->app->Up(r);
+		}
+		void Down(Renderer& r) override {
+			this->app->Down(r);
+		}
 	};
  protected:
 	 WeatherLayout* l = new WeatherLayout(this);
@@ -95,6 +101,21 @@ private:
 		 
 		
 	 }
+	 bool isTommorowBeingDisplayed = false;
+	 void Down(Renderer& r) {
+		 if (!isTommorowBeingDisplayed) {
+			 DisplayTommorow();
+		 }
+		 isTommorowBeingDisplayed = true;
+		 l->Draw(r);
+	 }
+	 void Up(Renderer& r) {
+		 if (isTommorowBeingDisplayed) {
+			 DisplayToday();
+		 }
+		 isTommorowBeingDisplayed = false;
+		 l->Draw(r);
+	 }
 	 void OnOpen() override {
 		
 
@@ -104,11 +125,16 @@ private:
 			
 			
 			 settingsManager->appsManager->GetKeyFromConfig("weather", "city", config.city);
-			 
+			 DisplayToday();
 	
 
-			 if (settingsManager->w->isConnected()) { DownloadData(); }
-			 else {
+			 //This piece is a bit complex; it should handle situations  when there is no internet but the data
+			 // was downloaded before. As for now, the data is always being downloaded from the net
+			/*
+			 if (settingsManager->w->isConnected()) { 
+				 DisplayToday(); 
+			 }
+			 else { //if there is no connection at the moment: 
 				 if (settingsManager->appsManager->KeyExists("weather", "tmpCache")) {
 					 char tmp[4];
 					 settingsManager->appsManager->GetKeyFromConfig("weather", "tmpCache",tmp);
@@ -118,6 +144,7 @@ private:
 					 l->noData = true;
 				 }
 			 }
+			 */
 			 if (layout == nullptr) Serial.println("Pointer is null");
 		 }
 		 else {
@@ -129,11 +156,8 @@ private:
 	 void OnExit() override {
 		 
 	 }
-	 void DownloadData() {
-		 
-		 
-
-	
+	 
+	 void DisplayToday() {
 		 char buffer[100];
 		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/?city=%s", config.city);
 		 auto a = settingsManager->http->MakeGetRequest(buffer);
@@ -150,7 +174,23 @@ private:
 		 settingsManager->http->EndRequest(a);
 		 
 	 }
-
+	 void DisplayTommorow() {
+		 //TODO: consolidate both functions
+		 char buffer[100];
+		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/tommorow?city=%s", config.city);
+		 auto a = settingsManager->http->MakeGetRequest(buffer);
+		 auto s = a->getStream();
+		 s.readBytesUntil('\n', state, 15);
+		 state[strlen(state)] = '\0';
+		 char xd[3];
+		 s.readBytesUntil('\n', xd, 3);
+		 temperature = atoi(xd);
+		 settingsManager->appsManager->UpdateKeyInConfig("weather", "tmpCacheTommorow", xd);
+		 Serial.println("Request done!");
+		 Serial.println(temperature);
+		 Serial.println(state);
+		 settingsManager->http->EndRequest(a);
+	 }
 };
 
 

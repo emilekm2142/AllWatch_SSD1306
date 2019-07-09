@@ -19,8 +19,8 @@ private:
 	 SettingsManager* settingsManager;
 	 UserInterfaceClass* UI;
  public:
-	
-	  char* name;
+	 const uint8_t* icon = NULL;
+	 char* name;
 	 Layout* layout;
 
 	 BuiltInApplication(Layout* layout, UserInterfaceClass* UI, SettingsManager* sm) {
@@ -29,6 +29,7 @@ private:
 		 this->settingsManager = sm;
 	 }
 	 void Open() {
+		 settingsManager->appsManager->currentApplication = this;
 		 Serial.println("opening app");
 		 OnOpen();
 		 Serial.println("after onOpen()");
@@ -37,11 +38,19 @@ private:
 	 virtual void OnOpen()  {
 
 	 }
+	 void OnLoop() {
+		 Loop(*UI->GetRenderer());
+	 }
+	 virtual void Loop(Renderer& r) {
+
+	 }
 	 void Exit() {
 		 Serial.println("Exiting app");
 		 OnExit();
 		 this->UI->ShowLayout(*this->UI->GetMainLayout());
+		 settingsManager->appsManager->currentApplication = NULL;
 		 if (deleteOnExit) delete this;
+		
 	 }
 	 virtual void OnExit() {
 

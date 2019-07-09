@@ -9,10 +9,14 @@
 	#include "WProgram.h"
 #endif
 //Implementation
-
+#include "Config.h"
 class InputHandler:public AbstractInputHandler
 {
 private:
+
+	int downPin = PIN_DOWN;
+	int upPin = PIN_UP;
+
 	Stream* Serial2;
 	
 	long longPressLimit = 500;
@@ -37,13 +41,14 @@ private:
 
 public:
 	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)(), Stream& Serial) :AbstractInputHandler(OnOk, OnUp, OnDown, OnBack) {
-
+		pinMode(downPin, INPUT_PULLUP);
+		pinMode(upPin, INPUT_PULLUP);
 		this->Serial2 = &Serial;
 	}
 	void OnLoop() override
 	{
-		downPressed = digitalRead(4) ? false : true;
-		upPressed = digitalRead(5) ? false : true;
+		downPressed = digitalRead(downPin) ? false : true;
+		upPressed = digitalRead(upPin) ? false : true;
 		if (block && !downPressed && !upPressed) {
 			block = false;
 			wasDownPressed = false;

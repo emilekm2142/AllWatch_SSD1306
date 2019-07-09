@@ -96,9 +96,14 @@ private:
 			 anyChangesStaged = false;
 		 }
 		 if (update) RedrawAll();
+	 
+		
 	 }
 	 void SetRenderer(Renderer& rndr) {
 		 this->renderer = &rndr;
+	 }
+	 Renderer* GetRenderer() {
+		 return this->renderer;
 	 }
 	 void Down() {
 		 if (IsAnyLayoutDisplayed()) {

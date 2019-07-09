@@ -1,3 +1,11 @@
+#include "IFTTApp.h"
+#include "ExecuteOnLoopApp.h"
+#include "StatusApp.h"
+#include "FlashlightApp.h"
+#include "ExtraPeripheralsManager.h"
+#include "BME280Barometer.h"
+#include "Thermometer.h"
+#include "Barometer.h"
 #include "HttpClient.h"
 #include "PizzaApp.h"
 #include "SimpleRequestsApp.h"
@@ -90,13 +98,14 @@ InputHandler inputHandler = InputHandler(
 );
 
 Column menu;
-
+BME280Barometer barometerBME280;
+ExtraPeripheralsManager extraPeripheralsManager;
 auto tk = TimeKepper(&UserInterface, &bm);
 auto r = SSD1306Renderer();
 
 auto home = HomeScreen(UserInterface, &tk);
 auto MainLayout = MainSlideLayout();
-auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk);
+auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk, &extraPeripheralsManager);
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 
 auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
@@ -109,13 +118,29 @@ auto genericText = GenericTextScreen(&UserInterface,text ,true);
 
 auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
 
+
+
+
 void setup() {
-	
-	
+#ifdef APPEND_DEFAULT_WIFI
+	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
+#endif // APPEND_DEFAULT_WIFI
+
+
+	extraPeripheralsManager.barometer = &barometerBME280;
+	extraPeripheralsManager.thermometer = &barometerBME280;
+
 	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
-	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
-	pinMode(5, INPUT_PULLUP);
-	pinMode(4, INPUT_PULLUP);
+	//settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
+	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); });
+	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, false);
+	settingsManager.appsManager->RegisterApplication("Status", []() {return new StatusApp(&UserInterface, &settingsManager); }, false);
+	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
+		settingsManager.appsManager->AppendKeyToConfig("IFTTT", "key", "type in the api key");
+	}
+	
+	
+	
 	pinMode(A0, INPUT);
 	
 
@@ -183,6 +208,8 @@ void loop() {
 	tk.OnLoop();
 	bm.OnLoop();
 	settingsManager.SettingsOnLoop();
+	 if (settingsManager.appsManager->currentApplication != NULL)
+			 settingsManager.appsManager->currentApplication->OnLoop();
 	//strcpy(home.preganteText,String(analogRead(A0)).c_str());
 	//UserInterface.StageChanges();
 	//Serial.println(freeRam());
