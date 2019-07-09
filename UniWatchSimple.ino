@@ -1,5 +1,4 @@
 #include "IFTTApp.h"
-#include "ExecuteOnLoopApp.h"
 #include "StatusApp.h"
 #include "FlashlightApp.h"
 #include "ExtraPeripheralsManager.h"
