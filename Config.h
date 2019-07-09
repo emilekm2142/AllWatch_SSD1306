@@ -11,9 +11,15 @@
 //#define Renderer_SSH1106
 
 
+
+//uncomment if you intend to use a RX or TX pin as a button
+#define USE_TX_RX_AS_GPIO
 //Set buttons
 #define PIN_DOWN  4
 #define PIN_UP  5
+
+
+
 
 
 //comment if you do not wish to add any default wifi network
