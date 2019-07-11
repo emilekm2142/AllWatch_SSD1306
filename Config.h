@@ -15,5 +15,5 @@
  //uncomment if you intend to use a RX or TX pin as a button
 #define USE_TX_RX_AS_GPIO
 //Set buttons	//Set buttons
-#define PIN_DOWN  1	
-#define PIN_UP  3	
+#define PIN_DOWN  2	
+#define PIN_UP  7	
