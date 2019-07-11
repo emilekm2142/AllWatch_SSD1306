@@ -38,17 +38,19 @@ private:
 
 public:
 	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)(), Stream& Serial) :AbstractInputHandler(OnOk, OnUp, OnDown, OnBack) {
-		pinMode(downPin, INPUT_PULLUP);
-		pinMode(upPin, INPUT_PULLUP);		
+		
+		
 #ifdef USE_TX_RX_AS_GPIO
 		//https://arduino.stackexchange.com/questions/29938/how-to-i-make-the-tx-and-rx-pins-on-an-esp-8266-01-into-gpio-pins?rq=1
 		//********** CHANGE PIN FUNCTION  TO GPIO **********
 		//GPIO 1 (TX) swap the pin to a GPIO.
-		pinMode(1, FUNCTION_3);
+		pinMode(downPin, FUNCTION_3);
 		//GPIO 3 (RX) swap the pin to a GPIO.
-		pinMode(3, FUNCTION_3);
+		pinMode(upPin, FUNCTION_3);
 		//**************************************************
 #endif
+		pinMode(downPin, INPUT_PULLUP);
+		pinMode(upPin, INPUT_PULLUP);
 		this->Serial2 = &Serial;
 	}
 	void OnLoop() override
