@@ -44,6 +44,7 @@ public:
 		//https://arduino.stackexchange.com/questions/29938/how-to-i-make-the-tx-and-rx-pins-on-an-esp-8266-01-into-gpio-pins?rq=1
 		//********** CHANGE PIN FUNCTION  TO GPIO **********
 		//GPIO 1 (TX) swap the pin to a GPIO.
+		
 		pinMode(downPin, FUNCTION_3);
 		//GPIO 3 (RX) swap the pin to a GPIO.
 		pinMode(upPin, FUNCTION_3);
@@ -55,8 +56,15 @@ public:
 	}
 	void OnLoop() override
 	{
-		downPressed = digitalRead(4) ? false : true;
-		upPressed = digitalRead(5) ? false : true;
+		downPressed = digitalRead(downPin) ? false : true;
+		upPressed = digitalRead(upPin) ? false : true;
+#ifdef INVERSE
+		downPressed = !downPressed;
+		upPressed = !upPressed;
+#endif // DEBUG
+
+
+
 		if (block && !downPressed && !upPressed) {
 			block = false;
 			wasDownPressed = false;

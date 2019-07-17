@@ -110,17 +110,16 @@ auto genericText = GenericTextScreen(&UserInterface,text ,true);
 auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
 
 void setup() {
-	
-	
-	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
-	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
-	pinMode(5, INPUT_PULLUP);
-	pinMode(4, INPUT_PULLUP);
-	pinMode(A0, INPUT);
-	
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);
 #endif // !USE_TX_RX_AS_GPIO
+	
+	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
+	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
+	
+	//pinMode(A0, INPUT);
+	
+
 
 
 
