@@ -52,7 +52,7 @@
 #include "FS.h"
 #include "GenericTextScreen.h"
 #include "PizzaApp.h"
-
+#include "Config.h"
 auto bm = BatteryManager(&UserInterface);
 
 extern "C" {
@@ -141,9 +141,18 @@ void setup() {
 	
 	
 	pinMode(A0, INPUT);
+#ifndef USE_TX_RX_AS_GPIO
+	Serial.begin(115200);
+#endif // !USE_TX_RX_AS_GPIO
+		
+
 	
 
-	Serial.begin(115200);
+
+
+
+
+
 	Serial.println("start");
 
 
