@@ -17,4 +17,4 @@
 //Set buttons	//Set buttons
 #define PIN_DOWN  1	
 #define PIN_UP  3
-#define INVERSE
+#define INVERT
