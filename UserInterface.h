@@ -61,6 +61,8 @@ private:
 		 isChildBeingShown = false;
 		 SetLayoutInFocues(*layoutThatWasInFocus);
 		 RedrawAll();
+
+		 Serial.println("UserInterface::ReturnToParentLayout: finished");
 	 }
 
 	 void OpenChildLayout(Layout* l) {
@@ -153,8 +155,7 @@ private:
 	 }
 	 void ShowLayout(Layout& layout) {
 		
-		
-		
+		 
 		 layout.CalculateLayout(*renderer);
 		 layout.DrawWithState(*renderer);
 		 if (focusedLayout == &layout) {

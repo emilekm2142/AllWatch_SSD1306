@@ -18,8 +18,7 @@ private:
 	int upPin = PIN_UP;
 
 	Stream* Serial2;
-	int downPin = PIN_DOWN;
-	int upPin = PIN_UP;
+
 	long longPressLimit = 500;
 
 	long downPressedStartTime = 0;
@@ -63,7 +62,7 @@ public:
 	{
 		downPressed = digitalRead(downPin) ? false : true;
 		upPressed = digitalRead(upPin) ? false : true;
-#ifdef INVERSE
+#ifdef INVERT
 		downPressed = !downPressed;
 		upPressed = !upPressed;
 #endif // DEBUG

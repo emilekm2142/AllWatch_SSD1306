@@ -74,18 +74,10 @@ public:
 			auto a = new Animation(*offsets->get(currentIndex), 0, delay, -step);
 			UI->RegisterAnimation(a);
 		}
-
 		currentIndex++;
 		if (currentIndex >= settingsManager->appsManager->builtInApps->size()) currentIndex = 0;
-
 		auto a2 = new Animation(*offsets->get(currentIndex), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
-
-
-
-
-
-
 	}
 	virtual void Ok(Renderer& renderer) override {
 		settingsManager->appsManager->builtInApps->get(currentIndex)->getApplication()->Open();

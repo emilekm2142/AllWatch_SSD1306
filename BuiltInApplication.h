@@ -47,6 +47,7 @@ private:
 	 void Exit() {
 		 Serial.println("Exiting app");
 		 OnExit();
+		 UI->ReturnToParentLayout();
 		 this->UI->ShowLayout(*this->UI->GetMainLayout());
 		 settingsManager->appsManager->currentApplication = NULL;
 		 if (deleteOnExit) delete this;
@@ -63,6 +64,9 @@ private:
 	 }
 	void AppendKey(char* key, char* value) {
 		settingsManager->appsManager->AppendKeyToConfig(this->name, key, value);
+	}
+	void GetKeyValue(char* key, char* buffer) {
+		settingsManager->appsManager->GetKeyFromConfig(this->name, key, buffer);
 	}
 	
 };

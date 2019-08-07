@@ -65,6 +65,7 @@ private:
 public:
 	StatusAppScreen* l;
 	StatusApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
+		Serial.println("Welcome to the status app");
 		this->l = new StatusAppScreen(this);
 		this->layout = l;
 		this->name = "Status";

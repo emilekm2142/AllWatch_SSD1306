@@ -16,6 +16,7 @@ class ExtraPeripheralsManager
 
 
  public:
+	 ExtraPeripheralsManager(Barometer* b, Thermometer* t) { this->barometer = b; this->thermometer = t; }
 	 Thermometer* thermometer;
 	 Barometer* barometer;
 };

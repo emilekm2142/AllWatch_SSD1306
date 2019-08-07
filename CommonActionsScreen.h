@@ -89,6 +89,7 @@ public:
 
 		switch (currentIndex) {
 		case 0:
+			Serial.println("gettin built in...");
 			settingsManager->appsManager->getBuiltInApplicationByName("Status")->getApplication()->Open();
 		case 1:
 		{

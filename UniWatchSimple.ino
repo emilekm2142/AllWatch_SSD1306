@@ -97,8 +97,8 @@ InputHandler inputHandler = InputHandler(
 );
 
 Column menu;
-BME280Barometer barometerBME280;
-ExtraPeripheralsManager extraPeripheralsManager;
+BME280Barometer barometerBME280 = BME280Barometer();
+ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280);
 auto tk = TimeKepper(&UserInterface, &bm);
 auto r = SSD1306Renderer();
 
@@ -108,8 +108,6 @@ auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk, &extraPeripheralsMan
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 
 auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
-
-WeatherApp weather = WeatherApp(&UserInterface, &settingsManager, &tk);
 
 char* text = "mamamamam!!!$$@$@";
 auto genericText = GenericTextScreen(&UserInterface,text ,true);
@@ -121,16 +119,18 @@ auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
 
 
 void setup() {
+#ifndef USE_TX_RX_AS_GPIO
+	Serial.begin(115200);
+#endif // !USE_TX_RX_AS_GPIO
+	Serial.println("joy");
 #ifdef APPEND_DEFAULT_WIFI
 	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
 #endif // APPEND_DEFAULT_WIFI
 
 
-	extraPeripheralsManager.barometer = &barometerBME280;
-	extraPeripheralsManager.thermometer = &barometerBME280;
 
 	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
-	//settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
+	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, false);
 	settingsManager.appsManager->RegisterApplication("Status", []() {return new StatusApp(&UserInterface, &settingsManager); }, false);
@@ -141,10 +141,7 @@ void setup() {
 	
 	
 	pinMode(A0, INPUT);
-#ifndef USE_TX_RX_AS_GPIO
-	Serial.begin(115200);
-#endif // !USE_TX_RX_AS_GPIO
-		
+
 
 	
 
@@ -163,26 +160,7 @@ void setup() {
 
 	UserInterface.SetRenderer(r);
 
-	auto l1 = new Label("mama!");
-	auto l2 = new Label("mama2");
-	auto l3 = new Label("mama3");
-	auto l4 = new Label("mama3");
-	l2->canBeActivated = true;
-	l2->onActivate = [] {Serial.println("option L2"); };
 	
-	l1->setBorder(true);
-	l1->canBeActivated = true;
-	l1->onActivate = [] {Serial.println("option L1"); };
-
-	l3->canBeActivated = true;
-	l3->onActivate = [] {Serial.print("asdasd"); };
-
-	menu.Add(l1);
-	menu.Add(l2);
-	menu.Add(l3);
-
-	menu.setBorder(true);
-	menu.setY(20);
 	MainLayout.Add(&home);
 	
 	MainLayout.Add(&commons);
@@ -192,25 +170,17 @@ void setup() {
 	commons.UI = &UserInterface;
 	
 	UserInterface.SetMainLayout(MainLayout);
-	//UserInterface.ShowLayout(MainLayout);
+
 	UserInterface.AddSecondaryLayout(&topBar);
 	UserInterface.RedrawAll();
-	//ESP.deepSleep(30e6, RFMode::RF_DISABLED);
-	//UserInterface.ShowLayout(menu);
-	//UserInterface.StageChanges();
 	
 
 
-	settingsManager.TestSaveWiFi();
+	//settingsManager.TestSaveWiFi();
 
 }
-//int freeRam() {
-//	extern int __heap_start, *__brkval;
-//	int v;
-//	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
-//}
+
 void loop() {
-	//Serial.println();
 	inputHandler.OnLoop();
 	UserInterface.OnLoop();
 	tk.OnLoop();
@@ -218,7 +188,5 @@ void loop() {
 	settingsManager.SettingsOnLoop();
 	 if (settingsManager.appsManager->currentApplication != NULL)
 			 settingsManager.appsManager->currentApplication->OnLoop();
-	//strcpy(home.preganteText,String(analogRead(A0)).c_str());
-	//UserInterface.StageChanges();
-	//Serial.println(freeRam());
+	
 }

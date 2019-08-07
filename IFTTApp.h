@@ -17,6 +17,7 @@
 #include "Layout.h"
 #include "SSD1306.h"
 #include "string.h"
+#include "SettingsScreen.h"
 class MenuPositionDataHolder {
 public:
 	char* name;
@@ -74,11 +75,30 @@ protected:
 
 public:
 	IFTTApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
+		Serial.println("Welcome to IFTTT app!");
 		this->l = new IFTTTMainLayout(this);
 		this->layout = l;
 		this->name = "IFTTT";
 		this->UI = UI;
+		
+		l->mainMenu->AddOption((char*)F("Add more..."), [this] {
+			SettingsScreen* settingsScreen = new SettingsScreen(this->UI, settingsManager);
+			settingsManager->OpenSettings();
+			settingsScreen->UI = this->UI;
+			this->UI->OpenChildLayout((Layout *)(settingsScreen));
+		
+		});
+		char buffer[50];
+		GetKeyValue("key", &buffer[0]);
+		if (this->KeyExists("key") && strcmp("type in the api key",buffer ) == 0) {
+			l->mainMenu->AddOption((char*)F("You have to change the API key!"), [this] {
+				SettingsScreen* settingsScreen = new SettingsScreen(this->UI, settingsManager);
+				settingsManager->OpenSettings();
+				settingsScreen->UI = this->UI;
+				this->UI->OpenChildLayout((Layout *)(settingsScreen));
 
+			});
+		}
 		auto configFile = sm->appsManager->GetConfigForApplication("IFTTT");
 		while (configFile.available()) {
 			char name[50];

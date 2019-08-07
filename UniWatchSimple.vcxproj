@@ -1,0 +1,563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C5F80730-F44F-4478-BDAE-6634EFC2CA88}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectName>UniWatchSimple</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\UniWatchSimple;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\libraries\ESP8266WiFi\src;$(ProjectDir)..\..\..\..\..\Program Files (x86)\Arduino\libraries\Bridge\src;$(ProjectDir)..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\libraries;$(ProjectDir)..\libraries;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\cores\esp8266;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\cores\esp8266\avr;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\cores\esp8266\libb64;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\cores\esp8266\spiffs;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\cores\esp8266\umm_malloc;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\variants\d1;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\tools\sdk\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\tools\sdk\lwip2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\tools\sdk\libc\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\xtensa-lx106-elf\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\2.5.0-3-20ed2b9\lib\gcc\xtensa-lx106-elf\4.8.2\include;$(ProjectDir)..\..\..\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.5.2\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.UniWatchSimple.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__ESP8266_ESp8266__;__ESP8266_ESP8266__;__ets__;ICACHE_FLASH;NONOSDK221=1;F_CPU=80000000L;LWIP_OPEN_SRC;TCP_MSS=536;LWIP_FEATURES=1;LWIP_IPV6=0;ARDUINO=10809;ARDUINO_ESP8266_WEMOS_D1R1;ARDUINO_ARCH_ESP8266;FLASHMODE_DIO;ESP8266;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="VisualMicro" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UniWatchSimple.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractInputHandler.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="AbstractInputInterpreter.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Action_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Application_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="AppsMenu.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Background_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Back_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Barometer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="BatteryManager.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="BME280Barometer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="BuiltInApplication.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="CardAttributes_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Column.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Command_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="CommonActionsScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Components_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ConnectingScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="CustomScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="DataBinding_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="DefaultDatatypes_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="DependenciesHolder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Dependency.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ExtraPeripheralsManager.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Extras_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="FlashlightApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatbuffers_common_builder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatbuffers_common_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_accessors.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_alloc.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_builder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_emitter.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_endian.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_epilogue.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_flatbuffers.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_identifier.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_iov.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_json_parser.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_json_printer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_portable.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_prologue.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_refmap.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_rtconfig.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_types.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_unaligned.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_verifier.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\flatcc_version.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\grisu3_math.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\grisu3_parse.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\grisu3_print.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\include\linux\endian.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\include\std\inttypes.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\include\std\stdalign.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\include\std\stdbool.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\include\std\stdint.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\paligned_alloc.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pbase64.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pdiagnostic.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pdiagnostic_pop.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pdiagnostic_push.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pendian.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pendian_detect.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pinline.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pinttypes.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\portable.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\portable_basic.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pparsefp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pparseint.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pprintfp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pprintint.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pstatic_assert.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pstatic_assert_scope.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pstdalign.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pstdbool.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pstdint.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\punaligned.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pversion.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\portable\pwarnings.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\reflection\flatbuffers_common_builder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\reflection\flatbuffers_common_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\reflection\reflection_builder.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\reflection\reflection_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\reflection\reflection_verifier.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\support\cdump.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\support\elapsed.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\support\hexdump.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="flatcc\support\readfile.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GenericMenuScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="GenericTextScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Handshake_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="HomeScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Id_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="IFTTApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Label.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Layout.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="LayoutAttributes_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ListData_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="MainSlideLayout.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Message_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="MessagingData_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Open_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="PizzaApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Profile_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Requirements_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SettingsManager.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SettingsScreen.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="ShapeAttributes_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SimpleListEntry_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SimpleMenuRecord.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SimpleRequestsApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SSD1306Renderer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="SSH1106Renderer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="StaticResources.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="StatusApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Style_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TemplateRoot_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Template_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TextAttributes_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TextData_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Thermometer.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TimeKepper.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TopBar.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Update_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="View_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="WatchHttpClient.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="WeatherApp.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Widget.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Widget_reader.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="__vm\.UniWatchSimple.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AbstractInputHandler.cpp" />
+    <ClCompile Include="AbstractInputInterpreter.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AppsMenu.cpp" />
+    <ClCompile Include="Barometer.cpp" />
+    <ClCompile Include="BatteryManager.cpp" />
+    <ClCompile Include="BME280Barometer.cpp" />
+    <ClCompile Include="BuiltInApplication.cpp" />
+    <ClCompile Include="Column.cpp" />
+    <ClCompile Include="CommonActionsScreen.cpp" />
+    <ClCompile Include="ConnectingScreen.cpp" />
+    <ClCompile Include="CustomScreen.cpp" />
+    <ClCompile Include="DependenciesHolder.cpp" />
+    <ClCompile Include="Dependency.cpp" />
+    <ClCompile Include="ExtraPeripheralsManager.cpp" />
+    <ClCompile Include="FlashlightApp.cpp" />
+    <ClCompile Include="GenericMenuScreen.cpp" />
+    <ClCompile Include="GenericTextScreen.cpp" />
+    <ClCompile Include="HomeScreen.cpp" />
+    <ClCompile Include="IFTTApp.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="Layout.cpp" />
+    <ClCompile Include="MainSlideLayout.cpp" />
+    <ClCompile Include="PizzaApp.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SettingsManager.cpp" />
+    <ClCompile Include="SettingsScreen.cpp" />
+    <ClCompile Include="SimpleMenuRecord.cpp" />
+    <ClCompile Include="SimpleRequestsApp.cpp" />
+    <ClCompile Include="SSD1306Renderer.cpp" />
+    <ClCompile Include="SSH1106Renderer.cpp" />
+    <ClCompile Include="StaticResources.cpp" />
+    <ClCompile Include="StatusApp.cpp" />
+    <ClCompile Include="Thermometer.cpp" />
+    <ClCompile Include="TimeKepper.cpp" />
+    <ClCompile Include="TopBar.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="WatchHttpClient.cpp" />
+    <ClCompile Include="WeatherApp.cpp" />
+    <ClCompile Include="Widget.cpp" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
