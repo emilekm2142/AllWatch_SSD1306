@@ -13,6 +13,11 @@
 class InputHandler:public AbstractInputHandler
 {
 private:
+	int debounceDelay = DEBOUNCE_TIME;
+
+
+	int lastDownDebounceTime = 0;
+	int lastUpDebounceTime = 0;
 
 	int downPin = PIN_DOWN;
 	int upPin = PIN_UP;
@@ -66,43 +71,59 @@ public:
 		downPressed = !downPressed;
 		upPressed = !upPressed;
 #endif // DEBUG
-		if (block && !downPressed && !upPressed) {
-			block = false;
-			wasDownPressed = false;
-			downPressed = false;
-			wasUpPressed = false;
-			upPressed = false;
-			goto breaked;
+
+
+		//debounce
+		if (downPressed != wasDownPressed) {
+			// reset the debouncing timer
+			lastDownDebounceTime = millis();
 		}
-		if (!block) {
-			
-			if (downPressed && !wasDownPressed) { downPressedStartTime = millis(); }
-			if (upPressed && !wasUpPressed) { upPressedStartTime = millis(); }
+		if (upPressed != wasUpPressed) {
+			// reset the debouncing timer
+			lastUpDebounceTime = millis();
+		}
+
+		if ((millis() - lastDownDebounceTime) > debounceDelay && (millis() - lastUpDebounceTime) > debounceDelay) {
 
 
 
-			if (downPressed && wasDownPressed && isLongDownPress()) {
-				OnOk();
+			if (block && !downPressed && !upPressed) {
+				block = false;
 				wasDownPressed = false;
 				downPressed = false;
-				block = true;
-				goto breaked;
-			}
-			if (upPressed && wasUpPressed && isLongUpPress()) {
-				OnBack();
 				wasUpPressed = false;
 				upPressed = false;
-				block = true;
 				goto breaked;
 			}
-			if (!downPressed && wasDownPressed) {
-				OnDown();
-			}
-			if (!upPressed && wasUpPressed) {
-				OnUp();
+			if (!block) {
+
+				if (downPressed && !wasDownPressed) { downPressedStartTime = millis(); }
+				if (upPressed && !wasUpPressed) { upPressedStartTime = millis(); }
+
+
+
+				if (downPressed && wasDownPressed && isLongDownPress()) {
+					OnOk();
+					wasDownPressed = false;
+					downPressed = false;
+					block = true;
+					goto breaked;
+				}
+				if (upPressed && wasUpPressed && isLongUpPress()) {
+					OnBack();
+					wasUpPressed = false;
+					upPressed = false;
+					block = true;
+					goto breaked;
+				}
+				if (!downPressed && wasDownPressed) {
+					OnDown();
+				}
+				if (!upPressed && wasUpPressed) {
+					OnUp();
+				}
 			}
 		}
-		
 		wasDownPressed = downPressed;
 		wasUpPressed = upPressed;
 		breaked:
