@@ -23,3 +23,6 @@
 #define PIN_DOWN  1	
 #define PIN_UP  3
 //#define INVERT
+
+
+#define DEBOUNCE_TIME 50

@@ -21,7 +21,7 @@
 #include "BuiltInApplication.h"
 class CommonActionsScreen :public CustomScreen {
 protected:
-	int delay = 80;
+	int localDelay = 80;
 	int maxOffset = 10;
 	int step = 1;
 public:
@@ -31,7 +31,7 @@ public:
 	int spacing = 3;
 	bool connecting = false;
 	int lineHeight = 10;
-	char* options[8] = { "Status", "Connect to WiFi","Sync time", "Settings", "Turn off", "Flashlight", "asdasf5", "asdasda" };
+	char* options[8] = { "Status","Settings","Sync time",  "Connect to WiFi", "Turn off", "Flashlight", "asdasf5", "asdasda" };
 	int offsets[8] = { maxOffset,0,0,0,0,0,0,0 };
 	
 	
@@ -49,14 +49,14 @@ public:
 	}
 	virtual void Up(Renderer& renderer) override {
 		if (offsets[currentIndex] != 0) {
-			auto a = new Animation(offsets[currentIndex], 0, delay, -step);
+			auto a = new Animation(offsets[currentIndex], 0, localDelay, -step);
 			UI->RegisterAnimation(a);
 		}
 
 		currentIndex--;
 		if (currentIndex < 0 ) currentIndex = optionsLength - 1;
 		
-			auto a2 = new Animation(offsets[currentIndex], maxOffset, delay, step);
+			auto a2 = new Animation(offsets[currentIndex], maxOffset, localDelay, step);
 			UI->RegisterAnimation(a2);
 		
 
@@ -68,31 +68,41 @@ public:
 	}
 	virtual void Down(Renderer& renderer) override {
 		if (offsets[currentIndex] != 0) {
-			auto a = new Animation(offsets[currentIndex], 0, delay, -step);
+			auto a = new Animation(offsets[currentIndex], 0, localDelay, -step);
 			UI->RegisterAnimation(a);
 		}
 
 		currentIndex++;
 		if (currentIndex >=optionsLength) currentIndex = 0;
-		
-			auto a2 = new Animation(offsets[currentIndex], maxOffset, delay, step);
+			auto a2 = new Animation(offsets[currentIndex], maxOffset, localDelay, step);
 			UI->RegisterAnimation(a2);
-		
-		
-
-		
-		
-
 	}
 	virtual void Ok(Renderer& renderer) override {
 		
-
+		Serial.printf("%d - currentIndex", currentIndex);
 		switch (currentIndex) {
 		case 0:
 			Serial.println("gettin built in...");
 			settingsManager->appsManager->getBuiltInApplicationByName("Status")->getApplication()->Open();
+			break;
 		case 1:
 		{
+			SettingsScreen* settingsScreen = new SettingsScreen(UI, settingsManager);
+			settingsManager->OpenSettings();
+			settingsScreen->UI = this->UI;
+			UI->OpenChildLayout((Layout *)(settingsScreen));
+		}
+			break;
+		case 2: {
+			
+			auto connectingScreen = new ConnectingScreen(UI, settingsManager, settingsManager->WiFiConnected() ? "syncing..." : "no internet!");
+			UI->OpenChildLayout(connectingScreen);
+			if (settingsManager->WiFiConnected()) settingsManager->SyncTime(); else  delay(1000);
+			UI->ReturnToParentLayout();
+			delete connectingScreen;
+			break;
+		}
+		case 3:{
 			connecting = true;
 			auto connectingScreen = new ConnectingScreen(UI, settingsManager);
 			UI->OpenChildLayout(connectingScreen);
@@ -103,17 +113,10 @@ public:
 			UI->ReturnToParentLayout();
 			delete connectingScreen;
 			connecting = false;
-			options[1] = settingsManager->WiFiConnected() ? (char*)"Disconnect Wifi" : (char*)"Connect to WiFi";
-		}
-			break;
-		case 2:
-			settingsManager->SyncTime();
-			break;
-		case 3:{
-			SettingsScreen* settingsScreen =new SettingsScreen(UI, settingsManager);
-			settingsManager->OpenSettings();
-			settingsScreen->UI = this->UI;
-			UI->OpenChildLayout((Layout *)(settingsScreen));
+			options[3] = settingsManager->WiFiConnected() ? (char*)"Disconnect Wifi" : (char*)"Connect to WiFi";
+
+
+			
 			//TODO: open settings info screen
 		}
 			break;
@@ -124,6 +127,7 @@ public:
 		case 5:
 		{
 			settingsManager->appsManager->getBuiltInApplicationByName("flashlight")->getApplication()->Open();
+			break;
 		}
 		}
 	}
@@ -131,7 +135,7 @@ public:
 
 
 	virtual void Draw(Renderer& renderer) override {
-		options[1] = settingsManager->WiFiConnected() ? (char*)"Disconnect Wifi" : (char*)"Connect to WiFi";
+		options[3] = settingsManager->WiFiConnected() ? (char*)"Disconnect Wifi" : (char*)"Connect to WiFi";
 		if (connecting) {
 			renderer.DrawAlignedString(GlobalX + renderer.GetScreenWidth() / 2, 40, "Connecting...", renderer.GetScreenWidth(), renderer.Center);
 

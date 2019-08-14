@@ -34,7 +34,7 @@ private:
 		}
 		void Draw(Renderer& r) override {
 			snprintf_P(buffer,
-				20,
+				200,
 				PSTR("My ip is: %s \n Temperature: %.1f*C \n Pressure: %.1f hPa \n Approx. altitude: %.2f"),
 				this->app->settingsManager->w->localIP().toString().c_str(),
 				this->app->settingsManager->extraPeripheralsManager->barometer->getPressure(),

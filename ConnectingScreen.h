@@ -25,8 +25,10 @@ public:
 
 	UserInterfaceClass* UI;
 	SettingsManager* sm;
-	ConnectingScreen(UserInterfaceClass*& UI, SettingsManager*& sm) {
+	const char* otherText;
+	ConnectingScreen(UserInterfaceClass*& UI, SettingsManager*& sm, const char* otherText=nullptr) {
 		this->UI = UI;
+		this->otherText = otherText;
 		this->sm = sm;
 	}
 
@@ -47,7 +49,9 @@ public:
 		//UI->RegisterAnimation(a);
 	}
 	virtual void Draw(Renderer& renderer) override {
-		renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 50, "Connecting... \n this might take a few seconds", renderer.GetScreenWidth() / 2, renderer.Center);
+		renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 20, 
+			otherText==nullptr?(char*)"Connecting... \n this might take a few seconds":(char*)otherText,
+			renderer.GetScreenWidth() / 2, renderer.Center);
 
 
 	}

@@ -61,13 +61,13 @@ public:
 		Serial.println(currentIndex);
 		if (currentIndex == 0) {
 			currentIndex = GetChildren()->size() - 1;
-			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, -stepSize);
+			Animation* a = new Animation(GlobalX, -currentIndex * 160, 1, -stepSize);
 			UI->RegisterAnimation(a);
 		}
 		else {
 			
 			currentIndex--;
-			Animation* a = new Animation(GlobalX, currentIndex * 160, 1, stepSize);
+			Animation* a = new Animation(GlobalX, -currentIndex * 160, 1, stepSize);
 			UI->RegisterAnimation(a);
 		}
 		Serial.print("After prev triggered: ");
@@ -104,6 +104,7 @@ public:
 			int positionsLeftToCenterPoint = i - centerPoint;
 			r.DrawString(centerH + positionsLeftToCenterPoint * offsetFromCenterH, indicatorY, ".");
 		}
+		r.SetFont((uint8_t *)ArialMT_Plain_10);
 	
 	}
 	virtual void CalculateLayout(Renderer& renderer) override {

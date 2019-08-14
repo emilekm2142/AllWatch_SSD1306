@@ -130,7 +130,7 @@ void setup() {
 
 
 	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
-	settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
+	//settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, false);
 	settingsManager.appsManager->RegisterApplication("Status", []() {return new StatusApp(&UserInterface, &settingsManager); }, false);
