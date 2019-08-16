@@ -10,7 +10,7 @@
 #endif
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <Adafruit_BMP280.h>
+
 #include "Barometer.h"
 #include "Thermometer.h"
 #define SEALEVELPRESSURE_HPA (1013.25)
@@ -21,9 +21,9 @@ class BME280Barometer:public Barometer, public Thermometer
 
  public:
 	 float baseHeight = SEALEVELPRESSURE_HPA;
-	 Adafruit_BMP280* bme;
+	 Adafruit_BME280* bme;
 	 BME280Barometer() {
-		 bme = new Adafruit_BMP280();
+		 bme = new Adafruit_BME280();
 		 bme->begin(0x77);
 		 
 		// bme->begin();

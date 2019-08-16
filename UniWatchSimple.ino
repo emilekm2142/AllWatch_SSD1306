@@ -122,7 +122,7 @@ void setup() {
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);
 #endif // !USE_TX_RX_AS_GPIO
-	Serial.println("joy");
+	Serial.println("joy2");
 #ifdef APPEND_DEFAULT_WIFI
 	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
 #endif // APPEND_DEFAULT_WIFI

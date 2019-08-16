@@ -59,7 +59,7 @@ class IFTTApp :public BuiltInApplication
 			this->app->Exit();
 		}
 		void Down(Renderer& r) override {
-			Serial.println("Pizza main layout on down");
+	
 			mainMenu->Down(r);
 		}
 		void Up(Renderer& r) override {
@@ -101,24 +101,25 @@ public:
 		}
 		auto configFile = sm->appsManager->GetConfigForApplication("IFTTT");
 		while (configFile.available()) {
+			Serial.println("Next char...");
 			char name[50];
 			int sizeName = configFile.readBytesUntil('=', &name[0], 50);
 			name[sizeName] = '\0';
-			
+			Serial.printf("Content: %s=", name);
 			char value[50];
 			int valueSize = configFile.readBytesUntil('\n', &value[0], 50);
 			value[valueSize] = '\0';
-			
+			Serial.printf("Content: =%s",  value);
 			if (strcmp(name, "key") != 0) {
-				auto i = new MenuPositionDataHolder(name, value);
-				AddMenuOption(i);
+			   	AddMenuOption(name);
 			}
 			else {
-				strcpy(key, (const char*)&name[0]);
+				strcpy(key, (const char*)&value[0]);
 			}
 			
 
 		}
+		Serial.println("CLOSING FILE");
 		configFile.close();
 
 	//	l->mainMenu->AddOption("Margarita", [this]() {this->app->Exit(); });
@@ -130,24 +131,33 @@ public:
 		Serial.println("IFTTT opened");
 	}
 	void OnExit() override {
-		for (int i = 0; i < ll->size(); i++) {
-			delete ll->get(i);
-		}
-		delete ll;
+		
 		delete l;
 	}
-	LinkedList<MenuPositionDataHolder*>* ll = new LinkedList<MenuPositionDataHolder *>();
-	void AddMenuOption(MenuPositionDataHolder* h) {
-		ll->add(h);
-		l->mainMenu->AddOption(h->name, [this, h]() {DoWebhookRequest(h); });
+	
+	void AddMenuOption(char* name) {
+		char* j = new char[strlen(name) + 1];
+		Serial.println("Copy...2");
+		strcpy(j, name);
+		l->mainMenu->AddOption(j, [this, j]() {DoWebhookRequest(j); }, true);
+		Serial.println("Added...");
 	}
-	void DoWebhookRequest(MenuPositionDataHolder* h) {
+	void DoWebhookRequest(char* h) {
 		char buffer[150];
-		sprintf(buffer, "https://maker.ifttt.com/trigger/%s/with/key/%s", h->action, key);
+		char value[100];
+		GetKeyValue(h, value);
+		sprintf(buffer, "https://maker.ifttt.com/trigger/%s/with/key/%s", value, key);
+		Serial.println("Sending request to:");
+		Serial.println(buffer);
 		auto d = settingsManager->http->MakeGetRequest(buffer);
+		if (d == nullptr) {
+			//TODO: SHOW WARNING SCREEN...
+		}else{
+			Serial.println(d->getString());
 
-
-		settingsManager->http->EndRequest(d);
+			settingsManager->http->EndRequest(d);
+		}
+	
 	}
 };
 

@@ -50,8 +50,9 @@ private:
 	 protected:
 		 SettingsManager* parent;
 	 public:
-		 void _Connect() {
+		 bool _Connect() {
 			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
+			 return parent->wifiManager->WiFiConnected();
 		 }
 		 void _Disconnect() {
 			 parent->wifiManager->Disconnect();
@@ -62,7 +63,11 @@ private:
 		 HTTPClient* MakeGetRequest(char* url) {
 			 
 			 if (!parent->wifiManager->WiFiConnected()) {
-				 _Connect();
+				bool success = _Connect();
+				if (!success) {
+					Serial.println(F("Error... No network available!")); return nullptr
+						;
+				}
 			 }
 			 HTTPClient* http = new HTTPClient();
 
@@ -150,10 +155,13 @@ private:
 		 }
 		 
 		 bool GetKeyFromConfig(char* appName, char* key, char* buffer) {
+			 Serial.printf((char*)F("Requested keyL %s"), key);
 			 auto f = GetConfigForApplication(appName);
 			 while (f.available()) {
 				 char keyBuffer[20];
 				 char valueBuffer[40];
+				 for (int i = 0; i < 40; i++) valueBuffer[i] = '\0';
+				 for (int i = 0; i < 20; i++) keyBuffer[i] = '\0';
 				 auto keyLength = f.readBytesUntil('=', keyBuffer, 20);
 				 keyBuffer[keyLength] = '\0';
 				 auto valueLength = f.readBytesUntil('\n', valueBuffer,40);
@@ -457,7 +465,10 @@ private:
 	 }
 	 void OpenSettings() {
 		 w->forceSleepWake();
-		 w->softAP("test", "123456789");
+		 int st = w->softAP("Watch");
+		 delay(1000);
+		 Serial.println("new network made");
+		 Serial.printf("Status: %d", st);
 		 server = new AsyncWebServer(80);
 		 server->on("/addWifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 if (request->hasParam("ssid") && request->hasParam("password")) {

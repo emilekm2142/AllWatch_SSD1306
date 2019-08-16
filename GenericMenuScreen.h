@@ -51,7 +51,7 @@ public:
 
 
 	}
-	void AddOption(char* name, std::function<void()> callback) {
+	void AddOption(char* name, std::function<void()> callback, bool copy=false) {
 		if (offsets->size() == 0) {
 			offsets->add(new int(15));
 		}
@@ -59,10 +59,25 @@ public:
 			offsets->add(new int(0));
 		}
 		optionsLength++;
-	
-		options->add(name);
-		callbacks->add(callback);
+		if (copy) {
+			Serial.println("Copy...");
+			char* j = new char[strlen(name)+1];
+			Serial.println("Copy...2");
+			strcpy(j, name);
+			Serial.println(j);
+			Serial.println("Copy...3");
+			options->add(j);
+			Serial.println("Copy...4");
+			callbacks->add(callback);
+			
+		}	
+		else {
+			options->add(name);
+			callbacks->add(callback);
+		\
+		}
 
+	
 	}
 	virtual int CalculateHeight(Renderer& renderer) override {
 		return renderer.GetScreenHeight();
