@@ -185,6 +185,7 @@
     <ClInclude Include="Extras_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="FlappyBird.h" />
     <ClInclude Include="FlashlightApp.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -374,6 +375,7 @@
     <ClInclude Include="flatcc\support\readfile.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GenericMenuScreen.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -527,7 +529,9 @@
     <ClCompile Include="DependenciesHolder.cpp" />
     <ClCompile Include="Dependency.cpp" />
     <ClCompile Include="ExtraPeripheralsManager.cpp" />
+    <ClCompile Include="FlappyBird.cpp" />
     <ClCompile Include="FlashlightApp.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GenericMenuScreen.cpp" />
     <ClCompile Include="GenericTextScreen.cpp" />
     <ClCompile Include="HomeScreen.cpp" />
