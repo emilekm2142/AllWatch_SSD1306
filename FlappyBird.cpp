@@ -1,6 +1,9 @@
 // Flappy Bird Simulator for ESPresso Lite
-
+#include "Game.h"
 #include "FlappyBird.h"
+#include "Config.h"
+#define BUTTON_UP PIN_UP
+#define BUTTON_DOWN PIN_DOWN
 
 using namespace flappyBird;
 
@@ -71,7 +74,7 @@ FlappyBird::FlappyBird() {
 }
 
 void FlappyBird::addScore(int value) {
-  score = constrain(score + value, 0, maxScore[gameIndex]);
+  score = constrain(score + value, 0, 99999);
   setScoreImages();
 }
 
@@ -108,7 +111,7 @@ void FlappyBird::changeGameMode(int mode) {
       setScorePanelImages(scorePanelScoreDigitImage, scorePanelScore);
       setScorePanelImages(scorePanelHighScoreDigitImage, scorePanelHighScore);
       isButtonAllowed = false;
-      pressedButton = BUTTON_NONE;
+      pressedButton = -1;
       break;
   }
 
@@ -140,9 +143,9 @@ void FlappyBird::checkHighScore() {
 }
 
 void FlappyBird::initGame() {
-  gameIndex = GAME_FLAPPY_BIRD;
+ 
   readHighScore();
-  readVolume();
+
   resetGame();
   changeGameMode(GAME_MODE_TITLE);
 }
@@ -222,21 +225,18 @@ void FlappyBird::playSound(int index) {
         break;
     }
 
-    espert->buzzer.on((int)constrain(frequency * volume, 0.0f, 25.0f));
+   
   }
 }
 
 void FlappyBird::pressButton() {
+	int buttonPin[] = { PIN_UP,PIN_DOWN };
+
+
   for (int i = 0; i < numberOfButtons; i++) {
     if (buttonPin[i] != -1) {
       bool isPressed = false;
-
-      if (buttonPin[i] == A0) {
-        isPressed = (batteryA0Value >= batteryA0Min) ? false : true;
-      } else {
         isPressed = (digitalRead(buttonPin[i]) == LOW) ? true : false;
-      }
-
       if (isPressed != isButtonPressed[i]) {
         isButtonPressed[i] = isPressed;
 
@@ -244,9 +244,8 @@ void FlappyBird::pressButton() {
           if (isPressed) {
             pressedButton = i;
 
-            if (gameMode == GAME_MODE_TITLE && !isGamepadEnabled && i == BUTTON_RIGHT) {
-              toggleVolume();
-              titleTime = 0.0f;
+            if (gameMode == GAME_MODE_TITLE && !isGamepadEnabled && i == BUTTON_UP) {
+             
             } else if (!isAutoPlay && (gameMode == GAME_MODE_GET_READY || gameMode == GAME_MODE_PLAY)) {
               jump();
 
@@ -256,11 +255,8 @@ void FlappyBird::pressButton() {
             }
           } else {
             if (isVolumeChanged > 0.0f) {
-              if ((!isGamepadEnabled && i == BUTTON_RIGHT) || (isGamepadEnabled && (i == BUTTON_UP || i == BUTTON_DOWN))) {
-                titleTime = 0.0f;
-                playSound(SOUND_VOLUME);
-              }
-            } else if (i == pressedButton && ((isGamepadEnabled && (i == BUTTON_A || i == BUTTON_B)) || (!isGamepadEnabled && (i == BUTTON_LEFT || i == BUTTON_RIGHT)))) {
+             
+            } else if (i == pressedButton &&   i == BUTTON_DOWN ) {
               if (isAutoPlay) {
                 readHighScore();
                 resetGame();
@@ -270,11 +266,11 @@ void FlappyBird::pressButton() {
               } else if (gameMode == GAME_MODE_GAME_OVER) {
                 changeGameMode(GAME_MODE_TITLE);
               }
-            } else if (isMenuEnabled && isGamepadEnabled && gameMode == GAME_MODE_TITLE && pressedButton == BUTTON_LEFT && i == BUTTON_LEFT) {
+            } else if (isMenuEnabled && gameMode == GAME_MODE_TITLE && pressedButton == BUTTON_DOWN && i == BUTTON_DOWN) {
               isRequestingExit = true;
             }
 
-            pressedButton = BUTTON_NONE;
+            pressedButton = -1;
           }
         }
         break;
@@ -288,73 +284,73 @@ void FlappyBird::render() {
     espert->oled.clear(false);
   }
 
-  drawBitmap(0, 0, screenSize.width, screenSize.height, backgroundBitmap, NULL, ESPERT_WHITE);
+  drawBitmap(0, 0, screenSize.width, screenSize.height, backgroundBitmap, NULL, 0);
 
   switch (gameMode) {
     case GAME_MODE_TITLE:
-      drawBitmap(32, 1, 72, 24, titleBitmap, titleMaskBitmap, ESPERT_BLACK);
-      renderMakerAsia(40, 51, ESPERT_BLACK);
+      drawBitmap(32, 1, 72, 24, titleBitmap, titleMaskBitmap,1);
+      renderMakerAsia(40, 51, 1);
       renderHighScore();
-      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees], ESPERT_BLACK);
+      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees], 1);
       break;
 
     case GAME_MODE_GET_READY:
-      drawBitmap(32, 1, 64, 56, getReadyBitmap, getReadyMaskBitmap, ESPERT_BLACK);
-      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees], ESPERT_BLACK);
+      drawBitmap(32, 1, 64, 56, getReadyBitmap, getReadyMaskBitmap, 1);
+      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees],1);
       break;
 
     case GAME_MODE_PLAY:
     case GAME_MODE_GAME_OVER:
       for (int i = 0; i < numberOfPipes; i++) {
         if (isPipeVisibled[i]) {
-          drawBitmap(pipePosition[i].x, pipePosition[i].y - pipeSize.height, 16, 32, pipeUpBitmap, pipeUpMaskBitmap, ESPERT_BLACK);
-          drawBitmap(pipePosition[i].x, pipePosition[i].y + heightBetweenPipes, 16, 32, pipeDownBitmap, pipeDownMaskBitmap, ESPERT_BLACK);
+          drawBitmap(pipePosition[i].x, pipePosition[i].y - pipeSize.height, 16, 32, pipeUpBitmap, pipeUpMaskBitmap, 1);
+          drawBitmap(pipePosition[i].x, pipePosition[i].y + heightBetweenPipes, 16, 32, pipeDownBitmap, pipeDownMaskBitmap, 1);
         }
       }
 
-      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees], ESPERT_BLACK);
+      drawBitmap(birdPosition.x, birdPosition.y, 16, 16, birdBitmap[(int)birdFrame][(int)birdDegrees], birdMaskBitmap[(int)birdFrame][(int)birdDegrees], 1);
 
       if (gameMode == GAME_MODE_PLAY) {
         for (int i = 0; i < 3; i++) {
           if (scoreDigitImage[i]) {
-            drawBitmap(scorePosition[i].x, scorePosition[i].y, 8, 16, scoreDigitImage[i], scoreDigitMaskImage[i], ESPERT_BLACK);
+            drawBitmap(scorePosition[i].x, scorePosition[i].y, 8, 16, scoreDigitImage[i], scoreDigitMaskImage[i],1);
           }
         }
       } else if (gameMode == GAME_MODE_GAME_OVER) {
-        drawBitmap(gameOverPosition.x, gameOverPosition.y, 64, 16, gameOverBitmap, gameOverMaskBitmap, ESPERT_BLACK);
-        drawBitmap(25, 16 + scorePanelOffset, 80, 40, scorePanelBitmap, scorePanelMaskBitmap, ESPERT_BLACK);
+        drawBitmap(gameOverPosition.x, gameOverPosition.y, 64, 16, gameOverBitmap, gameOverMaskBitmap, 1);
+        drawBitmap(25, 16 + scorePanelOffset, 80, 40, scorePanelBitmap, scorePanelMaskBitmap, 1);
 
         if (scorePanelMedalImage && scorePanelScore == score) {
-          drawBitmap(28, 24 + scorePanelOffset, 32, 32, scorePanelMedalImage, NULL, ESPERT_BLACK);
+          drawBitmap(28, 24 + scorePanelOffset, 32, 32, scorePanelMedalImage, NULL, 1);
         }
 
         if (isNewHighScore && scorePanelScore == scorePanelHighScore) {
-          drawBitmap(63, 36 + scorePanelOffset, 16, 8, newBitmap, NULL, ESPERT_BLACK);
+          drawBitmap(63, 36 + scorePanelOffset, 16, 8, newBitmap, NULL,1);
         }
 
         for (int i = 0; i < 3; i++) {
           int x = 78 + (i * 7);
           if (scorePanelScoreDigitImage[i]) {
-            drawBitmap(x, 25 + scorePanelOffset, 8, 8, scorePanelScoreDigitImage[i], NULL, ESPERT_BLACK);
+            drawBitmap(x, 25 + scorePanelOffset, 8, 8, scorePanelScoreDigitImage[i], NULL, 1);
           }
 
           if (scorePanelHighScoreDigitImage[i]) {
-            drawBitmap(x, 44 + scorePanelOffset, 8, 8, scorePanelHighScoreDigitImage[i], NULL, ESPERT_BLACK);
+            drawBitmap(x, 44 + scorePanelOffset, 8, 8, scorePanelHighScoreDigitImage[i], NULL, 1);
           }
         }
       }
       break;
   }
 
-  drawBitmap(landOffset.x, landOffset.y, 128, 8, landBitmap, landMaskBitmap, ESPERT_BLACK);
-  drawBitmap(landOffset.x - landSize.width, landOffset.y, 128, 8, landBitmap, landMaskBitmap, ESPERT_BLACK);
+  drawBitmap(landOffset.x, landOffset.y, 128, 8, landBitmap, landMaskBitmap, 1);
+  drawBitmap(landOffset.x - landSize.width, landOffset.y, 128, 8, landBitmap, landMaskBitmap, 1);
 
   if (gameMode == GAME_MODE_TITLE) {
-    renderVolume(1, 1, ESPERT_BLACK);
-    renderBattery(screenSize.width - batterySize.width - 1, 1, ESPERT_BLACK);
+    //renderVolume(1, 1, ESPERT_BLACK);
+   // renderBattery(screenSize.width - batterySize.width - 1, 1, ESPERT_BLACK);
   }
 
-  renderFPS(116, 52, 8, 8, -3, (const uint8_t*)numberBitmap, (const uint8_t*)numberMaskBitmap, ESPERT_BLACK, 102, 52);
+  renderFPS(116, 52, 8, 8, -3, (const uint8_t*)numberBitmap, (const uint8_t*)numberMaskBitmap,1, 102, 52);
 
   if (!isMenuEnabled) {
     espert->oled.update();
@@ -362,7 +358,7 @@ void FlappyBird::render() {
 }
 
 void FlappyBird::renderHighScore() {
-  drawBitmap(49, 38, 32, 8, highScoreBitmap, NULL, ESPERT_BLACK);
+  drawBitmap(49, 38, 32, 8, highScoreBitmap, NULL, 1);
   String highScoreString = String(highScore);
   int numberwidth = 7;
   int x = (screenSize.width - (highScoreString.length() * (numberwidth - 1))) * 0.5f;
@@ -370,7 +366,7 @@ void FlappyBird::renderHighScore() {
 
   for (int i = 0; i < highScoreString.length(); i++) {
     n = highScoreString.charAt(i) - '0';
-    drawBitmap(x + (i * (numberwidth - 1)), 45, 8, 8, numberBitmap[n], numberMaskBitmap[n], ESPERT_BLACK);
+    drawBitmap(x + (i * (numberwidth - 1)), 45, 8, 8, numberBitmap[n], numberMaskBitmap[n], 1);
   }
 }
 
@@ -394,7 +390,7 @@ void FlappyBird::resetGame() {
   score = 0;
   setScoreImages();
   buttonDelay = 0.0f;
-  pressedButton = BUTTON_NONE;
+  pressedButton = -1;
   landOffset.x = screenSize.width;
 
   memset(pipePosition, 0, sizeof(pipePosition));
@@ -458,7 +454,8 @@ void FlappyBird::setScorePanelImages(const uint8_t* digitImage[3], int value) {
 }
 
 void FlappyBird::update() {
-  updateGameTime();
+  //TODO:
+	updateGameTime();
 
   switch (gameMode) {
     case GAME_MODE_TITLE:
@@ -471,11 +468,7 @@ void FlappyBird::update() {
       titleTime += ((isVolumeChanged > 0.0f) ? 0.0f : elapsedTime);
 
       if (isGamepadEnabled && (pressedButton == BUTTON_UP || pressedButton == BUTTON_DOWN)) {
-        if (pressedButton == BUTTON_UP) {
-          increaseVolume();
-        } else if (pressedButton == BUTTON_DOWN) {
-          decreaseVolume();
-        }
+      
 
         titleTime = 0.0f;
       }
@@ -587,7 +580,7 @@ void FlappyBird::update() {
         if (scorePanelOffset <= 0.1f) {
           if (!isButtonAllowed) {
             isButtonAllowed = true;
-            pressedButton = BUTTON_NONE;
+            pressedButton = -1;
           }
 
           if (scorePanelScore != score) {

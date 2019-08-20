@@ -1,8 +1,9 @@
 #ifndef _GAME_H_
 #define _GAME_H_
-
-#include <ESPert.h>
-
+#define ESPERT_WHITE 0
+#define ESPERT_BLACK 1
+#define BUTTON_NONE -1
+#include "ESPert.h"
 static const int numberOfGames = 4;
 
 // Convert Image to XBM http://www.online-utility.org/image/convert/to/XBM
@@ -83,24 +84,9 @@ class Game {
     //          │             └─ volume (0.00 to 1.00)
     //          └─ saveDataKey
     // ****************************************************************************
-    typedef enum {
-      GAME_UNKNOWN = -1,
-      GAME_PAC_MAN,
-      GAME_FLAPPY_BIRD,
-      GAME_BREAKOUT,
-      GAME_OCTOPUS,
-    } GameIndex;
-    GameIndex gameIndex;
-    static const int saveDataHeaderSize = 32;
-    const String saveDataKey = "ESPressoGames";
-    static const int saveDataVolumeLength = 4; // 0.00 to 1.00
-    const unsigned long maxScore[numberOfGames] = {999999l, 999l, 9999l, 999l}; // GAME_PAC_MAN, ..., GAME_OCTOPUS
 
     // internet time
-    const char* wifiSSID = ""; // your WiFI network name
-    const char* wifiPassword = ""; // your WiFi password
-    const float timeZone = +7.00f; // your time zone (+7.00 is UTC+07:00 Bangkok)
-    bool isSyncInternetTime;
+    
     unsigned long timeSyncLastFrameTime;
     int hours;
     int minutes;
@@ -117,21 +103,18 @@ class Game {
       float y;
     } Point;
 
-    typedef enum {
-      BUTTON_NONE = -1,
-      BUTTON_LEFT,
-      BUTTON_RIGHT,
-      BUTTON_UP,
-      BUTTON_DOWN,
-      BUTTON_A,
-      BUTTON_B
-    } ButtonType;
+	bool isSyncInternetTime = false;
+	unsigned long highScore;
+	unsigned long score;
+	unsigned long readHighScore();
+	void writeHighScore();
+
 
     const Size screenSize = {128, 64};
     bool isRequestingExit;
     static const int maxBlinkTime = 500;
     bool isMenuEnabled;
-
+	void updateGameTime(bool btn=true);
     // game time
     unsigned long lastFrameTime;
     float elapsedTime;
@@ -147,8 +130,6 @@ class Game {
     // button
     static const int numberOfButtons = 6;
     static const int maxButtonDelay = 10;
-    int buttonPin[numberOfButtons];
-    ESPert_Button button[numberOfButtons];
     bool isGamepadEnabled;
     float buttonDelay = 0.0f;
     bool isButtonPressed[numberOfButtons];
@@ -165,38 +146,16 @@ class Game {
     bool isSoundInterruptEnabled;
     bool isSoundEnabled = true;
 
-    // battery
-    static const int batteryA0Min = 5;
-    static const int batteryMaxVoltage = 6080;
-    static const int batteryVoltageMin = 3000;
-    static const int batteryVoltageMax = 4225;
-    static const int batteryVoltageLength = batteryVoltageMax - batteryVoltageMin + 1;
-    static const int batteryMaxValues = 21;
-    int batteryFilters[batteryMaxValues];
-    int batteryFiltersIndex = 0;
-    int batteryA0Value;
-    int lastBatteryVoltage;
-    int batteryVoltage;
-    const Size batterySize = {15, 8};
-    float battery;
-
-    // score
-    unsigned long highScore;
-    unsigned long score;
-    int highScoreAddress;
 
     ESPert* espert;
 
     void decreaseVolume();
     void drawBitmap(int x, int y, int width, int height, const uint8_t* bitmap, const uint8_t* mask = NULL, int color = ESPERT_WHITE);
     String floatToString(float value, int length, int decimalPalces);
-    int getBatteryVoltage();
-    int getHighScoreAddress();
     void increaseVolume();
-    void initBattery();
     virtual void initGame();
     bool isBlink(float factor = 1.0f);
-    bool isSecondChanged();
+    
     float lerp(float t, float v0, float v1);
     String longToString(unsigned long value, int length, String prefixChar = "0");
     int median(int arr[], int maxValues);
@@ -204,25 +163,19 @@ class Game {
     virtual void playSound(int index);
     virtual void pressButton();
     void quickSort(int* arr, const int left, const int right);
-    unsigned long readHighScore(int offset = 0);
-    bool readInternetTime();
-    void readVolume();
-    void renderBattery(int x, int y, int color = ESPERT_WHITE, int bitmapWidth = 0, int bitmapHeight = 0, int gap = 0, const uint8_t* numberBitmap = NULL, const uint8_t* numberMaskBitmap = NULL);
-    void renderVolume(int x, int y, int color = ESPERT_WHITE);
+   
+    void renderVolume(int x, int y, int color = 0);
     void renderFPS(int x, int y, int bitmapWidth, int bitmapHeight, int gap, const uint8_t* numberBitmap, const uint8_t *numberMaskBitmap = NULL, int color = ESPERT_WHITE, int fpsBitmapX = -1, int fpsBitmapY = -1);
-    void renderMakerAsia(int x, int y, int color = ESPERT_WHITE);
+    void renderMakerAsia(int x, int y, int color = 0);
     void resetGameTime();
     void swap(int &a, int &b);
     void toggleVolume();
-    void updateGameTime(bool updateButton = true);
-    void updateInternetTime();
-    void writeHighScore(int offset = 0);
-    void writeVolume();
+   
 
   public:
     Game();
-    Game::GameIndex getGameIndex();
-    void init(ESPert* e, bool menu = false, bool syncInternetTime = false, int hh = 0, int mm = 0, int ss = 0);
+  
+    void init(ESPert* e, bool menu = false);
     virtual bool isBackToMenuEnabled();
     bool isExit();
     virtual void update();

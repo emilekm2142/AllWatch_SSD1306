@@ -145,6 +145,7 @@
                 }
                 console.log(tempList)
                 _this.networks = tempList;
+                _this.$forceUpdate()
 
             })
             .catch(function (error) {
@@ -169,6 +170,7 @@
                 }
                 console.log(l)
                 _this.apps = l;
+                _this.$forceUpdate()
             })
             .catch(function (error) {
                 // handle error

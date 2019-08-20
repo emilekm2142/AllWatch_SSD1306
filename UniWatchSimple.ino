@@ -1,3 +1,5 @@
+#include "FlappyBirdApp.h"
+#include "ESPert.h"
 #include "IFTTApp.h"
 #include "StatusApp.h"
 #include "FlashlightApp.h"
@@ -53,6 +55,7 @@
 #include "GenericTextScreen.h"
 #include "PizzaApp.h"
 #include "Config.h"
+#include "FlappyBirdApp.h"
 auto bm = BatteryManager(&UserInterface);
 
 extern "C" {
@@ -109,8 +112,8 @@ auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 
 auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
 
-char* text = "mamamamam!!!$$@$@";
-auto genericText = GenericTextScreen(&UserInterface,text ,true);
+//char* text = "mamamamam!!!$$@$@";
+//auto genericText = GenericTextScreen(&UserInterface,text ,true);
 
 
 auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
@@ -122,7 +125,6 @@ void setup() {
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);
 #endif // !USE_TX_RX_AS_GPIO
-	Serial.println("joy2");
 #ifdef APPEND_DEFAULT_WIFI
 	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
 #endif // APPEND_DEFAULT_WIFI
@@ -130,6 +132,7 @@ void setup() {
 
 
 	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
+	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); });
 	//settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, false);
@@ -141,14 +144,6 @@ void setup() {
 	
 	
 	pinMode(A0, INPUT);
-
-
-	
-
-
-
-
-
 
 	Serial.println("start");
 
@@ -165,7 +160,7 @@ void setup() {
 	
 	MainLayout.Add(&commons);
 	MainLayout.Add(&appsMenu);
-	MainLayout.Add((Layout*)&genericText);
+	//MainLayout.Add((Layout*)&genericText);
 	MainLayout.UI = &UserInterface;
 	commons.UI = &UserInterface;
 	
@@ -174,19 +169,18 @@ void setup() {
 	UserInterface.AddSecondaryLayout(&topBar);
 	UserInterface.RedrawAll();
 	
-
-
 	//settingsManager.TestSaveWiFi();
 
 }
-
 void loop() {
 	inputHandler.OnLoop();
 	UserInterface.OnLoop();
 	tk.OnLoop();
 	bm.OnLoop();
 	settingsManager.SettingsOnLoop();
-	 if (settingsManager.appsManager->currentApplication != NULL)
-			 settingsManager.appsManager->currentApplication->OnLoop();
+	if (settingsManager.appsManager->currentApplication != NULL) {
+		
+		settingsManager.appsManager->currentApplication->OnLoop();
+	}
 	
 }

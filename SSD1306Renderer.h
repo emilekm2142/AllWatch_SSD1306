@@ -59,7 +59,9 @@ private:
 	virtual void DrawCircle(int x, int y, int radius) override {
 		d->drawCircle(x, y, radius);
 	};
-
+	virtual void __SetColor(int color) override {
+		d->setColor(color==1? OLEDDISPLAY_COLOR::BLACK: OLEDDISPLAY_COLOR::WHITE);
+	}
 	virtual void FillRectangle(int x, int y, int height, int width, bool backgroundColor=false) override {
 		if (backgroundColor) d->setColor(OLEDDISPLAY_COLOR::BLACK);
 		d->fillRect(x, y, width, height);
@@ -67,7 +69,7 @@ private:
 	};
 	virtual void DrawBitmap(int x, int y, int width, int height, const unsigned char* bitmap) override {
 		
-		//d->drawFastImage(x, y, width, height, bitmap);
+		
 	};
 	virtual void DisableScreen() override {
 		d->displayOff();
