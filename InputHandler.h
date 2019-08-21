@@ -82,8 +82,8 @@ public:
 			// reset the debouncing timer
 			lastUpDebounceTime = millis();
 		}
-
-		if ((millis() - lastDownDebounceTime) > debounceDelay && (millis() - lastUpDebounceTime) > debounceDelay) {
+		//(millis() - lastDownDebounceTime) > debounceDelay && (millis() - lastUpDebounceTime) > debounceDelay
+		if (true) {
 
 
 

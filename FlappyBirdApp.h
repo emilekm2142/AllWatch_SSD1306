@@ -40,6 +40,7 @@ private:
 	 ESPert* espertLayer;
 	 FlappyBirdApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
 		 Serial.println("opening flappy bird!");
+		 UI->DisableDrawing();
 		 this->layout = l;
 		 espertLayer =new ESPert(UserInterface.GetRenderer());
 		 this->name = (char*)F("Flappy Bird");
@@ -54,6 +55,7 @@ private:
 	 void OnExit() override {
 		 delete game;
 		 delete espertLayer;
+		 UI->EnableDrawing();
 	 }
 	 void Loop(Renderer& r) override {
 		

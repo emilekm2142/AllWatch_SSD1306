@@ -19,6 +19,7 @@
 class UserInterfaceClass//:public Dependency
 {
 private:
+	boolean shouldDraw = true;
 	Renderer* renderer;
 	Layout* mainLayout;
 	Layout* focusedLayout=nullptr;
@@ -40,6 +41,15 @@ private:
 	 
 	 
  public:
+	 boolean GetShouldDraw() {
+		 return shouldDraw;
+	 }
+	 void DisableDrawing() {
+		 shouldDraw = false;
+	 }
+	 void EnableDrawing() {
+		 shouldDraw = true;
+	 }
 	 //	DependenciesHolder* dependencies;
 	 char currentScreenName[50];
 	 void RegisterAnimation(Animation* animation) {
@@ -129,6 +139,7 @@ private:
 		 }
 	 }
 	 void RedrawAll() {
+		 if (!shouldDraw) { return; }
 		 renderer->Clear();
 
 		 if (!isChildBeingShown)

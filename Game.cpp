@@ -81,19 +81,11 @@ void Game::initGame() {
 
 void Game::init(ESPert* e, bool menu) {
   isMenuEnabled = menu;
-
-
- 
-
   espert = e;
-  //TODO: tutaj zmienic numery
- 
-
   randomSeed(analogRead(0));
   initGame();
   resetGameTime();
   timeSyncLastFrameTime = lastFrameTime;
-
 }
 
 bool Game::isBackToMenuEnabled() {

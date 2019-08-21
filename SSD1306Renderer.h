@@ -68,8 +68,7 @@ private:
 		if (backgroundColor) d->setColor(OLEDDISPLAY_COLOR::WHITE);
 	};
 	virtual void DrawBitmap(int x, int y, int width, int height, const unsigned char* bitmap) override {
-		
-		
+		d->drawXbm(x, y, width, height, bitmap);
 	};
 	virtual void DisableScreen() override {
 		d->displayOff();
