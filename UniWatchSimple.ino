@@ -1,3 +1,4 @@
+#include "TimeConfiguratorApp.h"
 #include "FlappyBirdApp.h"
 #include "ESPert.h"
 #include "IFTTApp.h"
@@ -170,7 +171,6 @@ void setup() {
 	UserInterface.RedrawAll();
 	
 	//settingsManager.TestSaveWiFi();
-
 }
 void loop() {
 	inputHandler.OnLoop();
