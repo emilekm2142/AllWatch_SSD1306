@@ -168,9 +168,8 @@ private:
 				app->tk->SetDateTime(2019, localMonth, localDay, localHour, localMinute, 0);
 				app->Exit();
 			}
-			
-		
 		}
+
 		void DrawActiveIndicator(Renderer& r) override {}
 
 		void Loop() {
