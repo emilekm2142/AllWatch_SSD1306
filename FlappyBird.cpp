@@ -28,7 +28,7 @@ FlappyBird::FlappyBird() {
   birdFrameDirection = 1;
   isDropping = false;
   heightRatio = 0.0f;
-  gravity = 9.8f;
+  gravity = 6.0f;
   velocity = 0.0f;
   initialVelocity = 0.0f;
   birdPosition = {21, (screenSize.height - birdSize.height) * 0.5f};
@@ -79,6 +79,7 @@ void FlappyBird::addScore(int value) {
 }
 
 void FlappyBird::changeGameMode(int mode) {
+	Serial.printf("Changing to %d \n", mode);
   switch (mode) {
     case GAME_MODE_TITLE:
       readHighScore();
@@ -111,7 +112,7 @@ void FlappyBird::changeGameMode(int mode) {
       setScorePanelImages(scorePanelScoreDigitImage, scorePanelScore);
       setScorePanelImages(scorePanelHighScoreDigitImage, scorePanelHighScore);
       isButtonAllowed = false;
-      pressedButton = -1;
+      //pressedButton = -1;
       break;
   }
 
@@ -235,11 +236,11 @@ void FlappyBird::PressUp() {
 	if (gameMode == GAME_MODE_PLAY) {
 		jump();
 	 }
-	if (gameMode == GAME_MODE_GAME_OVER) { resetGame();  changeGameMode(GAME_MODE_GET_READY); }
+	if (gameMode == GAME_MODE_GAME_OVER) { resetGame();  changeGameMode(GAME_MODE_TITLE); }
 	if (gameMode == GAME_MODE_GET_READY) {
 		changeGameMode(GAME_MODE_PLAY);
 	}
-	if (gameMode == GAME_MODE_TITLE) { changeGameMode(GAME_MODE_GET_READY); jump(); }
+	if (gameMode == GAME_MODE_TITLE) { titleTime = 0.0f; changeGameMode(GAME_MODE_GET_READY); jump(); }
 	Serial.print("; Pressed Up: "); Serial.println(gameMode);
 }
 void FlappyBird::PressDown() {
@@ -358,7 +359,7 @@ void FlappyBird::resetGame() {
   score = 0;
   setScoreImages();
   buttonDelay = 0.0f;
-  pressedButton = -1;
+  //pressedButton = -1;
   landOffset.x = screenSize.width;
 
   memset(pipePosition, 0, sizeof(pipePosition));
@@ -435,11 +436,6 @@ void FlappyBird::update() {
 
       titleTime += ((isVolumeChanged > 0.0f) ? 0.0f : elapsedTime);
 
-      if (isGamepadEnabled && (pressedButton == BUTTON_UP || pressedButton == BUTTON_DOWN)) {
-      
-
-        titleTime = 0.0f;
-      }
 
       if (titleTime >= 5000.0f) {
         //isAutoPlay = true;
@@ -549,7 +545,7 @@ void FlappyBird::update() {
         if (scorePanelOffset <= 0.1f) {
           if (!isButtonAllowed) {
             isButtonAllowed = true;
-            pressedButton = -1;
+          //  pressedButton = -1;
           }
 
           if (scorePanelScore != score) {

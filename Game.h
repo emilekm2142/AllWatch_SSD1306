@@ -133,7 +133,7 @@ class Game {
     bool isGamepadEnabled;
     float buttonDelay = 0.0f;
     bool isButtonPressed[numberOfButtons];
-    int pressedButton;
+    int pressedButton2;
     bool isButtonAllowed;
 
     // sound

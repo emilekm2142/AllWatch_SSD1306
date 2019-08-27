@@ -22,7 +22,7 @@ Game::Game() {
   isGamepadEnabled = false;
   buttonDelay = 0.0f;
   isButtonPressed[numberOfButtons] = {false};
-  pressedButton = BUTTON_NONE;
+  //pressedButton = BUTTON_NONE;
   isButtonAllowed = true;
  
 
