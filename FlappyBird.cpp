@@ -228,56 +228,18 @@ void FlappyBird::playSound(int index) {
    
   }
 }
-
-void FlappyBird::pressButton() {
-	int buttonPin[] = { PIN_UP,PIN_DOWN };
-
-
-  for (int i = 0; i < numberOfButtons; i++) {
-    if (buttonPin[i] != -1) {
-      bool isPressed = false;
-        isPressed = (digitalRead(buttonPin[i]) == LOW) ? true : false;
-      if (isPressed != isButtonPressed[i]) {
-        isButtonPressed[i] = isPressed;
-
-        if (isButtonAllowed || isAutoPlay) {
-          if (isPressed) {
-            pressedButton = i;
-
-            if (gameMode == GAME_MODE_TITLE && !isGamepadEnabled && i == BUTTON_UP) {
-             
-            } else if (!isAutoPlay && (gameMode == GAME_MODE_GET_READY || gameMode == GAME_MODE_PLAY)) {
-              jump();
-
-              if (gameMode == GAME_MODE_GET_READY) {
-                changeGameMode(GAME_MODE_PLAY);
-              }
-            }
-          } else {
-            if (isVolumeChanged > 0.0f) {
-             
-            } else if (i == pressedButton &&   i == BUTTON_DOWN ) {
-              if (isAutoPlay) {
-                readHighScore();
-                resetGame();
-                changeGameMode(GAME_MODE_TITLE);
-              } else if (gameMode == GAME_MODE_TITLE) {
-                changeGameMode(GAME_MODE_GET_READY);
-              } else if (gameMode == GAME_MODE_GAME_OVER) {
-                changeGameMode(GAME_MODE_TITLE);
-              }
-            } else if (isMenuEnabled && gameMode == GAME_MODE_TITLE && pressedButton == BUTTON_DOWN && i == BUTTON_DOWN) {
-              isRequestingExit = true;
-            }
-
-            pressedButton = -1;
-          }
-        }
-        break;
-      }
-    }
-  }
+void FlappyBird::PressUp() {
+	if (gameMode == GAME_MODE_PLAY) {
+		jump();
+	 }
+	
+	if (gameMode == GAME_MODE_GET_READY) gameMode = GAME_MODE_PLAY;
+	if (gameMode == GAME_MODE_TITLE) gameMode = GAME_MODE_GET_READY;
 }
+void FlappyBird::PressDown() {
+
+}
+
 
 void FlappyBird::render() {
   if (!isMenuEnabled) {
@@ -454,7 +416,8 @@ void FlappyBird::setScorePanelImages(const uint8_t* digitImage[3], int value) {
 }
 
 void FlappyBird::update() {
-  //TODO:
+	Serial.println(gameMode);
+	Serial.println(birdPosition.y);
 	updateGameTime();
 
   switch (gameMode) {
@@ -474,7 +437,7 @@ void FlappyBird::update() {
       }
 
       if (titleTime >= 5000.0f) {
-        isAutoPlay = true;
+        //isAutoPlay = true;
         changeGameMode(GAME_MODE_GET_READY);
       }
       break;

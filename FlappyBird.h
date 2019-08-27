@@ -547,7 +547,7 @@ const uint8_t titleMaskBitmap[(72 * 24) / 8] PROGMEM = { // titleMask.png
 };
 
 class FlappyBird : public Game {
-  private:
+private:
     typedef enum {
       SOUND_NONE,
       SOUND_DIE,
@@ -638,9 +638,9 @@ class FlappyBird : public Game {
     void checkHighScore();
     void initGame();
     bool isHitPipe();
-    void jump();
+   
     void playSound(int index);
-    void pressButton();
+    
     void renderHighScore();
     void resetBird();
     void resetGame();
@@ -649,7 +649,10 @@ class FlappyBird : public Game {
     void updateBirdAnimation(bool rotate);
 
   public:
+	  void jump();
     FlappyBird();
+	void PressUp();
+	void PressDown();
     bool isBackToMenuEnabled();
     void update();
     void render();

@@ -23,7 +23,9 @@ private:
 			 app = a;
 		 }
 		 void Draw(Renderer& r) override {}
-		 void Up(Renderer& r) override {}
+		 void Up(Renderer& r) override {
+			 app->game->PressUp();
+		 }
 		 void Down(Renderer& r) override {}
 		 void Back(Renderer& r) override {
 			 app->UI->ReturnToParentLayout();
