@@ -30,7 +30,7 @@ FlappyBird::FlappyBird() {
   heightRatio = 0.0f;
   gravity = 9.8f;
   velocity = 0.0f;
-  initialVelocity = -2.5f;
+  initialVelocity = 0f;
   birdPosition = {21, (screenSize.height - birdSize.height) * 0.5f};
   dropPosition = 0.0f;
   isHit = false;
@@ -235,9 +235,11 @@ void FlappyBird::PressUp() {
 	if (gameMode == GAME_MODE_PLAY) {
 		jump();
 	 }
-	if (gameMode == GAME_MODE_GAME_OVER) { resetBird();  changeGameMode(GAME_MODE_GET_READY); }
-	if (gameMode == GAME_MODE_GET_READY) changeGameMode(GAME_MODE_PLAY);
-	if (gameMode == GAME_MODE_TITLE) changeGameMode(GAME_MODE_GET_READY);
+	if (gameMode == GAME_MODE_GAME_OVER) { resetGame();  changeGameMode(GAME_MODE_GET_READY); }
+	if (gameMode == GAME_MODE_GET_READY) {
+		changeGameMode(GAME_MODE_PLAY);
+	}
+	if (gameMode == GAME_MODE_TITLE) { changeGameMode(GAME_MODE_GET_READY); jump(); }
 	Serial.print("; Pressed Up: "); Serial.println(gameMode);
 }
 void FlappyBird::PressDown() {
