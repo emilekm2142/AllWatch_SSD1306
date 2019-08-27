@@ -185,6 +185,7 @@ bool FlappyBird::isHitPipe() {
 }
 
 void FlappyBird::jump() {
+	Serial.println("jumping");
   velocity = initialVelocity;
   isDropping = false;
 }
@@ -229,12 +230,15 @@ void FlappyBird::playSound(int index) {
   }
 }
 void FlappyBird::PressUp() {
+	
+	Serial.print("Before: "); Serial.print(gameMode);
 	if (gameMode == GAME_MODE_PLAY) {
 		jump();
 	 }
-	
-	if (gameMode == GAME_MODE_GET_READY) gameMode = GAME_MODE_PLAY;
-	if (gameMode == GAME_MODE_TITLE) gameMode = GAME_MODE_GET_READY;
+	if (gameMode == GAME_MODE_GAME_OVER) { resetBird();  changeGameMode(GAME_MODE_GET_READY); }
+	if (gameMode == GAME_MODE_GET_READY) changeGameMode(GAME_MODE_PLAY);
+	if (gameMode == GAME_MODE_TITLE) changeGameMode(GAME_MODE_GET_READY);
+	Serial.print("; Pressed Up: "); Serial.println(gameMode);
 }
 void FlappyBird::PressDown() {
 
@@ -416,8 +420,7 @@ void FlappyBird::setScorePanelImages(const uint8_t* digitImage[3], int value) {
 }
 
 void FlappyBird::update() {
-	Serial.println(gameMode);
-	Serial.println(birdPosition.y);
+	
 	updateGameTime();
 
   switch (gameMode) {
@@ -479,6 +482,7 @@ void FlappyBird::update() {
               if (birdPosition.x + (birdSize.width * 0.5f) >= pipePosition[i].x + (pipeSize.width * 0.5f)) {
                 if (birdPosition.y >= pipePosition[i].y - birdCollisionOffset.y && pipePosition[i].y <= pipePosition[i].y + heightBetweenPipes - birdSize.height + birdCollisionOffset.y) { // between two pipes
                   addScore(1);
+				  Serial.print("Scored!: "); Serial.println(score);
                   isPipeEnabled[i] = false;
                   playSound(SOUND_SCORE);
                 }
@@ -491,8 +495,8 @@ void FlappyBird::update() {
             }
           }
         }
-
-        if (isAutoPlay) {
+		//Turning autoplay off here
+        if (isAutoPlay && false) {
           if (isDropping && nearestPipe != -1 && isPipeVisibled[nearestPipe]) {
             float h = 0.73f + (random(0, 48) / 100.0f * ((random(0, 2) == 0) ? 1.0f : -1.0f));
             if (birdPosition.y > pipePosition[nearestPipe].y + (birdSize.height * h)) {

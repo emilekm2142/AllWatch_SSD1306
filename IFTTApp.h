@@ -52,7 +52,6 @@ class IFTTApp :public BuiltInApplication
 		}
 		void Draw(Renderer& r) override {
 			mainMenu->Draw(r);
-			r.DrawAlignedString(50, 25, "test!", 70, r.Right);
 		}
 		void Back(Renderer& r) override {
 			app->UI->ReturnToParentLayout();
@@ -91,7 +90,7 @@ public:
 		char buffer[50];
 		GetKeyValue("key", &buffer[0]);
 		if (this->KeyExists("key") && strcmp("type in the api key",buffer ) == 0) {
-			l->mainMenu->AddOption((char*)F("You have to change the API key!"), [this] {
+			l->mainMenu->AddOption((char*)F("Cchange the API key!"), [this] {
 				SettingsScreen* settingsScreen = new SettingsScreen(this->UI, settingsManager);
 				settingsManager->OpenSettings();
 				settingsScreen->UI = this->UI;

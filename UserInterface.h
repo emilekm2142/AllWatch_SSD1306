@@ -66,7 +66,9 @@ private:
 	 }
 	 void ReturnToParentLayout() {
 		 mainLayout = parentLayout;
+		 auto oldChildLayout = childLayout;
 		 childLayout = NULL;
+		 delete oldChildLayout;
 		 ShowLayout(*mainLayout);
 		 isChildBeingShown = false;
 		 SetLayoutInFocues(*layoutThatWasInFocus);

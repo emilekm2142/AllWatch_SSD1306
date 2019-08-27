@@ -28,8 +28,12 @@ private:
 		 }
 		 void Down(Renderer& r) override {}
 		 void Back(Renderer& r) override {
+			 app->game->isRequestingExit = true;
+			 app->game->render();
+			 app->game->update();
 			 app->UI->ReturnToParentLayout();
 			 this->app->Exit();
+			
 		 }
 		 void Ok(Renderer& r) override {}
 		 void DrawActiveIndicator(Renderer& r) override{}

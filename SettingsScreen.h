@@ -47,7 +47,7 @@ class SettingsScreen:public CustomScreen
 		 UI->RegisterAnimation(a);
 	 }
 	 virtual void Draw(Renderer& r) override{
-		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, "Connect to WiFi 'test', password '123456789'. Open any browser and type 192.168.4.1  \n Press Back to cancel", r.GetScreenWidth(), r.Left);
+		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, "Connect to WiFi network named test and type 192.168.4.1 in your browser to access settings.", r.GetScreenWidth(), r.Left);
 
 		
 	 }
