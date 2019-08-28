@@ -45,12 +45,18 @@ private:
 
 	 }
 	 void Exit() {
-		 Serial.println("Exiting app");
+		 Serial.println("Exiting app..");
 		 OnExit();
+		 Serial.println("50");
 		 UI->ReturnToParentLayout();
+		 Serial.println("52");
 		 this->UI->ShowLayout(*this->UI->GetMainLayout());
+		 Serial.println("54");
 		 settingsManager->appsManager->currentApplication = NULL;
-		 if (deleteOnExit) delete this;
+		 Serial.println("56");
+	     if (deleteOnExit) delete this;
+		 Serial.println("57");
+
 		
 	 }
 	 virtual void OnExit() {

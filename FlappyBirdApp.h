@@ -31,7 +31,7 @@ private:
 			 app->game->isRequestingExit = true;
 			 app->game->render();
 			 app->game->update();
-			 app->UI->ReturnToParentLayout();
+			 //app->UI->ReturnToParentLayout();
 			 this->app->Exit();
 			
 		 }

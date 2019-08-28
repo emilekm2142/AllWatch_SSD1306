@@ -59,7 +59,7 @@ private:
 			}
 		}
 		void Back(Renderer& r) override{
-			app->UI->ReturnToParentLayout();
+			//app->UI->ReturnToParentLayout();
 			this->app->Exit();
 		}
 		void Up(Renderer& r) override {

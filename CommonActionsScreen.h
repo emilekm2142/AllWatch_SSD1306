@@ -99,7 +99,7 @@ public:
 			UI->OpenChildLayout(connectingScreen);
 			if (settingsManager->WiFiConnected()) settingsManager->SyncTime(); else  delay(1000);
 			UI->ReturnToParentLayout();
-			delete connectingScreen;
+			
 			break;
 		}
 		case 3:{
@@ -111,7 +111,7 @@ public:
 			else
 				settingsManager->wifiManager->Disconnect();
 			UI->ReturnToParentLayout();
-			delete connectingScreen;
+			
 			connecting = false;
 			options[3] = settingsManager->WiFiConnected() ? (char*)"Disconnect Wifi" : (char*)"Connect to WiFi";
 

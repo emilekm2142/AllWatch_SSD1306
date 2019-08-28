@@ -39,14 +39,20 @@ private:
 
 
 		TimeConfiguratorLayout(TimeConfiguratorApp* a) {
-			localDay = app->tk->now.Day();
-			localMonth = app->tk->now.Month();
-			localHour = app->tk->now.Hour();
-			localMinute = app->tk->now.Minute();
+		//	localDay = app->tk->now.Day();
+		//	localMonth = app->tk->now.Month();
+		//	localHour = app->tk->now.Hour();
+		//	localMinute = app->tk->now.Minute();
+
+			localDay = 1;
+			localMonth = 1;
+			localHour = 1;
+			localMinute = 1;
 
 			app = a;
 		}
 		void Draw(Renderer& r) override {
+			return;
 			int offset = 15;
 			char timestring[20];
 			char datestring[20];
@@ -156,7 +162,7 @@ private:
 
 			
 			if (!editMode) {
-				app->UI->ReturnToParentLayout();
+				
 				this->app->Exit();
 			}
 			editMode = false;
@@ -192,18 +198,20 @@ public:
 	TimeConfiguratorLayout* l = new TimeConfiguratorLayout(this);
 	TimeKepper* tk;
 	TimeConfiguratorApp(UserInterfaceClass* UI, SettingsManager* sm, TimeKepper* tk) : BuiltInApplication((Layout*)this->l, UI, sm) {
+		Serial.println("constructor");
 		this->layout = l;
 		this->tk = tk;
+		Serial.println("after constructor");
 	}
 	void OnOpen() override {
 
 
 	}
 	void OnExit() override {
-		delete l;
+		Serial.println("On exit... Time configurator app");
 	}
 	void Loop() {
-		this->l->Loop();
+	//	this->l->Loop();
 	}
 	
 };

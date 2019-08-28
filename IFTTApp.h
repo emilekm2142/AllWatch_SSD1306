@@ -131,7 +131,6 @@ public:
 	}
 	void OnExit() override {
 		
-		delete l;
 	}
 	
 	void AddMenuOption(char* name) {

@@ -33,7 +33,7 @@ private:
 			r.FillRectangle(0, 0, r.GetScreenHeight(), r.GetScreenWidth());
 		}
 		void Back(Renderer& r) override {
-			//TODO: musi to byc? app->UI->ReturnToParentLayout();
+			
 			this->app->Exit();
 		}
 		void Down(Renderer& r) override {
@@ -53,10 +53,13 @@ private:
 	 FlashlightApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
 		 this->l = new FlashlightScreen(this);
 		 this->layout = l;
-		 this->name = "Pizza";
+		 this->name = "Flashlight";
 		 this->UI = UI;
+		 this->UI->DisableDrawing();
 
-
+	 }
+	 void OnExit() override {
+		 this->UI->EnableDrawing();
 	 }
 };
 
