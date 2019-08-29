@@ -52,7 +52,6 @@ private:
 			app = a;
 		}
 		void Draw(Renderer& r) override {
-			return;
 			int offset = 15;
 			char timestring[20];
 			char datestring[20];
