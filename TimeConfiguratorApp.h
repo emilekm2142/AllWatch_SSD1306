@@ -32,22 +32,22 @@ private:
 		int currentObject = 0;
 		int objectsCount = 4; //actually, +1 because we count with zero!
 
-		int blinkDelay = 700;
-		int blinkTime = 100;
+		int blinkDelay = 2000;
+		int blinkTime = 1000;
 		int lastBlinkTime = 0;
 		boolean blinkNow = false;
 
 
 		TimeConfiguratorLayout(TimeConfiguratorApp* a) {
-		//	localDay = app->tk->now.Day();
-		//	localMonth = app->tk->now.Month();
-		//	localHour = app->tk->now.Hour();
-		//	localMinute = app->tk->now.Minute();
+			localDay = app->tk->now.Day();
+			localMonth = app->tk->now.Month();
+			localHour = app->tk->now.Hour();
+			localMinute = app->tk->now.Minute();
 
-			localDay = 1;
-			localMonth = 1;
-			localHour = 1;
-			localMinute = 1;
+		//	localDay = 1;
+		//	localMonth = 1;
+		//	localHour = 1;
+		//	localMinute = 1;
 
 			app = a;
 		}
@@ -82,6 +82,7 @@ private:
 				localMinute
 
 			);
+			Serial.println(timestring);
 			r.SetFont((uint8_t *)ArialMT_Plain_10);
 			r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2, GlobalY + 0 + offset, datestring, r.GetScreenWidth(), r.Center);
 			r.SetFont((uint8_t *)ArialMT_Plain_24);
@@ -93,6 +94,7 @@ private:
 
 		}
 		void Up(Renderer& r) override {
+			Serial.println(currentObject);
 			if (!editMode) {
 				currentObject++;
 				if (currentObject > objectsCount)
@@ -125,6 +127,7 @@ private:
 			}
 		}
 		void Down(Renderer& r) override {
+			Serial.println(currentObject);
 			if (!editMode) {
 				currentObject--;
 				if (currentObject < 0 )
@@ -133,11 +136,11 @@ private:
 			else{
 				switch (currentObject) {
 				case 0: {
-					localHour++;
+					localHour--;
 					break;
 				}
 				case 1: {
-					localMinute++;
+					localMinute--;
 					break;
 				}
 				case 2: {
@@ -165,11 +168,12 @@ private:
 				this->app->Exit();
 			}
 			editMode = false;
+			Serial.printf("%02u.%02u  %02u:%02u", localDay, localMonth, localHour, localMinute);
 		}
 		void Ok(Renderer& r) override {
-			if (currentObject!=4)
+			
 			editMode = !editMode;
-			else {
+			if (currentObject==4) {
 				app->tk->SetDateTime(2019, localMonth, localDay, localHour, localMinute, 0);
 				app->Exit();
 			}
@@ -182,10 +186,12 @@ private:
 			if (blinkNow) {
 				if (millis() - lastBlinkTime > blinkTime) {
 					blinkNow = false;
+					
 				}
 			}
 			else {
 				if (millis() - lastBlinkTime > blinkDelay) {
+					lastBlinkTime = millis();
 					blinkNow = true;
 				}
 			}
@@ -210,7 +216,7 @@ public:
 		Serial.println("On exit... Time configurator app");
 	}
 	void Loop() {
-	//	this->l->Loop();
+		this->l->Loop();
 	}
 	
 };
