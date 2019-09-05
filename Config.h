@@ -5,10 +5,10 @@
 #define Renderer_OLED
 
 //Do we use SSD1306?
-//#define Renderer_SSD1306
+#define Renderer_SSD1306
 
 //Do we use SSH1106?
-#define Renderer_SSH1106
+//#define Renderer_SSH1106
 
 
 //comment if you do not wish to add any default wifi network

@@ -39,7 +39,7 @@ private:
  public:
 	 void init() {
 		#ifdef Renderer_SSD1306
-			d = new SSD1306Wire(0x3c, 0, 2);
+			d = new SSD1306Wire(0x3c, 14, 0);
 		#endif 
 		#ifdef Renderer_SSH1106
 			d = new SH1106Wire(0x3c, 0, 2);

@@ -54,7 +54,7 @@ class IFTTApp :public BuiltInApplication
 			mainMenu->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			app->UI->ReturnToParentLayout();
+			//app->UI->ReturnToParentLayout();
 			this->app->Exit();
 		}
 		void Down(Renderer& r) override {

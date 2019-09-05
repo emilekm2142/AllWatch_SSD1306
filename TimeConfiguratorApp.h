@@ -39,74 +39,122 @@ private:
 
 
 		TimeConfiguratorLayout(TimeConfiguratorApp* a) {
-			localDay = app->tk->now.Day();
-			localMonth = app->tk->now.Month();
-			localHour = app->tk->now.Hour();
-			localMinute = app->tk->now.Minute();
+		//	localDay = app->tk->now.Day();
+		//	localMonth = app->tk->now.Month();
+		//	localHour = app->tk->now.Hour();
+		//	localMinute = app->tk->now.Minute();
 
-		//	localDay = 1;
-		//	localMonth = 1;
-		//	localHour = 1;
-		//	localMinute = 1;
+			localDay = 1;
+			localMonth = 1;
+			localHour = 1;
+			localMinute = 1;
 
 			app = a;
 		}
 		void Draw(Renderer& r) override {
+			int spacing = 10;
 			int offset = 15;
-			char timestring[20];
-			char datestring[20];
-			snprintf_P(datestring,
-				20,
-				blinkNow ?
-				currentObject == 2 ?
-				 PSTR("  .%02u") :
-				currentObject == 3 ?
-				 PSTR("%02u.  ") :
-				PSTR("%02u.%02u")
-				: PSTR("%02u.%02u"),
-				localDay,
-				localMonth
+			char hourstring[10];
+			char minutestring[10];
+			char daystring[10];
+			char monthstring[10];
+			snprintf_P(hourstring,10,PSTR("%02u"), localHour);
+			snprintf_P(minutestring,10,PSTR("%02u"), localMinute);
+			snprintf_P(daystring,10,PSTR("%02u"), localDay);
+			snprintf_P(monthstring,10,PSTR("%02u"), localMonth);
+			if (currentObject == 0)r.DrawString(0, offset + 2, "-"); r.DrawString(5, offset + 2, "Hour: "); 
+			if (editMode) {
+				 if (currentObject==0 && !blinkNow || currentObject != 0)  r.DrawString(40, offset + 2, hourstring);
+				}
+			else {
+				r.DrawString(40, offset + 2, hourstring);
+			}
+			
+			if (currentObject == 1)r.DrawString(0, offset + 2+spacing, "-"); r.DrawString(5, offset + 2 + spacing, "Minute: ");
+			if (editMode) {
+				if (currentObject == 1 && !blinkNow || currentObject!=1)  r.DrawString(60, offset + 2 + spacing + 2, minutestring);
+			}
+			else {
+				r.DrawString(60, offset + 2 + spacing + 2, minutestring);
+			}
+				
+			if (currentObject == 2)r.DrawString(0, offset + 2+2*spacing, "-");  r.DrawString(5, offset + 2 + 2*spacing, "Month: "); 
+			if (currentObject == 2 && !blinkNow || currentObject != 2){ r.DrawString(60, offset + 2 + 2 * spacing, monthstring);
+		}
+			else {
+			r.DrawString(60, offset + 2 + 2 * spacing, monthstring);
+			}
+				
+			if (currentObject == 3)r.DrawString(0, offset + 2+3*spacing, "-");  r.DrawString(5, offset + 2 + 3*spacing, "Day: ");
+			if (currentObject == 3 && !blinkNow || currentObject != 3) {
+				r.DrawString(60, offset + 2 + 3 * spacing, daystring);
+			}
+			else {
+				r.DrawString(60, offset + 2 + 3 * spacing, daystring);
+			}
+				
+		
 
-			);
-			snprintf_P(timestring,
-				20,
-				blinkNow?
-				 currentObject==0?
-				  PSTR("  :%02u"):
-				 currentObject==1?
-			 	  PSTR("%02u:  "):
-				 PSTR("%02u:%02u")
-				:PSTR("%02u:%02u"),
-
-				localHour,
-				localMinute
-
-			);
-			Serial.println(timestring);
-			r.SetFont((uint8_t *)ArialMT_Plain_10);
-			r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2, GlobalY + 0 + offset, datestring, r.GetScreenWidth(), r.Center);
-			r.SetFont((uint8_t *)ArialMT_Plain_24);
-			r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2, GlobalY + 10 + offset, timestring, r.GetScreenWidth(), r.Center);
-			r.SetFont((uint8_t *)ArialMT_Plain_10);
-			r.DrawRectangle(GlobalX + r.GetScreenWidth() / 2 - 25, r.GetLineHeight() + GlobalY - 25, 15, 50);
-			if (currentObject==4) r.DrawRectangle(GlobalX + r.GetScreenWidth() / 2 - 25 -1, r.GetScreenHeight() +GlobalY - 25-1, 17, 52);
-			r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2, r.GetScreenHeight() + GlobalY + -20, (PROGMEM char*)("Ok"), r.GetScreenWidth(), r.Center);
 
 		}
-		void Up(Renderer& r) override {
+		void Down(Renderer& r) override {
 			Serial.println(currentObject);
 			if (!editMode) {
 				currentObject++;
 				if (currentObject > objectsCount)
 					currentObject--;
-			}else{
+			}
+			else {
+				switch (currentObject) {
+				case 0: {
+
+					localHour--;
+					if (localHour < 0) localHour++;
+					break;
+				}
+				case 1: {
+					localMinute--;
+					if (localMinute < 0) localMinute++;
+					break;
+				}
+				case 2: {
+					localMonth--;
+					if (localMonth < 1) {
+						localMonth = 12;
+					}
+					break;
+				}
+				case 3: {
+					localDay--;
+					if (localDay < 1) {
+						localDay = days[localMonth - 1];
+					}
+					break;
+				}
+
+				}
+			}
+			Draw(r);
+		}
+		
+		
+		void Up(Renderer& r) override {
+			Serial.println(currentObject);
+			if (!editMode) {
+				currentObject--;
+				if (currentObject < 0 )
+					currentObject++;
+			}
+			else {
 				switch (currentObject) {
 				case 0: {
 					localHour++;
+					if (localHour > 24) localHour--;
 					break;
 				}
 				case 1: {
 					localMinute++;
+					if (localMinute > 60) localMinute--;
 					break;
 				}
 				case 2: {
@@ -123,42 +171,10 @@ private:
 					}
 					break;
 				}
+
 				}
 			}
-		}
-		void Down(Renderer& r) override {
-			Serial.println(currentObject);
-			if (!editMode) {
-				currentObject--;
-				if (currentObject < 0 )
-					currentObject++;
-			}
-			else{
-				switch (currentObject) {
-				case 0: {
-					localHour--;
-					break;
-				}
-				case 1: {
-					localMinute--;
-					break;
-				}
-				case 2: {
-					localMonth--;
-					if (localMonth < 1) {
-						localMonth = 12;
-					}
-					break;
-				}
-				case 3: {
-					localDay--;
-					if (localDay < 1) {
-						localDay = days[localMonth-1];
-					}
-					break;
-				}
-				}
-			}
+			Draw(r);
 		}
 		void Back(Renderer& r) override {
 
@@ -171,7 +187,10 @@ private:
 			Serial.printf("%02u.%02u  %02u:%02u", localDay, localMonth, localHour, localMinute);
 		}
 		void Ok(Renderer& r) override {
-			
+			if (!editMode) {
+				lastBlinkTime = millis();
+				blinkNow = true;
+			}
 			editMode = !editMode;
 			if (currentObject==4) {
 				app->tk->SetDateTime(2019, localMonth, localDay, localHour, localMinute, 0);
@@ -181,20 +200,26 @@ private:
 
 		void DrawActiveIndicator(Renderer& r) override {}
 
-		void Loop() {
+		void Loop(Renderer& r) {
+			
 			//Blinking
 			if (blinkNow) {
+				
 				if (millis() - lastBlinkTime > blinkTime) {
 					blinkNow = false;
+					
 					
 				}
 			}
 			else {
+				//Serial.printf("%d - %d > %d", millis(), lastBlinkTime, blinkDelay);
 				if (millis() - lastBlinkTime > blinkDelay) {
 					lastBlinkTime = millis();
 					blinkNow = true;
+					
 				}
 			}
+			Draw(r);
 		}
 
 	};
@@ -215,8 +240,8 @@ public:
 	void OnExit() override {
 		Serial.println("On exit... Time configurator app");
 	}
-	void Loop() {
-		this->l->Loop();
+	void Loop(Renderer& r) override {
+		this->l->Loop(r);
 	}
 	
 };
