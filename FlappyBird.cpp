@@ -28,9 +28,9 @@ FlappyBird::FlappyBird() {
   birdFrameDirection = 1;
   isDropping = false;
   heightRatio = 0.0f;
-  gravity = 6.0f;
+  gravity = 9.8f;
   velocity = 0.0f;
-  initialVelocity = 2.5f;
+  initialVelocity = -1.8f;
   birdPosition = {21, (screenSize.height - birdSize.height) * 0.5f};
   dropPosition = 0.0f;
   isHit = false;

@@ -55,11 +55,13 @@ private:
 		 this->layout = l;
 		 this->name = "Flashlight";
 		 this->UI = UI;
-		 this->UI->DisableDrawing();
+		// this->UI->DisableDrawing();
+		// this->layout->Draw(*UI->GetRenderer());
+		 Serial.println("joy");
 
 	 }
 	 void OnExit() override {
-		 this->UI->EnableDrawing();
+		// this->UI->EnableDrawing();
 	 }
 };
 

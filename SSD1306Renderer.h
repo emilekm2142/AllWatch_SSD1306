@@ -39,7 +39,7 @@ private:
  public:
 	 void init() {
 		#ifdef Renderer_SSD1306
-			d = new SSD1306Wire(0x3c, 14, 0);
+		 d = new SSD1306Wire(0x3c, SSD1306_PIN_SDA, SSD1306_PIN_SCL);
 		#endif 
 		#ifdef Renderer_SSH1106
 			d = new SH1106Wire(0x3c, 0, 2);
@@ -67,6 +67,12 @@ private:
 		d->fillRect(x, y, width, height);
 		if (backgroundColor) d->setColor(OLEDDISPLAY_COLOR::WHITE);
 	};
+	virtual int GetVerticalCenter() override {
+		return GetScreenHeight() / 2;
+	}
+	virtual int GetHorizontalCenter() override {
+		return GetScreenWidth() / 2;
+	}
 	virtual void DrawBitmap(int x, int y, int width, int height, const unsigned char* bitmap) override {
 		d->drawXbm(x, y, width, height, bitmap);
 	};

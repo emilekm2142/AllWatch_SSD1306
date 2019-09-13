@@ -35,7 +35,6 @@ public:
 	
 
 	
-	UserInterfaceClass* UI;
 	SettingsManager* settingsManager;
 	AppsMenu(UserInterfaceClass* UI, SettingsManager* settingsManager) {
 		this->UI = UI;
@@ -91,9 +90,9 @@ public:
 				this->offsets->add(new int(0));
 		int y = offset;
 		int x = 0;
-		Serial.println(settingsManager->appsManager->builtInApps->size());
+		//Serial.println(settingsManager->appsManager->builtInApps->size());
 		for (int i = 0; i < settingsManager->appsManager->builtInApps->size(); i++) {
-			Serial.println(settingsManager->appsManager->builtInApps->get(i)->name);
+			//Serial.println(settingsManager->appsManager->builtInApps->get(i)->name);
 			if (currentIndex != i) {
 				
 					renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y,settingsManager->appsManager->builtInApps->get(i)->name);
@@ -115,9 +114,7 @@ public:
 		ApplyGlobalCoordinatesPreorderTreeWalk(this, renderer);
 
 	}
-	virtual void OnGetInFocus(Renderer& r) override {
-		
-	}
+
 };
 
 #endif

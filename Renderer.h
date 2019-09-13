@@ -12,6 +12,8 @@
 class Renderer
 {
  public:
+	 virtual int GetVerticalCenter() = 0;
+	 virtual int GetHorizontalCenter() = 0;
 	 int Left = 0, Center = 1, Right = 2;
 	 virtual void init() = 0;
 	virtual void DrawRectangle(int x, int y, int height, int width)=0;

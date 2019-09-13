@@ -56,8 +56,10 @@ public:
 
 	
 	virtual void Draw(Renderer& renderer) override {
+		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
 		
-		renderer.FillRectangle(0, 0, 18, renderer.GetScreenWidth(), true);
+		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
+
 		if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
 		renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
 		char datestring[20];

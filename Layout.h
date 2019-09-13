@@ -18,7 +18,9 @@ private:
 	char* name;
 	
  public:
+	 virtual void GetInFocus(Renderer& renderer) {}
 	 virtual void OnGetInFocus(Renderer& renderer) {
+		 GetInFocus(renderer);
 		 DrawActiveIndicator(renderer);
 	 };
 	virtual void Down(Renderer& renderer) = 0;

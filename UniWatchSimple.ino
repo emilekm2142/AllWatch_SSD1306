@@ -1,3 +1,4 @@
+#include "ImagesMenu.h"
 #include "TimeConfiguratorApp.h"
 #include "FlappyBirdApp.h"
 #include "ESPert.h"
@@ -53,6 +54,7 @@
 #include "CommonActionsScreen.h"
 #include "TopBar.h"
 #include "FS.h"
+#include "ImagesMenu.h"
 #include "GenericTextScreen.h"
 #include "PizzaApp.h"
 #include "Config.h"
@@ -112,13 +114,12 @@ auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk, &extraPeripheralsMan
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 
 auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
-
+auto testScreen = ImagesMenu(&UserInterface);
 //char* text = "mamamamam!!!$$@$@";
 //auto genericText = GenericTextScreen(&UserInterface,text ,true);
 
 
 auto appsMenu = AppsMenu(&UserInterface, &settingsManager);
-
 
 
 
@@ -132,7 +133,7 @@ void setup() {
 
 
 
-	settingsManager.appsManager->RegisterApplication("weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
+	settingsManager.appsManager->RegisterApplication("Weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); });
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); });
 	//settingsManager.appsManager->RegisterApplication("Pizza", []() {return new PizzaApp(&UserInterface, &settingsManager); });
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); });
@@ -142,8 +143,13 @@ void setup() {
 	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
 		settingsManager.appsManager->AppendKeyToConfig("IFTTT", "key", "type in the api key");
 	}
-	
-	
+	for (int i = 0; i < settingsManager.appsManager->builtInApps->size(); i++) {
+		auto app = settingsManager.appsManager->builtInApps->get(i);
+		testScreen.AddOption(app->name, UIAssets::baseline_videogame_asset_black_18dp_bits, [i]() {settingsManager.appsManager->builtInApps->get(i)->creatingFunction()->Open(); });
+
+
+	}
+
 	
 	pinMode(A0, INPUT);
 
@@ -162,6 +168,7 @@ void setup() {
 	
 	MainLayout.Add(&commons);
 	MainLayout.Add(&appsMenu);
+	MainLayout.Add((Layout*)&testScreen);
 	//MainLayout.Add((Layout*)&genericText);
 	MainLayout.UI = &UserInterface;
 	commons.UI = &UserInterface;

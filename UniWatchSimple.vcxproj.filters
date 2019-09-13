@@ -438,6 +438,9 @@
     <ClInclude Include="TimeConfiguratorApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ImagesMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">
@@ -576,6 +579,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TimeConfiguratorApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImagesMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

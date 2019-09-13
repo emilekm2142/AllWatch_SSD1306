@@ -35,7 +35,7 @@ public:
 	int offsets[8] = { maxOffset,0,0,0,0,0,0,0 };
 	
 	
-	UserInterfaceClass* UI;
+
 	SettingsManager* settingsManager;
 	CommonActionsScreen(UserInterfaceClass* UI, SettingsManager* settingsManager) {
 		this->UI = UI;
@@ -126,7 +126,7 @@ public:
 			break;
 		case 5:
 		{
-			settingsManager->appsManager->getBuiltInApplicationByName("flashlight")->getApplication()->Open();
+			settingsManager->appsManager->getBuiltInApplicationByName("Flashlight")->getApplication()->Open();
 			break;
 		}
 		}
@@ -162,9 +162,10 @@ public:
 		ApplyGlobalCoordinatesPreorderTreeWalk(this, renderer);
 
 	}
-	virtual void OnGetInFocus(Renderer& r) override {
+	virtual void GetInFocusExecutesBeforeGetInFocusInhertedFromCustomScreen(Renderer& r) override {
 		offset = 15;
 	}
+
 };
 
 
