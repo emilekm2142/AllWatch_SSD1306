@@ -99,7 +99,7 @@ void FlappyBird::changeGameMode(int mode) {
       break;
 
     case GAME_MODE_GAME_OVER:
-      readHighScore();
+      //readHighScore();
       gameOverTime = 0.0f;
       isCheckHighScore = true;
       gameOverVelocity = initialVelocity * 0.7f;

@@ -24,6 +24,9 @@ public:
 	char* name;
 	std::function<BuiltInApplication*()> creatingFunction;
 	bool showOnAppsList = true;
+	int iconHeight = NULL;
+	int iconWidth = NULL;
+	const unsigned char* icon = NULL;
 	ApplicationDataHolder() {
 
 	}
@@ -106,7 +109,7 @@ private:
 				 s.println(appsDir.fileName());
 			 }
 		 }
-		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, bool show=true) {
+		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, int iconWidth=NULL, int iconHeight=NULL, const unsigned char* icon=NULL, bool show=true) {
 			 char filePath[32];
 			 snprintf_P(filePath,
 				 32,
@@ -120,6 +123,9 @@ private:
 				f.close();
 			 }
 			 auto m = new ApplicationDataHolder(name, creatingFunction, show);
+			 m->iconHeight = iconHeight;
+			 m->iconWidth = iconWidth;
+			 m->icon = icon;
 			 this->builtInApps->add(m);
 
 

@@ -12,6 +12,7 @@
 #include <SSD1306Brzo.h> 
 #include "UserInterface.h"
 #include "TimeKepper.h"
+#include "SSD1306Fonts.h"
 class HomeScreen: public CustomScreen
 {
  protected:
@@ -46,8 +47,8 @@ class HomeScreen: public CustomScreen
 		 );
 		 r.SetFont((uint8_t *) ArialMT_Plain_10);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth() / 2, GlobalY+0+offset, datestring, r.GetScreenWidth(), r.Center);
-		 r.SetFont((uint8_t *)ArialMT_Plain_24);
-		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+10+offset, timestring, r.GetScreenWidth(), r.Center);
+		 r.SetFont((uint8_t *)Orbitron_Medium_30);
+		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
 		 r.SetFont((uint8_t *)ArialMT_Plain_10);
 	 }
 	 virtual void Up(Renderer& renderer) override {

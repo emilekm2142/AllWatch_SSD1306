@@ -19,7 +19,7 @@ private:
 	 SettingsManager* settingsManager;
 	 UserInterfaceClass* UI;
  public:
-	 const uint8_t* icon = NULL;
+	 virtual const char* GetIcon() { return NULL; }
 	 char* name;
 	 Layout* layout;
 
