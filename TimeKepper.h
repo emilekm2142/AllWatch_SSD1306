@@ -37,7 +37,7 @@ private:
 		 
 		 
 		 //if (now.Year()<2019)
-			 Rtc->SetDateTime(compiled);
+		//	 Rtc->SetDateTime(compiled);
 	 }
 	
 	 void SetDateTime(int year, int month, int day, int hour, int minute, int second) {

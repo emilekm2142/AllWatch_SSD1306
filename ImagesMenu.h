@@ -17,7 +17,7 @@
 #include "UserInterface.h"
 #include "StaticResources.h"
 #include "SettingsScreen.h"
-
+#include "SSD1306Fonts.h"
 typedef struct ImagesMenuEntry {
 	int width;
 	char* name;
@@ -57,6 +57,7 @@ public:
 	}
 	ImagesMenu(UserInterfaceClass* UI, LinkedList<ImagesMenuEntry*>* entries, bool isRunInsideApplication=false) {
 		this->UI = UI;
+
 		this->isRunInsideApplication = isRunInsideApplication;
 		this->entries = entries;
 	}
@@ -158,20 +159,49 @@ public:
 		
 	}
 	int getRealWidth(ImagesMenuEntry* e) {
+		UI->GetRenderer()->SetFont((uint8_t *)Orbitron_Medium_10);
 		int w = UI->GetRenderer()->GetStringWidth(e->name);
 		int width = w > e->icon_width ? w+1 : e->icon_width;
 		return width;
 	}
 
-	
-	virtual void Draw(Renderer& renderer) override {
-		int currentX = 0;
+	void drawActiveOptionIndicator(Renderer& renderer) {
+		auto entry = entries->get(currentIndex);
+		int rw = getRealWidth(entry);
+		int xStart = renderer.GetHorizontalCenter() - rw / 2;
+		int xEnd = renderer.GetHorizontalCenter() -rw/2;
+		int yStart = 14;
+		int yEnd = renderer.GetScreenHeight() - 5;
+
+		int offset = 2;
+
+		//top-left
+		renderer.DrawRectangle(xStart  -offset, yStart+offset, 1, rw / 3);
+		renderer.DrawRectangle(xStart  -offset, yStart +offset, rw/3,1);
 		
+		//top-right
+		renderer.DrawRectangle(xStart+rw  +offset, yStart +offset, rw/3, 1);
+		renderer.DrawRectangle(xStart+rw - rw/3 +1, yStart +offset, 1, rw/3);
+
+		//bottom-left
+		renderer.DrawRectangle(xStart   -offset, renderer.GetScreenHeight() - 2 - rw/3, rw/3, 1);
+		renderer.DrawRectangle(xStart   -offset, renderer.GetScreenHeight() -2, 1, rw/3);
+
+		//bottom-right
+		renderer.DrawRectangle(xStart + rw     +offset, renderer.GetScreenHeight() - 2 - rw / 3, rw/3, 1);
+		renderer.DrawRectangle(xStart + rw - rw/3   +offset, renderer.GetScreenHeight() - 2, 1, rw/3);
+
+		//renderer.DrawRectangle(xStart, yStart, rw/3, 1);
+	}
+	virtual void Draw(Renderer& renderer) override {
+		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
+		int currentX = 0;
+		drawActiveOptionIndicator(renderer);
 		for (int i = 0; i < entries->size(); i++) {
 			auto entry = entries->get(i);
 			int width = getRealWidth(entry);
 			if (entry->image != NULL) {
-				renderer.DrawBitmap(currentX + GlobalX + scrollX, renderer.GetVerticalCenter() - entry->icon_height/2, entry->icon_width, entry->icon_height, entry->image);
+				renderer.DrawBitmap(currentX + GlobalX + scrollX + abs((entry->width-width))/2, renderer.GetVerticalCenter() - entry->icon_height/2, entry->icon_width, entry->icon_height, entry->image);
 			}
 			renderer.DrawAlignedString(currentX + GlobalX + scrollX +initialPadding  + width / 2, renderer.GetScreenHeight() - 13, entry->name, width, renderer.Center);
 			//renderer.DrawRectangle(currentX + GlobalX + scrollX + initialPadding, 18, 37,width);

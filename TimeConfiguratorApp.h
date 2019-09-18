@@ -14,6 +14,7 @@
 #include <SSD1306Brzo.h> 
 #include "UserInterface.h"
 #include "TimeKepper.h"
+#include "Config.h"
 namespace TimeConfiguratorApp_Icon {
 	const int width = 36;
 		const int height = 36;
@@ -59,15 +60,20 @@ private:
 
 
 		TimeConfiguratorLayout(TimeConfiguratorApp* a) {
-		//	localDay = app->tk->now.Day();
-		//	localMonth = app->tk->now.Month();
-		//	localHour = app->tk->now.Hour();
-		//	localMinute = app->tk->now.Minute();
+#ifdef RTC_AVAILABLE
+			localDay = app->tk->now.Day();
+			localMonth = app->tk->now.Month();
+			localHour = app->tk->now.Hour();
+			localMinute = app->tk->now.Minute();
+#endif
+#ifndef RTC_AVAILABLE
 
 			localDay = 1;
 			localMonth = 1;
 			localHour = 1;
 			localMinute = 1;
+#endif // !RTC_AVAILABLE
+
 
 			app = a;
 		}
@@ -112,8 +118,12 @@ private:
 			else {
 				r.DrawString(60, offset + 2 + 3 * spacing, daystring);
 			}
-				
-		
+			
+			r.DrawString(r.GetScreenWidth() - 45, r.GetVerticalCenter(), (char*)F("SAVE"));
+
+			if (currentObject == 4) {
+				r.DrawRectangle(r.GetScreenWidth() - 48, r.GetVerticalCenter() - 5,20, r.GetStringWidth((char*)F("SAVE"))+3);
+			}
 
 
 		}
@@ -122,7 +132,7 @@ private:
 			if (!editMode) {
 				currentObject++;
 				if (currentObject > objectsCount)
-					currentObject--;
+					currentObject=0;
 			}
 			else {
 				switch (currentObject) {

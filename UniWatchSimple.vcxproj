@@ -457,6 +457,7 @@
     <ClInclude Include="SimpleRequestsApp.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="SSD1306Fonts.h" />
     <ClInclude Include="SSD1306Renderer.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -553,6 +554,7 @@
     <ClCompile Include="SettingsScreen.cpp" />
     <ClCompile Include="SimpleMenuRecord.cpp" />
     <ClCompile Include="SimpleRequestsApp.cpp" />
+    <ClCompile Include="SSD1306Fonts.cpp" />
     <ClCompile Include="SSD1306Renderer.cpp" />
     <ClCompile Include="SSH1106Renderer.cpp" />
     <ClCompile Include="StaticResources.cpp" />

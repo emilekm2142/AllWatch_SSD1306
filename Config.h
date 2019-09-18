@@ -25,5 +25,6 @@
 #define PIN_UP  3
 //#define INVERT
 
+#define RTC_AVAILABLE
 
 #define DEBOUNCE_TIME 50

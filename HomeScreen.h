@@ -45,11 +45,11 @@ class HomeScreen: public CustomScreen
 			 tk->now.Minute()
 			 
 		 );
-		 r.SetFont((uint8_t *) ArialMT_Plain_10);
+		 r.SetFont((uint8_t *) Orbitron_Medium_10);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth() / 2, GlobalY+0+offset, datestring, r.GetScreenWidth(), r.Center);
 		 r.SetFont((uint8_t *)Orbitron_Medium_30);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
-		 r.SetFont((uint8_t *)ArialMT_Plain_10);
+		 r.SetFont((uint8_t *)Orbitron_Medium_10);
 	 }
 	 virtual void Up(Renderer& renderer) override {
 
