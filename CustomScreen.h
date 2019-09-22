@@ -43,7 +43,11 @@ public:
 	virtual void Up(Renderer& renderer) override {}
 	virtual void Down(Renderer& renderer) override {}
 	virtual void Ok(Renderer& renderer) override {}
-	virtual void Back(Renderer& renderer) override {}
+	virtual void Back(Renderer& renderer) override {
+		if (this->onBackCallback != nullptr) {
+			this->onBackCallback();
+	}
+	}
 	
 	
 	virtual void DrawActiveIndicator(Renderer &renderer) override {

@@ -99,21 +99,17 @@ public:
 		this->UI = UI;
 		
 		l->mainMenu->AddOption((char*)F("Add more..."), [this] {
-			SettingsScreen* settingsScreen = new SettingsScreen(this->UI, settingsManager);
-			settingsManager->OpenSettings();
-			settingsScreen->UI = this->UI;
-			this->UI->OpenChildLayout((Layout *)(settingsScreen));
+			this->Exit();
+			this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
 		
 		});
 		char buffer[50];
 		GetKeyValue("key", &buffer[0]);
 		if (this->KeyExists("key") && strcmp("type in the api key",buffer ) == 0) {
 			l->mainMenu->AddOption((char*)F("Cchange the API key!"), [this] {
-				SettingsScreen* settingsScreen = new SettingsScreen(this->UI, settingsManager);
-				settingsManager->OpenSettings();
-				settingsScreen->UI = this->UI;
-				this->UI->OpenChildLayout((Layout *)(settingsScreen));
-
+				
+				this->Exit();
+				this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
 			});
 		}
 		auto configFile = sm->appsManager->GetConfigForApplication("IFTTT");

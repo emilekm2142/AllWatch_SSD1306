@@ -31,7 +31,7 @@ class SettingsScreen:public CustomScreen
 	 }
 
 	 virtual void Back(Renderer& r) override {
-		 sm->CloseSettings();
+		
 		 Serial.println("back");
 		 UserInterface.ReturnToParentLayout();
 	 }

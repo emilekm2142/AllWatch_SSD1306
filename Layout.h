@@ -16,8 +16,10 @@ class Layout :public Widget
 private:
 	LinkedList<Widget*> widgets = LinkedList<Widget*>();
 	char* name;
-	
+protected:
+	std::function<void()> onBackCallback = nullptr;
  public:
+	
 	 virtual void GetInFocus(Renderer& renderer) {}
 	 virtual void OnGetInFocus(Renderer& renderer) {
 		 GetInFocus(renderer);

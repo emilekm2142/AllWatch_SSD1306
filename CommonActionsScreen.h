@@ -87,10 +87,10 @@ public:
 			break;
 		case 1:
 		{
-			SettingsScreen* settingsScreen = new SettingsScreen(UI, settingsManager);
-			settingsManager->OpenSettings();
-			settingsScreen->UI = this->UI;
-			UI->OpenChildLayout((Layout *)(settingsScreen));
+		//	SettingsScreen* settingsScreen = new SettingsScreen(UI, settingsManager);
+		//	settingsManager->OpenSettings();
+		//	settingsScreen->UI = this->UI;
+		//	UI->OpenChildLayout((Layout *)(settingsScreen));
 		}
 			break;
 		case 2: {

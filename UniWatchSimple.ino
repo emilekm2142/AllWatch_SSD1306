@@ -1,3 +1,6 @@
+#include "WiFiConnectApp.h"
+#include "DelayedAction.h"
+#include "SettingsApp.h"
 #include "SSD1306Fonts.h"
 #include "ImagesMenu.h"
 #include "TimeConfiguratorApp.h"
@@ -54,12 +57,15 @@
 #include "MainSlideLayout.h"
 #include "CommonActionsScreen.h"
 #include "TopBar.h"
+#include "DelayedAction.h"
 #include "FS.h"
 #include "ImagesMenu.h"
 #include "GenericTextScreen.h"
 #include "PizzaApp.h"
 #include "Config.h"
 #include "FlappyBirdApp.h"
+#include "SettingsApp.h"
+#include "WiFiConnectApp.h"
 auto bm = BatteryManager(&UserInterface);
 
 extern "C" {
@@ -113,9 +119,7 @@ auto home = HomeScreen(UserInterface, &tk);
 auto MainLayout = MainSlideLayout();
 auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk, &extraPeripheralsManager);
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
-
-auto commons = CommonActionsScreen(&UserInterface, &settingsManager);
-auto testScreen = ImagesMenu(&UserInterface);
+auto imageMenuScreen = ImagesMenu(&UserInterface);
 //char* text = "mamamamam!!!$$@$@";
 //auto genericText = GenericTextScreen(&UserInterface,text ,true);
 
@@ -141,12 +145,15 @@ void setup() {
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, FlashlightApp_icon::width, FlashlightApp_icon::height, FlashlightApp_icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Set time", []() {return new TimeConfiguratorApp(&UserInterface, &settingsManager, &tk); }, TimeConfiguratorApp_Icon::width, TimeConfiguratorApp_Icon::height, TimeConfiguratorApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Status", []() {return new StatusApp(&UserInterface, &settingsManager); }, StatusApp_Icon::width, StatusApp_Icon::height, StatusApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Settings", []() {return new SettingsApp(&UserInterface, &settingsManager); }, SettingsApp_Icon::width, SettingsApp_Icon::height, SettingsApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("WiFi", []() {return new WiFiConnectApp(&UserInterface, &settingsManager); }, WiFiConnectApp_Icon::width, WiFiConnectApp_Icon::height, WiFiConnectApp_Icon::icon_bits);
+
 	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
 		settingsManager.appsManager->AppendKeyToConfig("IFTTT", "key", "type in the api key");
 	}
 	for (int i = 0; i < settingsManager.appsManager->builtInApps->size(); i++) {
 		auto app = settingsManager.appsManager->builtInApps->get(i);
-		testScreen.AddOption(app->name, app->iconWidth, app->iconHeight, app->icon, [i]() {settingsManager.appsManager->builtInApps->get(i)->creatingFunction()->Open(); });
+		imageMenuScreen.AddOption(app->name, app->iconWidth, app->iconHeight, app->icon, [i]() {settingsManager.appsManager->builtInApps->get(i)->creatingFunction()->Open(); });
 
 
 	}
@@ -167,18 +174,18 @@ void setup() {
 	
 	MainLayout.Add(&home);
 	
-	MainLayout.Add(&commons);
+//	MainLayout.Add(&commons);
 //	MainLayout.Add(&appsMenu);
-	MainLayout.Add((Layout*)&testScreen);
+	MainLayout.Add((Layout*)&imageMenuScreen);
 	//MainLayout.Add((Layout*)&genericText);
 	MainLayout.UI = &UserInterface;
-	commons.UI = &UserInterface;
+	
 	
 	UserInterface.SetMainLayout(MainLayout);
 
 	UserInterface.AddSecondaryLayout(&topBar);
 	UserInterface.RedrawAll();
-	testScreen.setCurrentScroll();
+	imageMenuScreen.setCurrentScroll();
 
 	//settingsManager.TestSaveWiFi();
 }
@@ -187,6 +194,7 @@ void loop() {
 	UserInterface.OnLoop();
 	tk.OnLoop();
 	bm.OnLoop();
+	Run::Loop();
 	settingsManager.SettingsOnLoop();
 	if (settingsManager.appsManager->currentApplication != NULL) {
 		

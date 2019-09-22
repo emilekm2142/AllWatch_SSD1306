@@ -24,6 +24,7 @@ protected:
 	int maxOffset = 10;
 	int step = 1;
 public:
+	
 	int offset = 15;
 	int currentIndex = 0;
 	int optionsLength = 5;
@@ -33,7 +34,7 @@ public:
 	LinkedList<char*>* options;
 	LinkedList<int*>* offsets = new LinkedList<int*>();
 	LinkedList<std::function<void()>>* callbacks;
-	
+	int scrollY = 0;
 	UserInterfaceClass* UI;
 	GenericMenuScreen(UserInterfaceClass* UI, LinkedList<char*> *options, LinkedList<std::function<void()>>* callbacks, int length) {
 		this->options=options;
@@ -50,6 +51,12 @@ public:
 		this->UI = UI;
 
 
+	}
+	void ClearList() {
+		//TOOD: deallocate the memory
+		this->offsets->clear();
+		this->options->clear();
+		this->callbacks->clear();
 	}
 	void AddOption(char* name, std::function<void()> callback, bool copy=false) {
 		if (offsets->size() == 0) {
@@ -90,10 +97,15 @@ public:
 			auto a = new Animation(*(offsets->get(currentIndex)), 0, delay, -step);
 			UI->RegisterAnimation(a);
 		}
-
+		
 		currentIndex--;
-		if (currentIndex < 0) currentIndex = options->size() - 1;
-
+		int sign = -1;
+		if (currentIndex < 0) { 
+			currentIndex = options->size() - 1;
+			sign = 1;
+		}
+		auto aScroll = new Animation(scrollY, currentIndex * 10, 1, sign*step);
+		UI->RegisterAnimation(aScroll);
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
 
@@ -101,20 +113,34 @@ public:
 
 
 	}
+	void setOnBackCallbackAction(std::function<void()> onBackCallback) {
+		this->onBackCallback = onBackCallback;
+	}
 	virtual void Back(Renderer& r) override {
-		UI->SetLayoutInFocues(*UI->GetMainLayout());
+		if (this->onBackCallback != nullptr) {
+			this->onBackCallback();
+		}
+		else {
+			UI->SetLayoutInFocues(*UI->GetMainLayout());
+		}
 	}
 	virtual void Down(Renderer& renderer) override {
 		Serial.println("downnnn");
 		if (*(offsets->get(currentIndex)) != 0) {
 			auto a = new Animation(*(offsets->get(currentIndex)), 0, delay, -step);
 			UI->RegisterAnimation(a);
+			
 		}
 
 		currentIndex++;
+		
 		Serial.printf("%d == %d", currentIndex, options->size());
-		if (currentIndex >= options->size()) currentIndex = 0;
-
+		int sign = 1;
+		if (currentIndex >= options->size()) { currentIndex = 0; sign = -1; }
+		
+		auto aScroll = new Animation(scrollY,currentIndex * 10, 1,sign*step);
+		UI->RegisterAnimation(aScroll);
+		
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
 
@@ -141,19 +167,15 @@ public:
 		
 		for (int i = 0; i < this->options->size(); i++) {
 			if (currentIndex != i) {
-				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y, options->get(i));
+				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y -scrollY, options->get(i));
 				//renderer.DrawString(5, 50, options->get(i));
 			}
 			else {
 				//renderer.DrawString(5, 50, options->get(i));
-				renderer.DrawString(x + GlobalX + *offsets->get(i) - 10, GlobalY + y, ">");
-				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y, options->get(i));
+				renderer.DrawString(x + GlobalX + *offsets->get(i) - 10, GlobalY + y-scrollY, ">");
+				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y-scrollY, options->get(i));
 			}
 			y = y + lineHeight + spacing;
-			if (y > renderer.GetScreenHeight()) {
-				y = offset;
-				x = x + renderer.GetScreenWidth() / 2;
-			}
 		}
 	}
 	virtual void CalculateLayout(Renderer& renderer) override {

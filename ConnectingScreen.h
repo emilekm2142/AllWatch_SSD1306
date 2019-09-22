@@ -33,7 +33,7 @@ public:
 	}
 
 	virtual void Back(Renderer& r) override {
-		sm->CloseSettings();
+		//sm->CloseSettings();
 		Serial.println("back");
 		UserInterface.ReturnToParentLayout();
 	}

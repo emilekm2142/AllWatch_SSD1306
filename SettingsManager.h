@@ -266,6 +266,15 @@ private:
 		 WiFiManager(SettingsManager* parent) {
 			 this->parent = parent;
 		 }
+		 int ScanNetworks() {
+			 return parent->w->scanNetworks();
+		 }
+		 String GetNetwork(int i ) {
+			 return parent->w->SSID(i);
+		 }
+		 int GetNetworkStrength(int i) {
+			 return parent->w->RSSI(i);
+		 }
 		 void AppendWiFiNetwork(fs::FS* SPIFFS, char* ssid, char* password) {
 			 Serial.println(ssid);
 			 auto f = parent->SPIFFS->open(filename, "a+");
@@ -376,8 +385,36 @@ private:
 			 return std::make_pair(n, p);
 
 		 }
-		 char* GetPassword(fs::FS* SPIFFS, char* ssid) {
+		 bool ConnectToWiFiUsingSavedCredentials(char* ssid) {
+			 auto f = parent->SPIFFS->open(filename, "r");
+			 Serial.println(f.size());
+			 int i = 0;
+			 int s = 0;
+			 while (f.available()) {
+				 char n[100];
+				 char p[100];
+				 int nl=f.readBytesUntil('\r', n, 100);
+				 int pl=f.readBytesUntil('\n', p, 100);
+				 n[nl] = '\0';
+				 p[pl] = '\0';
+				 if (strcmp(n,ssid)==0) {
+					int status= ConnectToWifiSync(ssid, p);
+					if (status) {
 
+						f.close();
+						return true;
+					}
+				 }
+				 
+
+			 }
+			
+			 
+
+
+
+			 f.close();
+			 return false;
 		 }
 		 bool IsNetworkSaved(fs::FS* SPIFFS, char* ssid) {
 
@@ -427,7 +464,7 @@ private:
 		
 	 }
 	 
-	 AsyncWebServer* server;
+	 AsyncWebServer* server =nullptr;
 	 
 	 fs::FS* SPIFFS;
 	 ESP8266WiFiClass* w;
@@ -464,33 +501,40 @@ private:
 	 bool WiFiConnected() {
 		 return w->isConnected();
 	 }
-	 void CloseSettings() {
+	 void CloseNetwork() {
 		 w->softAPdisconnect();
 		 w->enableAP(false);
-		 delete server;
+		
 	 }
-	 void OpenSettings() {
+	 void CloseSettingsServer() {
+		 if (server != nullptr)
+		 delete server;
+		 server = nullptr;
+	 }
+	 void CreateNetwork() {
 		 w->forceSleepWake();
 		 int st = w->softAP("Watch");
 		 delay(1000);
 		 Serial.println("new network made");
-		 Serial.printf("Status: %d", st);
+		 Serial.printf("Status: %d", st);		 
+	 }
+	 void OpenSettingsServer() {
 		 server = new AsyncWebServer(80);
 		 server->on("/addWifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 if (request->hasParam("ssid") && request->hasParam("password")) {
-				 this->wifiManager->AppendWiFiNetwork(this -> SPIFFS, (char*) request->getParam("ssid")->value().c_str(), (char*)request->getParam("password")->value().c_str());
-				
-			
+				 this->wifiManager->AppendWiFiNetwork(this->SPIFFS, (char*)request->getParam("ssid")->value().c_str(), (char*)request->getParam("password")->value().c_str());
+
+
 				 request->send(200, "text/plain", "OK");
 			 }
 			 request->send(200, "text/plain", "ERROR");
 		 });
 		 server->on("/requestWiFi", HTTP_GET, [this](AsyncWebServerRequest *request) {
-				//request->send()
-			Serial.println("requestWifi");
-			request->send(200, "text/plain", "OK");
-			request->send(*SPIFFS, wifiManager->filename, "text/plain");
-	
+			 //request->send()
+			 Serial.println("requestWifi");
+			 request->send(200, "text/plain", "OK");
+			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
+
 		 });
 		 server->on("/removeAllNetworks", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 wifiManager->ClearList();
@@ -508,7 +552,7 @@ private:
 		 server->on("/updateAppConfig", HTTP_POST, [this](AsyncWebServerRequest *request) {
 			 if (request->hasParam("name"))
 				 Serial.println((char*)request->getParam("name")->value().c_str());
-			 auto f = appsManager->GetConfigForApplication((char*)request->getParam("name")->value().c_str(),"w");
+			 auto f = appsManager->GetConfigForApplication((char*)request->getParam("name")->value().c_str(), "w");
 			 f.print((char*)request->getParam("cfg")->value().c_str());
 			 f.close();
 
@@ -520,7 +564,7 @@ private:
 				 (char*)request->getParam("name")->value().c_str()
 			 );
 			 request->send(*SPIFFS, filePath, "text/plain");
-			
+
 		 });
 		 server->on("/requestAppSettings", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 if (request->hasParam("name")) {
@@ -534,7 +578,7 @@ private:
 				 );
 				 request->send(*SPIFFS, filePath, "text/plain");
 			 }
-			
+
 
 
 		 });
@@ -542,15 +586,13 @@ private:
 			 //request->send()
 			 request->send(*SPIFFS, "/index.html", "text/html");
 
-			
+
 		 });
 		 server->serveStatic("/", *SPIFFS, "/");
 		 server->begin();
-		// server.begin();
-		 
-		 isSettingsServerOpened = true;
+		 // server.begin();
 
-		 
+		 isSettingsServerOpened = true;
 	 }
 	 String header;
 	 void SettingsOnLoop() {
