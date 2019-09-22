@@ -67,6 +67,19 @@ private:
 				
 				
 			});
+			menu->AddOption((char*)F("Sync time"), [this]() {
+				infoScreen->text = "Syncing...";
+				currentScreen = (Layout*)infoScreen;
+				Draw(*this->app->UI->GetRenderer());
+				Run::After(1000, [this]() {
+					this->app->settingsManager->SyncTime();
+					currentScreen = (Layout*)menu;
+				});
+			
+				
+
+
+			});
 			menu->AddOption((char*)F("Existing network"), [this]() {
 				//this->app->settingsManager->CloseNetwork();
 				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected()?(char*)"OK!":(char*)"You must connect to a network first";

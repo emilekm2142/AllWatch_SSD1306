@@ -50,7 +50,7 @@ public:
 		 if (!v) RegisterActivity();
 	 }
 	int GetBatteryLevel() {
-		 return batteryLevel;
+		return ESP.getVcc();
 	 }
 
 	void OnLoop() {

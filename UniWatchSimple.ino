@@ -192,7 +192,7 @@ void setup() {
 	//settingsManager.TestSaveWiFi();
 }
 void loop() {
-	Serial.println(ESP.getVcc());
+	
 	inputHandler.OnLoop();
 	UserInterface.OnLoop();
 	tk.OnLoop();
