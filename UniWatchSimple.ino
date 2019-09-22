@@ -66,6 +66,8 @@
 #include "FlappyBirdApp.h"
 #include "SettingsApp.h"
 #include "WiFiConnectApp.h"
+ADC_MODE(ADC_VCC);
+
 auto bm = BatteryManager(&UserInterface);
 
 extern "C" {
@@ -190,6 +192,7 @@ void setup() {
 	//settingsManager.TestSaveWiFi();
 }
 void loop() {
+	Serial.println(ESP.getVcc());
 	inputHandler.OnLoop();
 	UserInterface.OnLoop();
 	tk.OnLoop();
