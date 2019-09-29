@@ -459,6 +459,9 @@
     <ClInclude Include="AppMarketApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GenericDialogScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">
@@ -618,6 +621,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AppMarketApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericDialogScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

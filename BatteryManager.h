@@ -1,5 +1,4 @@
 // BatteryManager.h
-
 #ifndef _BATTERYMANAGER_h
 #define _BATTERYMANAGER_h
 
@@ -10,32 +9,27 @@
 #endif
 #include "UserInterface.h"
 #include "FS.h"
-//class DependenciesHolder;
-//#include "Dependency.h"
 
-class BatteryManager//: public Dependency
+class BatteryManager
 {
  protected:
-	 bool disableAll = true;
+	 bool disableAll = false;
 
-
-	 int deepSleepDelay=45e6;
-	 int deepSleepIDLETrigger = 6000;
-	 int batteryCheckDelay=10000;
+	 const int highBatteryPoint = 4200;
+	 const int lowBatteryPoint = 3300;
+	 const int deepSleepTime = 30*1000;
+	 const int inactivitySleepDelay = 30000;
+	 const int batteryCheckDelay=10000;
 	 int lastBatteryCheck = 0;
 	 bool alwaysWakeMode = false;
 	 bool isGoingToSleep = false;
 	 int lastActivity = 0;
-
-	 int batteryLevel=0;
 public:
-	// DependenciesHolder* dependencies;
 	UserInterfaceClass* UI;
 	 BatteryManager(UserInterfaceClass* UI) {
 		 lastActivity = millis();
 		 this->UI = UI;
-		 lastBatteryCheck = millis();
-		 batteryLevel = analogRead(A0);
+		 lastBatteryCheck = millis(); 
 	}
 
 	 void RegisterActivity() {
@@ -52,25 +46,32 @@ public:
 	int GetBatteryLevel() {
 		return ESP.getVcc();
 	 }
+	int GetBatteryPercentage() {
+		int current = GetBatteryLevel() - lowBatteryPoint;
+		int max = highBatteryPoint - lowBatteryPoint;
+		return (int)(((float)current / (float)max)*100.0);
+	}
+
+	bool ShouldUsePowerSaverMode(){
+		return GetBatteryLevel() < lowBatteryPoint;
+	}
+
 
 	void OnLoop() {
-		if (!disableAll) {
-			if (!alwaysWakeMode)
-				if (deepSleepIDLETrigger < millis() - lastActivity) {
-					isGoingToSleep = true;
-					UI->RedrawAll();
-					ESP.deepSleep(deepSleepDelay, RFMode::RF_DISABLED);
-				}
-
-			if (batteryCheckDelay < millis() - lastBatteryCheck) {
-				lastBatteryCheck = millis();
-				batteryLevel = analogRead(A0);
+		int currentTime = millis();
+		// if there was no user activity for `inactivitySleepDelay`
+		if (currentTime - lastActivity > inactivitySleepDelay) {
+			ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
+		}
+		//If there was no activity at all in the current run
+		if (lastActivity == 0) {
+			if (currentTime > inactivitySleepDelay) { //TODO: Add a condition that makes the watch go to sleep only after the time just turned to next minute
+				ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
 			}
 		}
+		
 	}
+	
 };
-
-
-
 #endif
 

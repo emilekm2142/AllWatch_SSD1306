@@ -1,3 +1,4 @@
+#include "GenericDialogScreen.h"
 #include "AppMarketApp.h"
 #include "GamesApp.h"
 #include "WiFiConnectApp.h"
@@ -196,6 +197,7 @@ void setup() {
 	imageMenuScreen.setCurrentScroll();
 
 	//settingsManager.TestSaveWiFi();
+	
 }
 void loop() {
 	

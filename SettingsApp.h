@@ -57,16 +57,6 @@ private:
 			
 			infoScreen = new GenericTextScreen(this->app->UI, (char*)F("joy xdxd"), true);
 			menu =new GenericMenuScreen(app->UI);
-			menu->AddOption((char*)F("Own network"), [this]() {
-				infoScreen->text = "Own Network........";
-				this->app->settingsManager->CreateNetwork();
-				this->app->settingsManager->OpenSettingsServer();
-				infoScreen->text = "Navigate to 192.168.1.4";
-				currentScreen = (Layout*)infoScreen;
-				Draw(*this->app->UI->GetRenderer());
-				
-				
-			});
 			menu->AddOption((char*)F("Sync time"), [this]() {
 				infoScreen->text = "Syncing...";
 				currentScreen = (Layout*)infoScreen;
@@ -75,11 +65,39 @@ private:
 					this->app->settingsManager->SyncTime();
 					currentScreen = (Layout*)menu;
 				});
-			
-				
+			});
+			menu->AddOption((char*)F("Check for updates"), [this]() {
+				infoScreen->text = "Getting updates...";
+				currentScreen = (Layout*)infoScreen;
+				Draw(*this->app->UI->GetRenderer());
+				Run::After(1000, [this]() {
+					char urlBuffer[100];
+					sprintf(urlBuffer, "http://watch-service-server.herokuapp.com/update/%d", 1);
+					auto request =this->app->settingsManager->http->MakeGetRequest(urlBuffer);
+					char rsp = request->getStream().read();
+					Serial.println(rsp);
+					if (rsp == '1') {
+
+					}
+					else if (rsp == '0') {
+						infoScreen->text = "No update available"
+					}
+					this->app->settingsManager->http->EndRequest(request);
+				});
+
+
 
 
 			});
+			menu->AddOption((char*)F("Own network"), [this]() {
+				infoScreen->text = "Own Network........";
+				this->app->settingsManager->CreateNetwork();
+				this->app->settingsManager->OpenSettingsServer();
+				infoScreen->text = "Navigate to 192.168.1.4";
+				currentScreen = (Layout*)infoScreen;
+				Draw(*this->app->UI->GetRenderer());
+			});
+		
 			menu->AddOption((char*)F("Existing network"), [this]() {
 				//this->app->settingsManager->CloseNetwork();
 				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected()?(char*)"OK!":(char*)"You must connect to a network first";

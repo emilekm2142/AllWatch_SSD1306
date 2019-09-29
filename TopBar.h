@@ -59,9 +59,10 @@ public:
 		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
 		
 		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
-		char buff[6];
-		sprintf(buff, "%d", bm->GetBatteryLevel());
-		renderer.DrawString(0, 0, buff);
+		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * 30;
+
+		renderer.DrawRectangle(3, 3, 5, 30);
+		renderer.FillRectangle(3, 3, 5, batBarWidth);
 
 		if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
 		renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
