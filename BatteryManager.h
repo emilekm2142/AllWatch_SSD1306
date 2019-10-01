@@ -9,6 +9,9 @@
 #endif
 #include "UserInterface.h"
 #include "FS.h"
+#include "SettingsManager.h"
+
+
 
 class BatteryManager
 {
@@ -25,6 +28,7 @@ class BatteryManager
 	 bool isGoingToSleep = false;
 	 int lastActivity = 0;
 public:
+	SettingsManager* sm = nullptr;
 	UserInterfaceClass* UI;
 	 BatteryManager(UserInterfaceClass* UI) {
 		 lastActivity = millis();
@@ -56,21 +60,26 @@ public:
 		return GetBatteryLevel() < lowBatteryPoint;
 	}
 
-
+	
 	void OnLoop() {
-		int currentTime = millis();
-		// if there was no user activity for `inactivitySleepDelay`
-		if (currentTime - lastActivity > inactivitySleepDelay) {
-			ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
-		}
-		//If there was no activity at all in the current run
-		if (lastActivity == 0) {
-			if (currentTime > inactivitySleepDelay) { //TODO: Add a condition that makes the watch go to sleep only after the time just turned to next minute
-				ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
+	 	//sleep only if there is no application turned on
+	 	if (sm->appsManager->currentApplication == nullptr && sm->appsManager->currentApplication == NULL)
+	 	{
+			int currentTime = millis();
+			// if there was no user activity for `inactivitySleepDelay`
+			if (currentTime - lastActivity > inactivitySleepDelay) {
+				//ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
 			}
+			//If there was no activity at all in the current run
+			if (lastActivity == 0) {
+				if (currentTime > inactivitySleepDelay) { //TODO: Add a condition that makes the watch go to sleep only after the time just turned to next minute
+					//ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
+				}
+			}
+
 		}
+	 	}
 		
-	}
 	
 };
 #endif

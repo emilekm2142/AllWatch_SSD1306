@@ -24,10 +24,10 @@ class GenericTextScreen:CustomScreen
 	 int offset = 15;
 	 
  public:
-	 char* text;
+	 const char* text;
 	 char* header;
 	
-	 GenericTextScreen(UserInterfaceClass* UI, char* text, bool scrollable, char* header = nullptr, bool headerScroll=true ) {
+	 GenericTextScreen(UserInterfaceClass* UI, const char* text, bool scrollable, char* header = nullptr, bool headerScroll=true ) {
 		 this->text = text;
 		 this -> scrollable = scrollable;
 		 this->UI = UI;
@@ -55,8 +55,8 @@ class GenericTextScreen:CustomScreen
 		 }
 	 }
 	 virtual void Draw(Renderer& r) override {
-		 Serial.println("Draw call in generic text screen");
-		 Serial.println(this->text);
+		 //Serial.println("Draw call in generic text screen");
+		 //Serial.println(this->text);
 		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, this->text, r.GetScreenWidth(), r.Left);
 	 }
 	 virtual void DrawActiveIndicator(Renderer &renderer) override {

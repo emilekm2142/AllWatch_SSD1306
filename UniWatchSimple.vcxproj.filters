@@ -90,9 +90,6 @@
     <ClInclude Include="DependenciesHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependency.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExtraPeripheralsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -462,6 +459,9 @@
     <ClInclude Include="GenericDialogScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StarsApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">
@@ -501,9 +501,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DependenciesHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependency.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExtraPeripheralsManager.cpp">
@@ -624,6 +621,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GenericDialogScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StarsApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

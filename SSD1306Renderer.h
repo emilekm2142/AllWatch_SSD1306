@@ -79,7 +79,7 @@ private:
 	virtual void DisableScreen() override {
 		d->displayOff();
 	}
-	virtual void DrawString(int x, int y, char* string, bool inversed = false) override {
+	virtual void DrawString(int x, int y, const char* string, bool inversed = false) override {
 		if (inversed) {
 			d->setColor(OLEDDISPLAY_COLOR::INVERSE);
 		}
@@ -118,7 +118,7 @@ private:
 	virtual void DrawXBM(int x, int y, int width, int height, unsigned char* bitmap) override {
 		d->drawXbm(x, y, width, height, bitmap);
 	}
-	virtual void DrawAlignedString(int x, int y, char* string, int width, int side) override {
+	virtual void DrawAlignedString(int x, int y, const char* string, int width, int side) override {
 		OLEDDISPLAY_TEXT_ALIGNMENT a;
 		if (side == Left) {
 			a = OLEDDISPLAY_TEXT_ALIGNMENT::TEXT_ALIGN_LEFT;

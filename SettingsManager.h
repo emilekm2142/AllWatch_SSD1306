@@ -10,13 +10,17 @@
 #endif
 #include "LinkedList.h"
 #include "EEPROM.h"
+#include <ESP8266httpUpdate.h>
+#include "TimeKepper.h"
 #include <ESP8266WiFi.h>
+#include <ArduinoOTA.h>
 #include "FS.h"
+#include "Config.h"
 #include <ESP8266HTTPClient.h>
 #include <Hash.h>
 //#include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include "Dependency.h"
+
 #include "ExtraPeripheralsManager.h"
 class BuiltInApplication;
 class ApplicationDataHolder {
@@ -79,9 +83,9 @@ private:
 
 			 return http;
 		 }
-		 void EndRequest(HTTPClient* r) {
+		 void EndRequest(HTTPClient* r, bool disconnect=true) {
 			 r->end();
-			 _Disconnect();
+			 if (disconnect) _Disconnect();
 		 }
 
 	 };
@@ -195,8 +199,12 @@ private:
 			 while (f.available()) {
 				 char keyBuffer[20];
 				 char valueBuffer[20];
+				 
 				 auto keyLength = f.readBytesUntil('=', keyBuffer, 20);
 				 auto valueLength = f.readBytesUntil('\n', valueBuffer, 20);
+				 valueBuffer[valueLength] = '\0';
+				 keyBuffer[keyLength] = '\0';
+				 Serial.println(keyBuffer);
 				 if (strcmp(key, keyBuffer) == 0) {
 					 return true;
 				 }
@@ -241,6 +249,8 @@ private:
 				 char valueBuffer[20];
 				 auto keyLength = f.readBytesUntil('=', keyBuffer, 20);
 				 auto valueLength = f.readBytesUntil('\n', valueBuffer, 20);
+				 keyBuffer[keyLength] = '\0';
+				 valueBuffer[valueLength] = '\0';
 				 if (strcmp(key, keyBuffer) != 0) {
 					 
 					 newF.print(keyBuffer);
@@ -268,6 +278,10 @@ private:
 		 }
 		 int ScanNetworks() {
 			 return parent->w->scanNetworks();
+		 }
+	 	String GetIp()
+		 {
+			return parent->w->localIP().toString();
 		 }
 		 String GetNetwork(int i ) {
 			 return parent->w->SSID(i);
@@ -417,7 +431,35 @@ private:
 			 return false;
 		 }
 		 bool IsNetworkSaved(fs::FS* SPIFFS, char* ssid) {
+			 auto f = parent->SPIFFS->open(filename, "r");
+			 Serial.println(f.size());
+			 int i = 0;
+			 int s = 0;
+			 while (f.available()) {
+				 char n[100];
+				 char p[100];
+				 int nl = f.readBytesUntil('\r', n, 100);
+				 int pl = f.readBytesUntil('\n', p, 100);
+				 n[nl] = '\0';
+				 p[pl] = '\0';
+				 if (strcmp(n, ssid) == 0) {
+					
+					 
 
+						 f.close();
+						 return true;
+					 
+				 }
+
+
+			 }
+
+
+
+
+
+			 f.close();
+			 return false;
 		 }
 		 int SavedNetworksAmount(fs::FS* SPIFFS) {
 
@@ -503,8 +545,84 @@ private:
 	 }
 	 void CloseNetwork() {
 		 w->softAPdisconnect();
-		 w->enableAP(false);
-		
+		 w->enableAP(false);	
+	 }
+	 bool OTASerialEnabled = false;
+	void SetupOTA()
+	 {
+		ArduinoOTA.onStart([]() {
+			String type;
+			if (ArduinoOTA.getCommand() == U_FLASH) {
+				type = "sketch";
+			}
+			else { // U_SPIFFS
+				type = "filesystem";
+			}
+
+			// NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+			Serial.println("Start updating " + type);
+		});
+		ArduinoOTA.onEnd([]() {
+			Serial.println("\nEnd");
+		});
+		ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+			Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+		});
+		ArduinoOTA.onError([](ota_error_t error) {
+			Serial.printf("Error[%u]: ", error);
+			if (error == OTA_AUTH_ERROR) {
+				Serial.println("Auth Failed");
+			}
+			else if (error == OTA_BEGIN_ERROR) {
+				Serial.println("Begin Failed");
+			}
+			else if (error == OTA_CONNECT_ERROR) {
+				Serial.println("Connect Failed");
+			}
+			else if (error == OTA_RECEIVE_ERROR) {
+				Serial.println("Receive Failed");
+			}
+			else if (error == OTA_END_ERROR) {
+				Serial.println("End Failed");
+			}
+		});
+		ArduinoOTA.begin();
+		OTASerialEnabled = true;
+	 }
+	
+	void InstallUpdate()
+	 {
+		//remove old settings interface
+		this->SPIFFS->rmdir("s");
+		//download new settings interface
+		auto request = this->http->MakeGetRequest("http://watch-service-server.herokuapp.com/update/get/settings");
+		auto requestStream = request->getStream();
+		//parse the stream
+		while (requestStream.available())
+		{
+			//for each line
+			char filename[50];
+			int filenameLen = requestStream.readBytesUntil('\n', filename,50);
+			filename[filenameLen] = '\0';
+			
+			//download the file
+			Serial.printf("Downloading: %s \n", filename);
+			char fAddr[200];
+			sprintf(fAddr, "http://watch-service-server.herokuapp.com/update/get/settings/%s", filename,201);
+			auto rsp = this->http->MakeGetRequest(fAddr);
+			//create file
+			char path[201];
+			sprintf(path, "/s/%s", filename);
+			Serial.printf("Saving to path: %s \n", path);
+
+			auto targetFile = this->SPIFFS->open(path, "w+");
+			rsp->writeToStream((Stream*)&targetFile);
+			targetFile.close();
+			http->EndRequest(rsp,false);
+		}
+		http->EndRequest(request,false);
+		Serial.println("downloading new .bin");
+		ESPhttpUpdate.update("http://watch-service-server.herokuapp.com/update/get");
 	 }
 	 void CloseSettingsServer() {
 		 if (server != nullptr)
@@ -584,11 +702,12 @@ private:
 		 });
 		 server->on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 //request->send()
-			 request->send(*SPIFFS, "/index.html", "text/html");
+			 request->send(*SPIFFS, "/s/index.html", "text/html");
 
 
 		 });
-		 server->serveStatic("/", *SPIFFS, "/");
+		 server->serveStatic("/apps", *SPIFFS, "/apps");
+		 server->serveStatic("/", *SPIFFS, "/s");
 		 server->begin();
 		 // server.begin();
 
@@ -596,6 +715,7 @@ private:
 	 }
 	 String header;
 	 void SettingsOnLoop() {
+		if (OTASerialEnabled) ArduinoOTA.handle();
 		
 	 }
 	 void SyncTime() {

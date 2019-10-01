@@ -11,7 +11,7 @@
 #include <RtcDS3231.h>
 #include <Wire.h>
 #include "UserInterface.h"
-#include "BatteryManager.h"
+
 //#include "DependenciesHolder.h"
 class TimeKepper//:public Dependency
 {
@@ -25,11 +25,11 @@ private:
 	// DependenciesHolder* dependencies;
 	 RtcDateTime now;
 	 UserInterfaceClass* UI;
-	 BatteryManager* bm;
-	 TimeKepper(UserInterfaceClass* _UI, BatteryManager* bm) {
+
+	 TimeKepper(UserInterfaceClass* _UI) {
 		 RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
 		 this->UI = _UI;
-		 this->bm = bm;
+	
 		 Rtc = new RtcDS3231<TwoWire>(Wire);
 		 Wire.begin(0, 2); // due to limited pins, use pin 0 and 2 for SDA, SCL
 		 Rtc->Begin();

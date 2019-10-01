@@ -15,7 +15,8 @@
 #include "Animation.h"
 #include "UserInterface.h"
 #include "StaticResources.h"
-#include "Dependency.h"
+#include "SSD1306Fonts.h"
+
 #include "SettingsManager.h"
 #include "DependenciesHolder.h"
 #define net_wifi4_width 16
@@ -59,13 +60,17 @@ public:
 		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
 		
 		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
-		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * 30;
-
-		renderer.DrawRectangle(3, 3, 5, 30);
-		renderer.FillRectangle(3, 3, 5, batBarWidth);
-
-		if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
-		renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
+		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * 22;
+		if (batBarWidth < 0) batBarWidth = 22;
+		renderer.DrawRectangle(0, 3, 5, 22);
+		renderer.FillRectangle(0, 3, 5, batBarWidth);
+		char b[4];
+		renderer.SetFont((uint8_t *)Orbitron_Medium_6);
+		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
+		renderer.DrawString(23, 3, b);
+		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
+		//if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
+		//renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
 		char datestring[20];
 
 		snprintf_P(datestring,

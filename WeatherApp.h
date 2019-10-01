@@ -71,9 +71,7 @@ private:
 				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, 25 + offset + GlobalY, str, r.GetScreenWidth(), r.Center);
 				r.SetFont((uint8_t *)ArialMT_Plain_10);
 			}
-			else if (noData || this->app->temperature==-999) {
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, "No cache nor internet. Cannot display any weather", r.GetScreenWidth(), r.Center);
-			}
+			
 			else if (!configured) {
 				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, "Application is not configured, check settings!", r.GetScreenWidth(), r.Center);
 			}
@@ -97,25 +95,13 @@ private:
 	 char state[10];
 
 
-	 unsigned char icon[32 * 32] = {
-		 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x02,
-	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	  0x00, 0x80, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00,
-	  0x00, 0x20, 0x00, 0x00, 0x00, 0xE0, 0x00, 0x04, 0x00, 0x80, 0x01, 0x06,
-	  0x10, 0x00, 0x00, 0x02, 0x10, 0x00, 0x00, 0x03, 0x20, 0x00, 0x00, 0x01,
-	  0x60, 0x00, 0x00, 0x01, 0xC0, 0x00, 0x80, 0x01, 0x80, 0x01, 0xC0, 0x00,
-	  0x00, 0x07, 0x60, 0x00, 0x00, 0xFC, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00,
-	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, };
 	 TimeKepper* tk;
 	  struct WeatherAppConfig config = {"London","xd"};
 	 
 	 WeatherApp(UserInterfaceClass* UI, SettingsManager* sm, TimeKepper* tk): BuiltInApplication((Layout*)this->l, UI, sm){
 		 this->layout = l;
 		 this->tk = tk;
-		 this->name = "weather";
+		 this->name = "Weather";
 		 if (!KeyExists("city"))
 			AppendKey("city", "Warszawa");
 		 
@@ -140,31 +126,13 @@ private:
 		
 
 		 Serial.println("opening weather, connected?");
+		 Serial.println(KeyExists("city"));
 		 if (KeyExists("city")) {
 			 
 			
 			
-			 settingsManager->appsManager->GetKeyFromConfig("weather", "city", config.city);
+			GetKeyValue("city", config.city);
 			 DisplayToday();
-	
-
-			 //This piece is a bit complex; it should handle situations  when there is no internet but the data
-			 // was downloaded before. As for now, the data is always being downloaded from the net
-			/*
-			 if (settingsManager->w->isConnected()) { 
-				 DisplayToday(); 
-			 }
-			 else { //if there is no connection at the moment: 
-				 if (settingsManager->appsManager->KeyExists("weather", "tmpCache")) {
-					 char tmp[4];
-					 settingsManager->appsManager->GetKeyFromConfig("weather", "tmpCache",tmp);
-					 temperature = atoi(tmp);
-				 }
-				 else {
-					 l->noData = true;
-				 }
-			 }
-			 */
 			 if (layout == nullptr) Serial.println("Pointer is null");
 		 }
 		 else {

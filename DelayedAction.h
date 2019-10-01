@@ -37,11 +37,14 @@ namespace Run {
 		return b;
 	}
 	void Cancel(DelayedActionDataHolder* b) {
+		if (b == NULL || b == nullptr) { return; }
 		for (int i = 0; i < __a.size(); i++) {
 			if (__a.get(i) == b) {
 				__a.remove(i);
 				//TOOD: Deallocate;
 				delete b;
+				b = nullptr;
+			
 			}
 		}
 	}

@@ -25,6 +25,7 @@ class SettingsScreen:public CustomScreen
 	 
 	 UserInterfaceClass* UI;
 	 SettingsManager* sm;
+	 char* ip;
 	 SettingsScreen(UserInterfaceClass*& UI, SettingsManager*& sm) {
 		 this->UI = UI;
 		 this->sm = sm;
@@ -47,11 +48,15 @@ class SettingsScreen:public CustomScreen
 		 UI->RegisterAnimation(a);
 	 }
 	 virtual void Draw(Renderer& r) override{
-		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, "Connect to WiFi network named test and type 192.168.4.1 in your browser to access settings.", r.GetScreenWidth(), r.Left);
+		 char a[100];
+		 sprintf(a,"Connect to WiFi network named test and type %s in your browser to access settings.", sm->w->localIP().toString().c_str());
+		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, a, r.GetScreenWidth(), r.Left);
 
 		
 	 }
 	 virtual void OnGetInFocus(Renderer& r) override {
+		
+	 	 
 		 offset = 15;
 	 }
 

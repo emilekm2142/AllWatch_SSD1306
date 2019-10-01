@@ -16,6 +16,7 @@
 #include <ESP8266HTTPClient.h>
 #include "Layout.h"
 #include "DelayedAction.h"
+
 #include "SSD1306.h"
 #include "SettingsManager.h"
 #include "GenericMenuScreen.h"
@@ -52,10 +53,11 @@ private:
 		GenericTextScreen* infoScreen;
 		GenericMenuScreen* menu;
 		SettingsLayout(SettingsApp* app) {
+		
 			this->app = app;
 
 			
-			infoScreen = new GenericTextScreen(this->app->UI, (char*)F("joy xdxd"), true);
+			infoScreen = new GenericTextScreen(this->app->UI, (char*)F("."), true);
 			menu =new GenericMenuScreen(app->UI);
 			menu->AddOption((char*)F("Sync time"), [this]() {
 				infoScreen->text = "Syncing...";
@@ -72,15 +74,24 @@ private:
 				Draw(*this->app->UI->GetRenderer());
 				Run::After(1000, [this]() {
 					char urlBuffer[100];
-					sprintf(urlBuffer, "http://watch-service-server.herokuapp.com/update/%d", 1);
+					sprintf(urlBuffer, "http://watch-service-server.herokuapp.com/update/%d", WATCH_VERSION_NUMBER);
+					Serial.println("EXECUTING REQUEST...");
 					auto request =this->app->settingsManager->http->MakeGetRequest(urlBuffer);
 					char rsp = request->getStream().read();
+					Serial.println("RESULT READ:");
 					Serial.println(rsp);
+					Serial.println((int)rsp);
+				
 					if (rsp == '1') {
-
+						this->app->settingsManager->InstallUpdate();
 					}
 					else if (rsp == '0') {
-						infoScreen->text = "No update available"
+						const char* strPtr = PSTR("No update available");
+						infoScreen->text = strPtr;
+						Run::After(1000, [this]()
+						{
+							currentScreen= (Layout*)menu;
+						});
 					}
 					this->app->settingsManager->http->EndRequest(request);
 				});
@@ -107,16 +118,30 @@ private:
 				Run::After(1000, [this]() {
 					currentScreen = (Layout*)menu;
 					if (this->app->settingsManager->wifiManager->WiFiConnected()) {
-						//TODO: does it work?
-						auto o = SettingsScreen(this->app->UI, this->app->settingsManager);
-						currentScreen = (Layout*)&o;
+						auto o = new SettingsScreen(this->app->UI, this->app->settingsManager);
+						currentScreen = (Layout*)o;
 						this->app->settingsManager->OpenSettingsServer();
 					}
 					Draw(*this->app->UI->GetRenderer());
 				});
 			});
-			currentScreen = (Layout*)menu;
+			menu->AddOption((char*)F("OTA Serial"), [this]() {
+				
+				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected() ? (char*)"OK!" : (char*)"You must connect to a network first";
 
+				currentScreen = (Layout*)infoScreen;
+				Draw(*this->app->UI->GetRenderer());
+				Run::After(1000, [this]() {
+					currentScreen = (Layout*)menu;
+					if (this->app->settingsManager->wifiManager->WiFiConnected()) {
+						
+						this->app->settingsManager->SetupOTA();
+					}
+					Draw(*this->app->UI->GetRenderer());
+				});
+			});
+			
+			currentScreen = (Layout*)menu;
 		}
 		void Draw(Renderer& r) {
 			currentScreen->Draw(r);

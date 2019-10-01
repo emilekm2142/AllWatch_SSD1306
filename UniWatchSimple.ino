@@ -1,3 +1,4 @@
+#include "StarsApp.h"
 #include "GenericDialogScreen.h"
 #include "AppMarketApp.h"
 #include "GamesApp.h"
@@ -26,7 +27,7 @@
 #include "GenericMenuScreen.h"
 #include "GenericTextScreen.h"
 //#include "AppsMenu.h"
-#include "Dependency.h"
+
 #include "DependenciesHolder.h"
 #include "BatteryManager.h"
 #include "SettingsScreen.h"
@@ -66,6 +67,7 @@
 #include "GenericTextScreen.h"
 #include "PizzaApp.h"
 #include "Config.h"
+#include "StarsApp.h"
 #include "FlappyBirdApp.h"
 #include "SettingsApp.h"
 #include "WiFiConnectApp.h"
@@ -119,7 +121,7 @@ InputHandler inputHandler = InputHandler(
 Column menu;
 BME280Barometer barometerBME280 = BME280Barometer();
 ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280);
-auto tk = TimeKepper(&UserInterface, &bm);
+auto tk = TimeKepper(&UserInterface);
 auto r = SSD1306Renderer();
 
 auto home = HomeScreen(UserInterface, &tk);
@@ -136,16 +138,24 @@ auto imageMenuScreen = ImagesMenu(&UserInterface);
 
 
 void setup() {
+
+	bm.sm = &settingsManager;
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);
 #endif // !USE_TX_RX_AS_GPIO
 #ifdef APPEND_DEFAULT_WIFI
+	if (settingsManager.wifiManager->IsNetworkSaved(settingsManager.SPIFFS, DEFAULT_WIFI_SSID))
+	{
+		settingsManager.wifiManager->RemoveWiFiNetwork(DEFAULT_WIFI_SSID);
+	}
 	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
 #endif // APPEND_DEFAULT_WIFI
 
 	
 
 	settingsManager.appsManager->RegisterApplication("Weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); }, WeatherApp_Icon::width, WeatherApp_Icon::height, WeatherApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Stars", []() {return new StarsApp(&UserInterface, &settingsManager); }, StarsApp_Icon::width, StarsApp_Icon::height, StarsApp_Icon::icon_bits);
+
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); }, FlappyBirdApp_Icon::width, FlappyBirdApp_Icon::height, FlappyBirdApp_Icon::icon_bits,false);
 	settingsManager.appsManager->RegisterApplication("Games", []() {return new GamesApp(&UserInterface, &settingsManager); },GamesApp_Icon::width,GamesApp_Icon::height,GamesApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); }, IFTTApp_icon::width, IFTTApp_icon::height, IFTTApp_icon::iftt_bits);
@@ -171,7 +181,7 @@ void setup() {
 	pinMode(A0, INPUT);
 
 	Serial.println("start");
-
+	//Serial.println("UPDATED!!");
 
 	delay(1000);
 
@@ -196,6 +206,11 @@ void setup() {
 	UserInterface.RedrawAll();
 	imageMenuScreen.setCurrentScroll();
 
+
+#ifdef START_WITH_OTA_PORT
+	settingsManager.w->begin(OTA_WIFI_SSID, OTA_WIFI_PASSWORD);
+	settingsManager.SetupOTA();
+#endif
 	//settingsManager.TestSaveWiFi();
 	
 }

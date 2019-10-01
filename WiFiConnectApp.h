@@ -89,7 +89,7 @@ private:
 			choiceMenu->AddOption("List networks", [this]() {
 				char** names = new char*[25];
 				for (int x = 0; x < 25; x++) names[x] = NULL;
-				taskRef = Run::Every(15000, [this, names]() {
+				taskRef = Run::After(100, [this, names]() {
 					int len = this->app->settingsManager->wifiManager->ScanNetworks();
 					menu->ClearList();
 					for (int i = 0; i < len; i++) {
@@ -101,9 +101,10 @@ private:
 						menu->AddOption(names[i], [this, names, i]() {
 							//make copy
 							int d = i;
-							infoScreen->text = (char*)F("Connecting...");
+							infoScreen->text = PSTR("Connecting...");
 							currentScreen = (Layout*)infoScreen;
 							Draw(*this->app->UI->GetRenderer());
+							Serial.println("...");
 							int status = this->app->settingsManager->wifiManager->ConnectToWiFiUsingSavedCredentials(names[d]);
 							if (!status) {
 								infoScreen->text = "Could not connect... \n Did you provide the password?";
@@ -114,6 +115,7 @@ private:
 							else {
 								infoScreen->text = "Connected!";
 								Run::After(2000, [this]() {
+									Run::Cancel(taskRef);
 									this->app->Exit();
 								});
 							}
@@ -166,7 +168,7 @@ private:
 
 	 }
 	 void OnExit() override {
-
+		 Run::Cancel(this->l->taskRef);
 	 }
 
 
