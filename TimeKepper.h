@@ -41,6 +41,7 @@ private:
 	 }
 	
 	 void SetDateTime(int year, int month, int day, int hour, int minute, int second) {
+		 Serial.printf("setting datetime: %d/%d/%d, %d:%d:%d \n", year, month, day, hour, minute, second);
 		 RtcDateTime n = RtcDateTime(year, month, day, hour, minute, second);
 		 Rtc->SetDateTime(n);
 	 }

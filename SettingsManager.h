@@ -77,10 +77,10 @@ private:
 				}
 			 }
 			 HTTPClient* http = new HTTPClient();
-
+			 Serial.printf("\n Sending request: %s \n", url);
 			 http->begin(url);
-			 http->GET();
-
+			 int code = http->GET();
+			 Serial.printf("code: %d", code);
 			 return http;
 		 }
 		 void EndRequest(HTTPClient* r, bool disconnect=true) {
@@ -113,7 +113,21 @@ private:
 				 s.println(appsDir.fileName());
 			 }
 		 }
-		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, int iconWidth=NULL, int iconHeight=NULL, const unsigned char* icon=NULL, bool show=true) {
+	 	void DeleteConfigFile(const char* name)
+		 {
+			char filePath[32];
+			snprintf_P(filePath,
+				32,
+				"/apps/%s",
+				name
+			);
+			if (parent->SPIFFS->exists(filePath)) {
+				parent->SPIFFS->remove(filePath);
+
+			}
+		 }
+	 	 void MakeConfigFile(const char* name)
+		 {
 			 char filePath[32];
 			 snprintf_P(filePath,
 				 32,
@@ -123,9 +137,12 @@ private:
 			 if (!parent->SPIFFS->exists(filePath)) {
 				 Serial.println("creating file: ");
 				 Serial.println(filePath);
-				auto f =  parent->SPIFFS->open(filePath, "a+");
-				f.close();
+				 auto f = parent->SPIFFS->open(filePath, "a+");
+				 f.close();
 			 }
+		 }
+		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, int iconWidth=NULL, int iconHeight=NULL, const unsigned char* icon=NULL, bool show=true) {
+			 MakeConfigFile(name);
 			 auto m = new ApplicationDataHolder(name, creatingFunction, show);
 			 m->iconHeight = iconHeight;
 			 m->iconWidth = iconWidth;
@@ -135,19 +152,10 @@ private:
 
 		 }
 		 void DeleteApplication(char* name) {
-			 char filePath[32];
-			 snprintf_P(filePath,
-				 32,
-				 "/apps/%s",
-				 name
-			 );
-			 if (parent->SPIFFS->exists(filePath)) {
-				  parent->SPIFFS->remove(filePath);
-				 
-			 }
-
+			
+			 DeleteConfigFile(name);
 		 }
-		 fs::File GetConfigForApplication(char* appName, char* mode="a+") {
+		 fs::File GetConfigForApplication(const char* appName, const char* mode="a+") {
 			 char filePath[32];
 
 			 snprintf_P(filePath,
@@ -212,7 +220,7 @@ private:
 			 }
 			 return false;
 		 }
-		 void AppendKeyToConfig(char* appName, char* key, char* value) {
+		 void AppendKeyToConfig(const char* appName, const char* key, const char* value) {
 			 auto f = GetConfigForApplication(appName);
 	
 			 f.print(key);
@@ -270,6 +278,27 @@ private:
 		 }
 	 };
 	 class WiFiManager {
+	 private:
+		 bool persistentConnectionStatus = false;
+		 char persistentConnectionSSID[25];
+		 char persistentConnectionPassword[25];
+	 	 void SetPersistentConnection(const char* SSID, const char* password)
+	 	 {
+			 strcpy(persistentConnectionSSID,SSID);
+			 strcpy(persistentConnectionPassword,password);
+	 	 	 
+	 	 }
+	 	void SavePersistentConnectionDetailsToFile(const char* SSID, const char* password)
+	 	 {
+			this->parent->appsManager->DeleteConfigFile("WiFiPersistent");
+			this->parent->appsManager->MakeConfigFile("WiFiPersistent");
+			this->parent->appsManager->AppendKeyToConfig("WiFiPersistent", "SSID", SSID);
+			this->parent->appsManager->AppendKeyToConfig("WiFiPersistent", "pswd", password);
+	 	 }
+	 	void LoadPersistentNetworkFromFile()
+	 	 {
+		 	 
+	 	 }
 	 public:
 		 const char* filename = "/WiFi.list";
 		 SettingsManager* parent;
@@ -720,40 +749,48 @@ private:
 	 }
 	 void SyncTime() {
 		 //https://time-watch-service.herokuapp.com/datetime
-		 HTTPClient http;
-		 char buffer[] = "https://time-watch-service.herokuapp.com/datetime";
-		 http.begin(buffer);
-		 http.addHeader("Content-Type", "text/plain");
-		 int code = http.GET();
-		 auto s = http.getStream();
+		 auto rsp = http->MakeGetRequest("http://time-watch-service.herokuapp.com/datetime");
+	
+		 auto s = rsp->getStream();
 		 char buff[10];
 		 int read;
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
+		 Serial.println(buff);
 		 int year = atoi(buff);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
+		 Serial.println(buff);
+
 		 int month = atoi(buff);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
+		 Serial.println(buff);
+
 		 int day = atoi(buff);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
+		 Serial.println(buff);
+
 		 int hour = atoi(buff);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
+		 Serial.println(buff);
+
 		 int minute = atoi(buff);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
-		 int second = atoi(buff);
+		 Serial.println(buff);
+
+	 	int second = atoi(buff);
 
 		 tk->SetDateTime(year, month, day, hour, minute, second);
-
+		 http->EndRequest(rsp, false);
 	 }
 	 //Na kartce
 	 void CreateMobileAppliation(char* name,  char* packageName) {

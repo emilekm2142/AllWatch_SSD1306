@@ -106,19 +106,23 @@ private:
 							Draw(*this->app->UI->GetRenderer());
 							Serial.println("...");
 							int status = this->app->settingsManager->wifiManager->ConnectToWiFiUsingSavedCredentials(names[d]);
-							if (!status) {
-								infoScreen->text = "Could not connect... \n Did you provide the password?";
-								Run::After(2000, [this]() {
-									currentScreen = (Layout*)menu;
-								});
-							}
-							else {
-								infoScreen->text = "Connected!";
-								Run::After(2000, [this]() {
-									Run::Cancel(taskRef);
-									this->app->Exit();
-								});
-							}
+							Run::After(1000, [this,status]()
+							{
+								if (!status) {
+									infoScreen->text = PSTR("Could not connect... \n Did you provide the password? Try again");
+									Run::After(2000, [this]() {
+										currentScreen = (Layout*)menu;
+									});
+								}
+								else {
+									infoScreen->text = PSTR("Connected!");
+									Run::After(2000, [this]() {
+										Run::Cancel(taskRef);
+										this->app->Exit();
+									});
+								}
+							});
+						
 						});
 					}
 				});

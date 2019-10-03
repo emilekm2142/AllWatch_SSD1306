@@ -63,10 +63,9 @@ private:
 				infoScreen->text = "Syncing...";
 				currentScreen = (Layout*)infoScreen;
 				Draw(*this->app->UI->GetRenderer());
-				Run::After(1000, [this]() {
-					this->app->settingsManager->SyncTime();
-					currentScreen = (Layout*)menu;
-				});
+				this->app->settingsManager->SyncTime();
+				currentScreen = (Layout*)menu;
+			
 			});
 			menu->AddOption((char*)F("Check for updates"), [this]() {
 				infoScreen->text = "Getting updates...";
