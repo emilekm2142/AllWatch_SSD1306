@@ -11,6 +11,7 @@
 #include "BuiltInApplication.h"
 #include "Renderer.h"
 #include "CustomScreen.h"
+#include <RtcDS3231.h>
 #include <SSD1306Brzo.h> 
 #include "UserInterface.h"
 #include "TimeKepper.h"
@@ -60,19 +61,8 @@ private:
 
 
 		TimeConfiguratorLayout(TimeConfiguratorApp* a) {
-#ifdef RTC_AVAILABLE
-			localDay = app->tk->now.Day();
-			localMonth = app->tk->now.Month();
-			localHour = app->tk->now.Hour();
-			localMinute = app->tk->now.Minute();
-#endif
-#ifndef RTC_AVAILABLE
+			
 
-			localDay = 1;
-			localMonth = 1;
-			localHour = 1;
-			localMinute = 1;
-#endif // !RTC_AVAILABLE
 
 
 			app = a;
@@ -261,6 +251,12 @@ public:
 		Serial.println("constructor");
 		this->layout = l;
 		this->tk = tk;
+		auto n = tk->GetCurrentTime();
+
+		l->localDay =  n.Day();
+		l->localMonth =  n.Month();
+		l->localHour =  n.Hour();
+		l->localMinute = n.Minute();
 		Serial.println("after constructor");
 	}
 	void OnOpen() override {

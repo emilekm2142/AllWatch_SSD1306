@@ -297,7 +297,7 @@ private:
 	 	 }
 	 	void LoadPersistentNetworkFromFile()
 	 	 {
-		 	 
+		 	 //TODO: ta czesc
 	 	 }
 	 public:
 		 const char* filename = "/WiFi.list";
@@ -507,7 +507,7 @@ private:
 
 			 while (!WiFiConnected()) {
 				 if (millis() - startTime > 5000) return false;
-				 delay(1);
+				 delay(50);
 			 }
 			 return true;
 		 }

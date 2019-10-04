@@ -20,24 +20,26 @@
 //comment if you do not wish to add any default wifi network
 #define APPEND_DEFAULT_WIFI
 //set the values accordingly
-#define DEFAULT_WIFI_SSID  "test"
+#define DEFAULT_WIFI_SSID  "test5"
 #define DEFAULT_WIFI_PASSWORD  "123456789"
 
 
 //uncomment if you intend to use a RX or TX pin as a button
 
 
-//#define USE_TX_RX_AS_GPIO
+#define USE_TX_RX_AS_GPIO
 #define PIN_DOWN  1	
 #define PIN_UP  3
 //uncomment if you want to inverse HIGH to LOW
 //#define INVERT
 
-//#define RTC_AVAILABLE
+#define RTC_AVAILABLE
 
-#define DEBOUNCE_TIME 50
+#define DEBOUNCE_TIME 200
 
 
 //#define START_WITH_OTA_PORT
 #define OTA_WIFI_SSID "test"
 #define OTA_WIFI_PASSWORD "123456789"
+
+//#define TEMPERATURE_AVAILABLE

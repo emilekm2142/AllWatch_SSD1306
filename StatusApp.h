@@ -13,6 +13,7 @@
 #include "CustomScreen.h"
 #include "UserInterface.h"
 #include "GenericMenuScreen.h"
+#include  "Config.h"
 #include "GenericTextScreen.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -54,6 +55,7 @@ private:
 
 		}
 		void Draw(Renderer& r) override {
+#ifdef TEMPERATURE_AVAILABLE
 			snprintf_P(buffer,
 				200,
 				PSTR("My ip is: %s \n Temperature: %.1f*C \n Pressure: %.1f hPa \n Approx. altitude: %.2f"),
@@ -62,6 +64,15 @@ private:
 				this->app->settingsManager->extraPeripheralsManager->thermometer->getTemperatureC(),
 				this->app->settingsManager->extraPeripheralsManager->barometer->getHeight()
 			);
+#else
+snprintf_P(buffer,
+	200,
+	PSTR("My ip is: %s \n"),
+	this->app->settingsManager->w->localIP().toString().c_str()
+	
+);
+
+#endif
 			screen->Draw(r);
 			
 			

@@ -154,7 +154,7 @@ void setup() {
 	
 
 	settingsManager.appsManager->RegisterApplication("Weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); }, WeatherApp_Icon::width, WeatherApp_Icon::height, WeatherApp_Icon::icon_bits);
-	settingsManager.appsManager->RegisterApplication("Stars", []() {return new StarsApp(&UserInterface, &settingsManager); }, StarsApp_Icon::width, StarsApp_Icon::height, StarsApp_Icon::icon_bits);
+	//settingsManager.appsManager->RegisterApplication("Stars", []() {return new StarsApp(&UserInterface, &settingsManager); }, StarsApp_Icon::width, StarsApp_Icon::height, StarsApp_Icon::icon_bits);
 
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); }, FlappyBirdApp_Icon::width, FlappyBirdApp_Icon::height, FlappyBirdApp_Icon::icon_bits,false);
 	settingsManager.appsManager->RegisterApplication("Games", []() {return new GamesApp(&UserInterface, &settingsManager); },GamesApp_Icon::width,GamesApp_Icon::height,GamesApp_Icon::icon_bits);

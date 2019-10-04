@@ -32,20 +32,25 @@ private:
 	
 		 Rtc = new RtcDS3231<TwoWire>(Wire);
 		 Wire.begin(0, 2); // due to limited pins, use pin 0 and 2 for SDA, SCL
+		
 		 Rtc->Begin();
+		
 		 now = Rtc->GetDateTime();
-		 
 		 
 		 //if (now.Year()<2019)
 		//	 Rtc->SetDateTime(compiled);
 	 }
-	
+	 RtcDateTime GetCurrentTime()
+	 {
+		 return this->Rtc->GetDateTime();
+	 }
 	 void SetDateTime(int year, int month, int day, int hour, int minute, int second) {
 		 Serial.printf("setting datetime: %d/%d/%d, %d:%d:%d \n", year, month, day, hour, minute, second);
 		 RtcDateTime n = RtcDateTime(year, month, day, hour, minute, second);
 		 Rtc->SetDateTime(n);
 	 }
 	 void OnLoop() {
+	 	//TODO: usunac to z tego miejsca
 		 if (1000  <= millis() - lastCheck) {
 			// Serial.println("Getting new time");
 			 now = Rtc->GetDateTime();

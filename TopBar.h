@@ -19,12 +19,7 @@
 
 #include "SettingsManager.h"
 #include "DependenciesHolder.h"
-#define net_wifi4_width 16
-#define net_wifi4_height 16
-static unsigned PROGMEM char net_wifi4_bits[] = {
-   0x00, 0x00, 0x00, 0x00, 0xf0, 0x0f, 0x08, 0x10, 0xe4, 0x27, 0x10, 0x08,
-   0xc0, 0x03, 0x20, 0x04, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x80, 0x01,
-   0xc0, 0x03, 0xc0, 0x03, 0x80, 0x01, 0x00, 0x00 };
+
 class TopBar :public Layout {
 public:
 	int currentIndex = 0;
@@ -65,7 +60,7 @@ public:
 		renderer.DrawRectangle(0, 3, 5, 22);
 		renderer.FillRectangle(0, 3, 5, batBarWidth);
 		char b[4];
-		renderer.SetFont((uint8_t *)Orbitron_Medium_6);
+		renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
 		renderer.DrawString(23, 3, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
@@ -86,7 +81,7 @@ public:
 			);
 
 		renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
-		if (sm->WiFiConnected()) renderer.DrawBitmap(renderer.GetScreenWidth() - 20, 2, 16, 16, net_wifi4_bits);
+		if (sm->WiFiConnected()) renderer.DrawBitmap(renderer.GetScreenWidth() - 12, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
 		
 		//renderer.DrawAlignedString(renderer.GetScreenWidth(), 0, , renderer.GetScreenWidth(), renderer.Right);
 	}
