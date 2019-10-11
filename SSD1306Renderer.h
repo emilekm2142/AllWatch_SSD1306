@@ -42,7 +42,7 @@ private:
 		 d = new SSD1306Wire(0x3c, SSD1306_PIN_SDA, SSD1306_PIN_SCL);
 		#endif 
 		#ifdef Renderer_SSH1106
-			d = new SH1106Wire(0x3c, 0, 2);
+			d = new SH1106Wire(0x3c, SSH1106_PIN_SDA, SSH1106_PIN_SCL);
 		#endif // SSH1106
 		 d->init();
 		 d->flipScreenVertically();

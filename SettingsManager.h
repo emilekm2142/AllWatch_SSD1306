@@ -14,6 +14,7 @@
 #include "TimeKepper.h"
 #include <ESP8266WiFi.h>
 #include <ArduinoOTA.h>
+
 #include "FS.h"
 #include "Config.h"
 #include <ESP8266HTTPClient.h>
@@ -80,6 +81,12 @@ private:
 			 Serial.printf("\n Sending request: %s \n", url);
 			 http->begin(url);
 			 int code = http->GET();
+		 	if (code<0)
+		 	{
+				delay(1000);
+				code = http->GET();
+			
+		 	}
 			 Serial.printf("code: %d", code);
 			 return http;
 		 }

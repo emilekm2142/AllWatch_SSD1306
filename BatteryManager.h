@@ -50,10 +50,17 @@ public:
 	int GetBatteryLevel() {
 		return ESP.getVcc();
 	 }
-	int GetBatteryPercentage() {
+	int __GetBatteryPercentage() {
 		int current = GetBatteryLevel() - lowBatteryPoint;
 		int max = highBatteryPoint - lowBatteryPoint;
-		return (int)(((float)current / (float)max)*100.0);
+		int result = (int)(((float)current / (float)max)*100.0);
+		return result > 100 ? 100 : result < 2 ? 2 : result;
+	}
+	int GetBatteryPercentage() {
+		int res1 = __GetBatteryPercentage();
+		int res2 = __GetBatteryPercentage();
+		int res3 = __GetBatteryPercentage();
+		return(min(res1, min(res2, res3)));
 	}
 
 	bool ShouldUsePowerSaverMode(){

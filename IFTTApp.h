@@ -106,7 +106,7 @@ public:
 		char buffer[50];
 		GetKeyValue("key", &buffer[0]);
 		if (this->KeyExists("key") && strcmp("type in the api key",buffer ) == 0) {
-			l->mainMenu->AddOption((char*)F("Cchange the API key!"), [this] {
+			l->mainMenu->AddOption((char*)F("Change the API key!"), [this] {
 				
 				this->Exit();
 				this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
@@ -134,11 +134,8 @@ public:
 		}
 		Serial.println("CLOSING FILE");
 		configFile.close();
-
-	//	l->mainMenu->AddOption("Margarita", [this]() {this->app->Exit(); });
-	//	l->mainMenu->AddOption("Fungi", [this]() {this->app->Exit(); });
-	//	l->mainMenu->AddOption("Vesuvio", [this]() {this->app->Exit(); });
-
+		Serial.println(ESP.getFreeHeap());
+		Serial.println(ESP.getFreeSketchSpace());
 	}
 	void OnOpen() override {
 		Serial.println("IFTTT opened");
