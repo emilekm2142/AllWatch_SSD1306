@@ -11,7 +11,7 @@
 #include <RtcDS3231.h>
 #include <Wire.h>
 #include "UserInterface.h"
-
+#include  "Config.h"
 //#include "DependenciesHolder.h"
 class TimeKepper//:public Dependency
 {
@@ -31,7 +31,7 @@ private:
 		 this->UI = _UI;
 	
 		 Rtc = new RtcDS3231<TwoWire>(Wire);
-		 Wire.begin(0, 2); // due to limited pins, use pin 0 and 2 for SDA, SCL
+		 Wire.begin(RTC_SDA, RTC_SCL); // due to limited pins, use pin 0 and 2 for SDA, SCL
 		
 		 Rtc->Begin();
 	

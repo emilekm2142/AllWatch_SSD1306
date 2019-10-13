@@ -36,6 +36,8 @@
 //#define INVERT
 
 #define RTC_AVAILABLE
+#define RTC_SDA 14
+#define RTC_SCL 2
 
 #define DEBOUNCE_TIME 200
 
