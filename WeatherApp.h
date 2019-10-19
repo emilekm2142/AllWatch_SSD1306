@@ -60,7 +60,11 @@ private:
 		void Draw(Renderer& r) {
 			//Serial.println("DRWAING!!!");
 			//r.DrawXBM(25, 25, 32, 32, app->icon);
-			if (configured) {
+			if (this->app->downloading)
+			{
+				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, "Downloading...", r.GetScreenWidth(), r.Center);
+			}
+			else if (configured) {
 				sprintf(header, "Weather in %s", this->app->config.city);
 				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, header, r.GetScreenWidth(), r.Center);
 				r.SetFont((uint8_t *)ArialMT_Plain_10);
@@ -94,7 +98,7 @@ private:
 	 int temperature=-999;
 	 char state[10];
 
-
+	 bool downloading = true;
 	 TimeKepper* tk;
 	  struct WeatherAppConfig config = {"London","xd"};
 	 
@@ -124,16 +128,15 @@ private:
 	 }
 	 void OnOpen() override {
 		
-
+		
 		 Serial.println("opening weather, connected?");
 		 Serial.println(KeyExists("city"));
-		 if (KeyExists("city")) {
-			 
-			
-			
+		 if (KeyExists("city")) {			
 			GetKeyValue("city", config.city);
-			 DisplayToday();
-			 if (layout == nullptr) Serial.println("Pointer is null");
+			downloading = true;
+			this->l->Draw(*UI->GetRenderer());
+			DisplayToday();
+			if (layout == nullptr) Serial.println("Pointer is null");
 		 }
 		 else {
 			 l->configured = false;
@@ -149,17 +152,26 @@ private:
 		 char buffer[100];
 		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/?city=%s", config.city);
 		 auto a = settingsManager->http->MakeGetRequest(buffer);
-		 auto s = a->getStream();
-		 s.readBytesUntil('\n', state, 15);
-		 state[strlen(state)] = '\0';
-		 char xd[3];
-		 s.readBytesUntil('\n', xd, 3);
-		 temperature = atoi(xd);
-		 settingsManager->appsManager->UpdateKeyInConfig("weather", "tmpCache", xd);
-		 Serial.println("Request done!");
-		 Serial.println(temperature);
-		 Serial.println(state);
-		 settingsManager->http->EndRequest(a);
+	 	 if (a==nullptr)
+	 	 {
+			 Exit();
+			 Serial.println("closed!");
+	 	 }
+		 else {
+			 auto s = a->getStream();
+			 s.readBytesUntil('\n', state, 15);
+			 state[strlen(state)] = '\0';
+			 char xd[3];
+			 s.readBytesUntil('\n', xd, 3);
+			 temperature = atoi(xd);
+			 settingsManager->appsManager->UpdateKeyInConfig("weather", "tmpCache", xd);
+			 Serial.println("Request done!");
+			 Serial.println(temperature);
+			 Serial.println(state);
+			 settingsManager->http->EndRequest(a);
+			 downloading = false;
+			 UI->RedrawAll();
+		 }
 		 
 	 }
 	 void DisplayTommorow() {

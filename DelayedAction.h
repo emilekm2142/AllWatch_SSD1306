@@ -16,8 +16,8 @@ namespace Run {
 		int startTime;
 		int type; //0 - 
 	};
-	LinkedList<DelayedActionDataHolder*> __a = LinkedList<DelayedActionDataHolder*>();
-	DelayedActionDataHolder* After(int delay, std::function<void()> action) {
+	extern LinkedList<DelayedActionDataHolder*> __a;
+	inline DelayedActionDataHolder* After(int delay, std::function<void()> action) {
 		auto b = new DelayedActionDataHolder();
 		b->delay = delay;
 		b->action = action;
@@ -26,7 +26,7 @@ namespace Run {
 		__a.add(b);
 		return b;
 	}
-	DelayedActionDataHolder* Every(int delay, std::function<void()> action) {
+	inline DelayedActionDataHolder* Every(int delay, std::function<void()> action) {
 		action();
 		auto b = new DelayedActionDataHolder();
 		b->delay = delay;
@@ -36,7 +36,7 @@ namespace Run {
 		__a.add(b);
 		return b;
 	}
-	void Cancel(DelayedActionDataHolder* b) {
+	inline void Cancel(DelayedActionDataHolder* b) {
 		if (b == NULL || b == nullptr) { return; }
 		for (int i = 0; i < __a.size(); i++) {
 			if (__a.get(i) == b) {
@@ -48,7 +48,7 @@ namespace Run {
 			}
 		}
 	}
-	void Loop() {
+	inline void Loop() {
 		for (int i = 0; i < __a.size(); i++) {
 			if (millis() - __a.get(i)->startTime > __a.get(i)->delay) {
 				__a.get(i)->action();
@@ -64,5 +64,6 @@ namespace Run {
 		}
 	}
 }
+
 #endif
 

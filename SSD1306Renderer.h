@@ -22,10 +22,6 @@
 	#include <SH1106Wire.h> 
 #endif // SSH1106
 
-
-
-
-#include <U8g2lib.h>
 class SSD1306Renderer:public Renderer
 {
 private:

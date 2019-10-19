@@ -54,8 +54,8 @@ private:
 		int currentObject = 0;
 		int objectsCount = 4; //actually, +1 because we count with zero!
 
-		int blinkDelay = 2000;
-		int blinkTime = 1000;
+		int blinkDelay = 1000;
+		int blinkTime = 700;
 		int lastBlinkTime = 0;
 		boolean blinkNow = false;
 

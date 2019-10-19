@@ -49,21 +49,42 @@ public:
 	virtual void Ok(Renderer& renderer) override {}
 	virtual void Back(Renderer& renderer) override {}
 
-
-	
-	virtual void Draw(Renderer& renderer) override {
-		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
-		
-		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
-		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * 22;
-		if (batBarWidth < 0) batBarWidth = 22;
-		renderer.DrawRectangle(0, 3, 5, 22);
-		renderer.FillRectangle(0, 3, 5, batBarWidth);
+	void DrawBattery(Renderer& renderer)
+	{
+		const int batteryMiddleWidth = 15;
+		const int batterySidesWidth = 1;
+		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * batteryMiddleWidth;
+		if (batBarWidth < 0) batBarWidth = batteryMiddleWidth;
+		//sides
+		renderer.FillRectangle(0, 4, 3, batterySidesWidth);
+		renderer.FillRectangle(batteryMiddleWidth+batterySidesWidth, 4, 3, batterySidesWidth);
+		//fill
+		renderer.DrawRectangle(batterySidesWidth, 3, 5, batteryMiddleWidth);
+		renderer.FillRectangle(batterySidesWidth, 3, 5, batBarWidth);
 		char b[4];
 		renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
-		renderer.DrawString(23, 3, b);
+		renderer.DrawString(2*batterySidesWidth + batteryMiddleWidth+3, 3, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
+	}
+	void DrawChargingIndicator(Renderer& renderer)
+	{
+		renderer.SetFont((uint8_t *)Orbitron_Medium_8);
+		renderer.DrawString(0, 3, "Charging");
+		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
+	}
+	
+	virtual void Draw(Renderer& renderer) override {
+
+		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
+		/*if (bm->isBeingCharged()) {
+			DrawChargingIndicator(renderer);
+		}else{
+			DrawBattery(renderer);
+		}*/
+		DrawBattery(renderer);
+		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
+		
 		//if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
 		//renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
 		char datestring[20];

@@ -64,7 +64,7 @@ private:
 			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			this->app->Exit();
+			
 		}
 		void Up(Renderer& r) override {
 			currentScreen->Up(r);
@@ -92,7 +92,10 @@ public:
 
 	void OnOpen() override {
 
-
+		Run::After(1500, [this]
+		{
+			Exit();
+		});
 	}
 	void OnExit() override {
 

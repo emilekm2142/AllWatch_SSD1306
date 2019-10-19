@@ -10,13 +10,13 @@
 #define Renderer_OLED
 
 //Do we use SSD1306?
-#define Renderer_SSD1306
+//#define Renderer_SSD1306
 #define SSD1306_PIN_SDA 14 //D5 on wemos d1 mini
 #define SSD1306_PIN_SCL 0 //D3 on wemos d1 mini
 
 //Do we use SSH1106?
-//#define Renderer_SSH1106
-#define SSH1106_PIN_SDA 14 //D5 on wemos d1 mini
+#define Renderer_SSH1106
+#define SSH1106_PIN_SDA 2 //D5 on wemos d1 mini
 #define SSH1106_PIN_SCL 0 //D3 on wemos d1 mini
 
 //comment if you do not wish to add any default wifi network
@@ -36,8 +36,8 @@
 //#define INVERT
 
 #define RTC_AVAILABLE
-#define RTC_SDA 14
-#define RTC_SCL 2
+#define RTC_SDA 2
+#define RTC_SCL 0
 
 #define DEBOUNCE_TIME 200
 

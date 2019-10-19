@@ -21,6 +21,7 @@ class BatteryManager
 	 const int highBatteryPoint = 4200;
 	 const int lowBatteryPoint = 3300;
 	 const int deepSleepTime = 30*1000;
+	 const int chargingPoint = 2965;
 	 const int inactivitySleepDelay = 30000;
 	 const int batteryCheckDelay=10000;
 	 int lastBatteryCheck = 0;
@@ -66,7 +67,11 @@ public:
 	bool ShouldUsePowerSaverMode(){
 		return GetBatteryLevel() < lowBatteryPoint;
 	}
-
+	bool isBeingCharged()
+	 {
+		const int o = GetBatteryLevel();
+		return o< chargingPoint + 3 && o > chargingPoint - 3;
+	 }
 	
 	void OnLoop() {
 	 	//sleep only if there is no application turned on

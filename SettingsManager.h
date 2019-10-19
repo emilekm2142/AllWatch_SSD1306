@@ -60,6 +60,7 @@ private:
 	 public:
 		 bool _Connect() {
 			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
+			 delay(500);
 			 return parent->wifiManager->WiFiConnected();
 		 }
 		 void _Disconnect() {

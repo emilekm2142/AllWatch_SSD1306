@@ -125,7 +125,8 @@ private:
 				});
 			});
 			menu->AddOption((char*)F("OTA Serial"), [this]() {
-				
+				this->app->settingsManager->wifiManager->ConnectToFirstFittingWiFiNetwork();
+				delay(1000);
 				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected() ? (char*)"OK!" : (char*)"You must connect to a network first";
 
 				currentScreen = (Layout*)infoScreen;

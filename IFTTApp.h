@@ -108,8 +108,8 @@ public:
 		if (this->KeyExists("key") && strcmp("type in the api key",buffer ) == 0) {
 			l->mainMenu->AddOption((char*)F("Change the API key!"), [this] {
 				
-				this->Exit();
-				this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
+			//	this->Exit();
+			//	this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
 			});
 		}
 		auto configFile = sm->appsManager->GetConfigForApplication("IFTTT");

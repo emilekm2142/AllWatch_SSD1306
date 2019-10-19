@@ -11,6 +11,7 @@
 #include "LinkedList.h"
 #include "Layout.h"
 #include "Widget.h"
+#include "DelayedAction.h"
 #include "Animation.h"
 #include "UserInterface.h"
 #include <SSD1306Brzo.h> 
@@ -18,6 +19,7 @@ class MainSlideLayout :public Layout {
 public:
 	int stepSize = 25;
 	int currentIndex = 0;
+	bool blocked = false;
 	UserInterfaceClass* UI;
 	virtual int CalculateHeight(Renderer& renderer) override {
 		return renderer.GetScreenHeight();
@@ -26,10 +28,18 @@ public:
 		return width;
 	}
 	virtual void Up(Renderer& renderer) override {
-		PrevScreen();
+		if (!blocked) {
+			PrevScreen();
+			blocked = true;
+			Run::After(200, [this] {this->blocked = false; });
+		}
 	}
 	virtual void Down(Renderer& renderer) override {
-		NextScreen();
+		if (!blocked) {
+			NextScreen();
+			blocked = true;
+			Run::After(200, [this] {this->blocked = false; });
+		}
 	}
 	virtual void Ok(Renderer& renderer) override {
 		UI->SetLayoutInFocues( *(Layout*)GetChildren()->get(currentIndex) );

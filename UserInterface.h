@@ -78,15 +78,20 @@ private:
 	 }
 
 	 void OpenChildLayout(Layout* l) {
-		 layoutThatWasInFocus = focusedLayout;
-		 parentLayout = mainLayout;
-		 childLayout = l;
-		 SetLayoutInFocues(*l);
-		 ShowLayout(*l);
-		 isChildBeingShown = true;
-		 Serial.print("Opened child layout");
-		 RedrawAll();
-
+		 if (childLayout != l) {
+			 layoutThatWasInFocus = focusedLayout;
+			 parentLayout = mainLayout;
+			 childLayout = l;
+			 SetLayoutInFocues(*l);
+			 ShowLayout(*l);
+			 isChildBeingShown = true;
+			 Serial.print("Opened child layout");
+			 RedrawAll();
+		 }
+		 else
+		 {
+			 Serial.println("Opening the same layout for the second time is not possible!");
+		 }
 	 }
 	 void OnLoop() {
 		 bool update = false;

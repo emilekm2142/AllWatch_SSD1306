@@ -31,9 +31,10 @@ private:
 	 void Open() {
 		 settingsManager->appsManager->currentApplication = this;
 		 Serial.println("opening app");
+		 this->UI->OpenChildLayout(layout);
 		 OnOpen();
 		 Serial.println("after onOpen()");
-		 this->UI->OpenChildLayout(layout);
+		 
 	 }
 	 virtual void OnOpen()  {
 
