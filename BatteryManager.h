@@ -97,12 +97,12 @@ public:
 			int currentTime = millis();
 			// if there was no user activity for `inactivitySleepDelay`
 			if (currentTime - lastActivity > inactivitySleepDelay) {
-				//Sleep();
+				Sleep();
 			}
 			//If there was no activity at all in the current run
 			if (lastActivity == 0) {
 				if (currentTime > inactivitySleepDelay) { //TODO: Add a condition that makes the watch go to sleep only after the time just turned to next minute
-					//Sleep();
+					Sleep();
 				}
 			}
 
