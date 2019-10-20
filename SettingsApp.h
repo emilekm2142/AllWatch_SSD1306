@@ -16,7 +16,7 @@
 #include <ESP8266HTTPClient.h>
 #include "Layout.h"
 #include "DelayedAction.h"
-
+#include "Config.h"
 #include "SSD1306.h"
 #include "SettingsManager.h"
 #include "GenericMenuScreen.h"
@@ -136,6 +136,7 @@ private:
 					Draw(*this->app->UI->GetRenderer());
 				});
 			});
+#ifdef OTA_AVAILABLE
 			menu->AddOption((char*)F("OTA Serial"), [this]() {
 				this->app->settingsManager->wifiManager->ConnectToFirstFittingWiFiNetwork();
 				delay(1000);
@@ -152,6 +153,7 @@ private:
 					Draw(*this->app->UI->GetRenderer());
 				});
 			});
+#endif
 			
 			currentScreen = (Layout*)menu;
 		}

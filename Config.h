@@ -29,7 +29,7 @@
 //uncomment if you intend to use a RX or TX pin as a button
 
 
-#define USE_TX_RX_AS_GPIO
+//#define USE_TX_RX_AS_GPIO
 #define PIN_DOWN  1	
 #define PIN_UP  3
 //uncomment if you want to inverse HIGH to LOW
@@ -41,9 +41,13 @@
 
 #define DEBOUNCE_TIME 200
 
-
-//#define START_WITH_OTA_PORT
+//#define OTA_AVAILABLE
+#define START_WITH_OTA_PORT
 #define OTA_WIFI_SSID "VM2828377"
 #define OTA_WIFI_PASSWORD "qjf4vbhqXpNr"
 
 #define TEMPERATURE_AVAILABLE
+
+#define DISPLAY_SECONDS
+#define ENERGY_SAVING
+#define WAKE_UP_FROM_SLEEP_AUTOMATICALLY

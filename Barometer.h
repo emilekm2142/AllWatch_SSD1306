@@ -17,6 +17,7 @@ class Barometer
  public:
 	 virtual float getHeight() = 0;
 	 virtual float getPressure() = 0;
+	 virtual void sleep() = 0;
 };
 
 

@@ -40,6 +40,10 @@ class BME280Barometer:public Barometer, public Thermometer
 		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme->readHumidity());
 		 return bme->readTemperature();
 	 }
+	void sleep() override
+	 {
+		
+	 }
 
 };
 

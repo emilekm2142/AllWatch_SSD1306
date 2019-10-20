@@ -37,6 +37,7 @@ class HomeScreen: public CustomScreen
 			 tk->now.Month()
 
 		 );
+#ifdef DISPLAY_SECONDS
 		 snprintf_P(timestring,
 			 20,
 			 PSTR("%02u:%02u"),
@@ -45,6 +46,19 @@ class HomeScreen: public CustomScreen
 			 tk->now.Minute()
 			 
 		 );
+#endif
+
+#ifndef DISPLAY_SECONDS
+		 snprintf_P(timestring,
+			 20,
+			 PSTR("%02u:%02u:%02u"),
+
+			 tk->now.Hour(),
+			 tk->now.Minute(),
+			 tk->now.Second()
+
+		 );
+#endif
 		 r.SetFont((uint8_t *) Orbitron_Medium_10);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth() / 2, GlobalY+0+offset, datestring, r.GetScreenWidth(), r.Center);
 		 r.SetFont((uint8_t *)Orbitron_Medium_30);
