@@ -63,8 +63,20 @@ private:
 				infoScreen->text = "Syncing...";
 				currentScreen = (Layout*)infoScreen;
 				Draw(*this->app->UI->GetRenderer());
-				this->app->settingsManager->SyncTime();
-				currentScreen = (Layout*)menu;
+				if (this->app->settingsManager->SyncTime()>=0)
+				{
+					currentScreen = (Layout*)menu;
+				}
+				else
+				{
+					infoScreen->text = "Could not connect to a network...";
+					currentScreen = (Layout*)infoScreen;
+					Run::After(1000,[this]
+					{
+						currentScreen = (Layout*)menu;
+					});
+				}
+				
 			
 			});
 			menu->AddOption((char*)F("Check for updates"), [this]() {

@@ -49,7 +49,10 @@ public:
 		 if (!v) RegisterActivity();
 	 }
 	int GetBatteryLevel() {
-		return ESP.getVcc();
+	 	auto o1 = ESP.getVcc();
+	 	auto o2 = ESP.getVcc();
+	 	auto o3= ESP.getVcc();
+		return max(max(o1, o2), o3);
 	 }
 	int __GetBatteryPercentage() {
 		int current = GetBatteryLevel() - lowBatteryPoint;

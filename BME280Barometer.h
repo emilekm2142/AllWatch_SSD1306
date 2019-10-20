@@ -25,7 +25,7 @@ class BME280Barometer:public Barometer, public Thermometer
 	 Adafruit_BME280* bme;
 	 BME280Barometer() {
 		 bme = new Adafruit_BME280();
-		 bme->begin(0x77);
+		 bme->begin(0x76);
 		 
 		// bme->begin();
 	}

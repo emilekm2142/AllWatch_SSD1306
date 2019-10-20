@@ -153,9 +153,6 @@
     <ClInclude Include="Open_reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PizzaApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Profile_reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -462,6 +459,9 @@
     <ClInclude Include="StarsApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GenericLoadingScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">
@@ -531,9 +531,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainSlideLayout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PizzaApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -624,6 +621,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarsApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericLoadingScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

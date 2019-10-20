@@ -16,14 +16,14 @@
 
 //Do we use SSH1106?
 #define Renderer_SSH1106
-#define SSH1106_PIN_SDA 2 //D5 on wemos d1 mini
-#define SSH1106_PIN_SCL 0 //D3 on wemos d1 mini
+#define SSH1106_PIN_SDA 0 //D5 on wemos d1 mini
+#define SSH1106_PIN_SCL 2 //D3 on wemos d1 mini
 
 //comment if you do not wish to add any default wifi network
 #define APPEND_DEFAULT_WIFI
 //set the values accordingly
-#define DEFAULT_WIFI_SSID  "test5"
-#define DEFAULT_WIFI_PASSWORD  "123456789"
+#define DEFAULT_WIFI_SSID  "VM2828377"
+#define DEFAULT_WIFI_PASSWORD  "qjf4vbhqXpNr"
 
 
 //uncomment if you intend to use a RX or TX pin as a button
@@ -36,14 +36,14 @@
 //#define INVERT
 
 #define RTC_AVAILABLE
-#define RTC_SDA 2
-#define RTC_SCL 0
+#define RTC_SDA 0
+#define RTC_SCL 2
 
 #define DEBOUNCE_TIME 200
 
 
 //#define START_WITH_OTA_PORT
-#define OTA_WIFI_SSID "test"
-#define OTA_WIFI_PASSWORD "123456789"
+#define OTA_WIFI_SSID "VM2828377"
+#define OTA_WIFI_PASSWORD "qjf4vbhqXpNr"
 
-//#define TEMPERATURE_AVAILABLE
+#define TEMPERATURE_AVAILABLE

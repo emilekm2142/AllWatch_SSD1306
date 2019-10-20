@@ -62,14 +62,14 @@ public:
 		renderer.DrawRectangle(batterySidesWidth, 3, 5, batteryMiddleWidth);
 		renderer.FillRectangle(batterySidesWidth, 3, 5, batBarWidth);
 		char b[4];
-		renderer.SetFont((uint8_t *)Orbitron_Medium_8);
+		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
 		renderer.DrawString(2*batterySidesWidth + batteryMiddleWidth+3, 3, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
 	}
 	void DrawChargingIndicator(Renderer& renderer)
 	{
-		renderer.SetFont((uint8_t *)Orbitron_Medium_8);
+		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		renderer.DrawString(0, 3, "Charging");
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
 	}

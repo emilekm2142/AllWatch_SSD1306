@@ -86,6 +86,7 @@ private:
 		 	{
 				delay(1000);
 				code = http->GET();
+				if (code < 0) { return nullptr; }
 			
 		 	}
 			 Serial.printf("code: %d", code);
@@ -755,10 +756,10 @@ private:
 		if (OTASerialEnabled) ArduinoOTA.handle();
 		
 	 }
-	 void SyncTime() {
+	 int SyncTime() {
 		 //https://time-watch-service.herokuapp.com/datetime
 		 auto rsp = http->MakeGetRequest("http://time-watch-service.herokuapp.com/datetime");
-	
+		 if (rsp == nullptr) { return -1; }
 		 auto s = rsp->getStream();
 		 char buff[10];
 		 int read;
@@ -799,6 +800,7 @@ private:
 
 		 tk->SetDateTime(year, month, day, hour, minute, second);
 		 http->EndRequest(rsp, false);
+		 return 0;
 	 }
 	 //Na kartce
 	 void CreateMobileAppliation(char* name,  char* packageName) {

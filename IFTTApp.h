@@ -98,9 +98,9 @@ public:
 		this->name = "IFTTT";
 		this->UI = UI;
 		
-		l->mainMenu->AddOption((char*)F("Add more..."), [this] {
-			this->Exit();
-			this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
+		l->mainMenu->AddOption((char*)F("Add more in options..."), [this] {
+			//this->Exit();
+			//this->settingsManager->appsManager->getBuiltInApplicationByName("Settings")->getApplication()->Open();
 		
 		});
 		char buffer[50];
@@ -134,8 +134,7 @@ public:
 		}
 		Serial.println("CLOSING FILE");
 		configFile.close();
-		Serial.println(ESP.getFreeHeap());
-		Serial.println(ESP.getFreeSketchSpace());
+
 	}
 	void OnOpen() override {
 		Serial.println("IFTTT opened");

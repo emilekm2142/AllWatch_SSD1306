@@ -159,8 +159,8 @@ private:
 	 	 }
 		 else {
 			 auto s = a->getStream();
-			 s.readBytesUntil('\n', state, 15);
-			 state[strlen(state)] = '\0';
+			 auto l = s.readBytesUntil('\n', state, 15);
+			 state[l] = '\0';
 			 char xd[3];
 			 s.readBytesUntil('\n', xd, 3);
 			 temperature = atoi(xd);

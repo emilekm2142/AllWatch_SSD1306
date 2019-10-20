@@ -1,11 +1,12 @@
-#include "StarsApp.h"
+#include "GenericLoadingScreen.h"
+
 #include "GenericDialogScreen.h"
 #include "AppMarketApp.h"
 #include "GamesApp.h"
 #include "WiFiConnectApp.h"
 #include "DelayedAction.h"
 #include "SettingsApp.h"
-#include "SSD1306Fonts.h"
+
 #include "ImagesMenu.h"
 #include "TimeConfiguratorApp.h"
 #include "FlappyBirdApp.h"
@@ -15,64 +16,34 @@
 #include "FlashlightApp.h"
 #include "ExtraPeripheralsManager.h"
 #include "BME280Barometer.h"
-#include "Thermometer.h"
-#include "Barometer.h"
-#include "HttpClient.h"
-#include "PizzaApp.h"
-#include "SimpleRequestsApp.h"
-#include "SSH1106Renderer.h"
-#include "ConnectingScreen.h"
 #include "WeatherApp.h"
 #include "BuiltInApplication.h"
-#include "GenericMenuScreen.h"
-#include "GenericTextScreen.h"
-//#include "AppsMenu.h"
 
-#include "DependenciesHolder.h"
 #include "BatteryManager.h"
-#include "SettingsScreen.h"
-#include "SettingsManager.h"
-#include "CommonActionsScreen.h"
-#include "StaticResources.h"
+
 #include "TopBar.h"
-#include "Animation.h"
+
 #include "MainSlideLayout.h"
 #include "HomeScreen.h"
-#include "CustomScreen.h"
+
 #include <Arduino.h>
-#include "SimpleMenuRecord.h"
+
 #include "Column.h"
-#include "Label.h"
+
 #include "SSD1306Renderer.h"
-#include "Widget.h"
+
 #include "Layout.h"
 #include "InputHandler.h"
 #include "TimeKepper.h"
-#include "Renderer.h"
+
 #include "UserInterface.h"
-#include "InputHandler.h"
-#include "AbstractInputInterpreter.h"
-#include "AbstractInputHandler.h"
-#include "Column.h"
-#include "Label.h"
+
 #include <ESP8266WiFi.h>
-#include "HomeScreen.h"
-#include "TimeKepper.h"
-#include "MainSlideLayout.h"
-#include "CommonActionsScreen.h"
-#include "TopBar.h"
-#include "DelayedAction.h"
+
 #include "FS.h"
-#include "ImagesMenu.h"
-#include "GenericTextScreen.h"
-#include "PizzaApp.h"
+
 #include "Config.h"
-#include "StarsApp.h"
-#include "FlappyBirdApp.h"
-#include "SettingsApp.h"
-#include "WiFiConnectApp.h"
-#include "GamesApp.h"
-#include "AppMarketApp.h"
+
 ADC_MODE(ADC_VCC);
 
 auto bm = BatteryManager(&UserInterface);
