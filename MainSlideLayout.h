@@ -14,7 +14,7 @@
 #include "DelayedAction.h"
 #include "Animation.h"
 #include "UserInterface.h"
-#include <SSD1306Brzo.h> 
+#include "TopBar.h"
 class MainSlideLayout :public Layout {
 public:
 	int stepSize = 25;
@@ -84,12 +84,17 @@ public:
 		Serial.println(currentIndex);
 	}
 	virtual void Draw(Renderer& renderer) override{
+		if (currentIndex == 0) { TopBar* topBar = ((TopBar*)UI->GetSecondaryLayouts()->get(0)); topBar->drawHour = false; topBar->clearBg = false; }
+		else { TopBar* topBar = ((TopBar*)UI->GetSecondaryLayouts()->get(0)); topBar->drawHour = true; topBar->clearBg = true; }
+		//TODO: check the performance of this /\
+
 		int lowerBound = currentIndex - 1 >= 0 ? currentIndex - 1 : 0;
 		int upperBound = currentIndex + 1 < GetChildren()->size() ? currentIndex + 1 : GetChildren()->size();
 		for (int i = lowerBound; i < upperBound; i++) {
 			if (i >= GetChildren()->size()) break;
 			GetChildren()->get(i)->DrawWithState(renderer);
 		}
+		DrawIndicators(renderer);
 		
 
 	}
@@ -105,7 +110,7 @@ public:
 
 		int extraHOffset = isEven ? 5:0;
 
-		for (int i = 0; i < childrenSize; i++) {
+		/*for (int i = 0; i < childrenSize; i++) {
 			if (i == currentIndex)
 				r.SetFont((uint8_t *)ArialMT_Plain_24);
 			else
@@ -113,8 +118,8 @@ public:
 
 			int positionsLeftToCenterPoint = i - centerPoint;
 			r.DrawString(centerH + positionsLeftToCenterPoint * offsetFromCenterH, indicatorY, ".");
-		}
-		r.SetFont((uint8_t *)ArialMT_Plain_10);
+		}*/
+		//r.SetFont((uint8_t *)ArialMT_Plain_10);
 	
 	}
 	virtual void CalculateLayout(Renderer& renderer) override {

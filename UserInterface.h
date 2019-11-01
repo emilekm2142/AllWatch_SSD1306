@@ -171,6 +171,10 @@ private:
 		 mainLayout = &layout;
 		 SetLayoutInFocues(layout);
 	 }
+	LinkedList<Layout*>* GetSecondaryLayouts()
+	 {
+		return &layouts;
+	 }
 	 void ShowLayout(Layout& layout) {
 		
 		 

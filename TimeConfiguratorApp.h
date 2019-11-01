@@ -12,7 +12,7 @@
 #include "Renderer.h"
 #include "CustomScreen.h"
 #include <RtcDS3231.h>
-#include <SSD1306Brzo.h> 
+
 #include "UserInterface.h"
 #include "TimeKepper.h"
 #include "Config.h"
@@ -43,7 +43,7 @@ private:
 	class TimeConfiguratorLayout :public CustomScreen {
 	public:
 		TimeConfiguratorApp* app;
-		int days[12] = { 31,30,31,30,31,30,31,31,30,31,30,31 };
+		const int days[12] = { 31,30,31,30,31,30,31,31,30,31,30,31 };
 		int localHour;
 		int localMinute;
 
@@ -52,10 +52,10 @@ private:
 
 		boolean editMode = false;
 		int currentObject = 0;
-		int objectsCount = 4; //actually, +1 because we count with zero!
+		const int objectsCount = 4; //actually, +1 because we count with zero!
 
-		int blinkDelay = 1000;
-		int blinkTime = 700;
+		const int blinkDelay = 1000;
+		const int blinkTime = 500;
 		int lastBlinkTime = 0;
 		boolean blinkNow = false;
 
@@ -74,13 +74,15 @@ private:
 			char minutestring[10];
 			char daystring[10];
 			char monthstring[10];
-			snprintf_P(hourstring,10,PSTR("%02u"), localHour);
-			snprintf_P(minutestring,10,PSTR("%02u"), localMinute);
-			snprintf_P(daystring,10,PSTR("%02u"), localDay);
-			snprintf_P(monthstring,10,PSTR("%02u"), localMonth);
+			auto strtemplate = PSTR("%02u");
+			snprintf_P(hourstring,10,strtemplate, localHour);
+			snprintf_P(minutestring,10,strtemplate, localMinute);
+			snprintf_P(daystring,10,strtemplate, localDay);
+			snprintf_P(monthstring,10,strtemplate, localMonth);
 			if (currentObject == 0)r.DrawString(0, offset + 2, "-"); r.DrawString(5, offset + 2, "Hour: "); 
 			if (editMode) {
-				 if (currentObject==0 && !blinkNow || currentObject != 0)  r.DrawString(40, offset + 2, hourstring);
+				if (currentObject == 0 && !blinkNow || currentObject != 0) r.DrawString(40, offset + 2, hourstring);
+				
 				}
 			else {
 				r.DrawString(40, offset + 2, hourstring);
@@ -227,7 +229,8 @@ private:
 				
 				if (millis() - lastBlinkTime > blinkTime) {
 					blinkNow = false;
-					
+					app->UI->RedrawAll();
+					//Serial.println("not blinking");
 					
 				}
 			}
@@ -236,10 +239,11 @@ private:
 				if (millis() - lastBlinkTime > blinkDelay) {
 					lastBlinkTime = millis();
 					blinkNow = true;
-					
+					app->UI->RedrawAll();
+				//	Serial.println("blink");
 				}
 			}
-			Draw(r);
+			
 		}
 
 	};

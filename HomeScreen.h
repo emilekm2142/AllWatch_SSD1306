@@ -9,7 +9,7 @@
 	#include "WProgram.h"
 #endif
 #include "CustomScreen.h"
-#include <SSD1306Brzo.h> 
+
 #include "UserInterface.h"
 #include "TimeKepper.h"
 #include "SSD1306Fonts.h"
@@ -25,7 +25,7 @@ class HomeScreen: public CustomScreen
 		 this->tk = tk;
 	 }
 	 void Draw(Renderer& r) override {
-		 int offset = 15;
+		 int offset = 8;
 		 char timestring[20];
 		 char datestring[20];
 		 char* days[] = { "Su","Mon", "Tue", "Wed", "Thu", "Fr", "Sa" };
@@ -37,7 +37,7 @@ class HomeScreen: public CustomScreen
 			 tk->now.Month()
 
 		 );
-#ifdef DISPLAY_SECONDS
+#ifndef DISPLAY_SECONDS
 		 snprintf_P(timestring,
 			 20,
 			 PSTR("%02u:%02u"),
@@ -48,7 +48,7 @@ class HomeScreen: public CustomScreen
 		 );
 #endif
 
-#ifndef DISPLAY_SECONDS
+#ifdef DISPLAY_SECONDS
 		 snprintf_P(timestring,
 			 20,
 			 PSTR("%02u:%02u:%02u"),
@@ -61,6 +61,7 @@ class HomeScreen: public CustomScreen
 #endif
 		 r.SetFont((uint8_t *) Orbitron_Medium_10);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth() / 2, GlobalY+0+offset, datestring, r.GetScreenWidth(), r.Center);
+	 	//TOdo: font musi byc tutaj mniejszy jak jest display_seconds
 		 r.SetFont((uint8_t *)Orbitron_Medium_30);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
 		 r.SetFont((uint8_t *)Orbitron_Medium_10);

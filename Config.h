@@ -10,12 +10,12 @@
 #define Renderer_OLED
 
 //Do we use SSD1306?
-//#define Renderer_SSD1306
-#define SSD1306_PIN_SDA 14 //D5 on wemos d1 mini
-#define SSD1306_PIN_SCL 0 //D3 on wemos d1 mini
+#define Renderer_SSD1306
+#define SSD1306_PIN_SDA 0 //D5 on wemos d1 mini
+#define SSD1306_PIN_SCL 2 //D3 on wemos d1 mini
 
 //Do we use SSH1106?
-#define Renderer_SSH1106
+//#define Renderer_SSH1106
 #define SSH1106_PIN_SDA 0 //D5 on wemos d1 mini
 #define SSH1106_PIN_SCL 2 //D3 on wemos d1 mini
 
@@ -42,12 +42,12 @@
 #define DEBOUNCE_TIME 200
 
 //#define OTA_AVAILABLE
-#define START_WITH_OTA_PORT
+//#define START_WITH_OTA_PORT
 #define OTA_WIFI_SSID "VM2828377"
 #define OTA_WIFI_PASSWORD "qjf4vbhqXpNr"
 
 #define TEMPERATURE_AVAILABLE
 
-#define DISPLAY_SECONDS
+//#define DISPLAY_SECONDS
 #define ENERGY_SAVING
-#define WAKE_UP_FROM_SLEEP_AUTOMATICALLY
+//#define WAKE_UP_FROM_SLEEP_AUTOMATICALLY

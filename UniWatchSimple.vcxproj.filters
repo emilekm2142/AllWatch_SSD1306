@@ -462,6 +462,12 @@
     <ClInclude Include="GenericLoadingScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mitov_BME280_TemperatureHumidity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mitov_BME280_TemperatureHumidity_I2C.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">

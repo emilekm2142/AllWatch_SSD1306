@@ -89,7 +89,7 @@ InputHandler inputHandler = InputHandler(
 	Serial
 );
 
-Column menu;
+
 BME280Barometer barometerBME280 = BME280Barometer();
 ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280);
 auto tk = TimeKepper(&UserInterface);

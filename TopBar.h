@@ -22,6 +22,8 @@
 
 class TopBar :public Layout {
 public:
+	bool drawHour = true;
+	bool clearBg = true;
 	int currentIndex = 0;
 	UserInterfaceClass* UI;
 	BatteryManager* bm;
@@ -51,20 +53,23 @@ public:
 
 	void DrawBattery(Renderer& renderer)
 	{
+		
 		const int batteryMiddleWidth = 15;
 		const int batterySidesWidth = 1;
+		const int leftOffset = renderer.GetScreenWidth() - batterySidesWidth * 2 - batteryMiddleWidth;
 		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * batteryMiddleWidth;
 		if (batBarWidth < 0) batBarWidth = batteryMiddleWidth;
 		//sides
-		renderer.FillRectangle(0, 4, 3, batterySidesWidth);
-		renderer.FillRectangle(batteryMiddleWidth+batterySidesWidth, 4, 3, batterySidesWidth);
+		renderer.FillRectangle(leftOffset, 4, 3, batterySidesWidth);
+		renderer.FillRectangle(leftOffset+batteryMiddleWidth+batterySidesWidth, 4, 3, batterySidesWidth);
 		//fill
-		renderer.DrawRectangle(batterySidesWidth, 3, 5, batteryMiddleWidth);
-		renderer.FillRectangle(batterySidesWidth, 3, 5, batBarWidth);
+		renderer.DrawRectangle(leftOffset+batterySidesWidth, 3, 5, batteryMiddleWidth);
+		renderer.FillRectangle(leftOffset+batterySidesWidth, 3, 5, batBarWidth);
 		char b[4];
 		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
-		renderer.DrawString(2*batterySidesWidth + batteryMiddleWidth+3, 3, b);
+		const int width = renderer.GetStringWidth(b);
+		renderer.DrawString(leftOffset - (width+1), 0, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
 	}
 	void DrawChargingIndicator(Renderer& renderer)
@@ -76,7 +81,7 @@ public:
 	
 	virtual void Draw(Renderer& renderer) override {
 
-		renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
+		if (clearBg) renderer.FillRectangle(0, 0, 12, renderer.GetScreenWidth(), true);
 		/*if (bm->isBeingCharged()) {
 			DrawChargingIndicator(renderer);
 		}else{
@@ -87,22 +92,24 @@ public:
 		
 		//if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
 		//renderer.DrawAlignedString(0, 0, UI->currentScreenName, renderer.GetScreenWidth(), renderer.Left);
-		char datestring[20];
+		if (drawHour) {
+			char datestring[20];
 
-		snprintf_P(datestring,
-			20,
-			PSTR("%02u:%02u"),
-			
-			tk->now.Hour() ,
-		
-			tk->now.Minute()
-			//,bm->GetBatteryLevel()
-		
-			
+			snprintf_P(datestring,
+				20,
+				PSTR("%02u:%02u"),
+
+				tk->now.Hour(),
+
+				tk->now.Minute()
+				//,bm->GetBatteryLevel()
+
+
 			);
 
-		renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
-		if (sm->WiFiConnected()) renderer.DrawBitmap(renderer.GetScreenWidth() - 12, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
+			renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
+		}
+			if (sm->WiFiConnected()) renderer.DrawBitmap(renderer.GetScreenWidth() - 12, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
 		
 		//renderer.DrawAlignedString(renderer.GetScreenWidth(), 0, , renderer.GetScreenWidth(), renderer.Right);
 	}

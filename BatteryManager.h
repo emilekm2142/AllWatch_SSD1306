@@ -10,7 +10,6 @@
 #include "UserInterface.h"
 #include "FS.h"
 #include "SettingsManager.h"
-
 #include "Config.h"
 
 class BatteryManager
@@ -37,7 +36,8 @@ public:
 	 BatteryManager(UserInterfaceClass* UI) {
 		 lastActivity = millis();
 		 this->UI = UI;
-		 lastBatteryCheck = millis(); 
+		 lastBatteryCheck = millis();
+		 lastBatteryCheck = __ReadBatteryLevel();
 	}
 
 	 void RegisterActivity() {
@@ -52,10 +52,11 @@ public:
 		 if (!v) RegisterActivity();
 	 }
 	int GetBatteryLevel() {
-	 	auto o1 = ESP.getVcc();
-	 	auto o2 = ESP.getVcc();
-	 	auto o3= ESP.getVcc();
-		return max(max(o1, o2), o3);
+		return lastBatteryCheck;
+	 }
+	int __ReadBatteryLevel()
+	 {
+		return ESP.getVcc();
 	 }
 	int __GetBatteryPercentage() {
 		int current = GetBatteryLevel() - lowBatteryPoint;
@@ -85,11 +86,15 @@ public:
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
 		ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
 #else
-		ESP.deepSleep(99999999999999, RFMode::RF_DISABLED);
+		ESP.deepSleep(0, RFMode::RF_DISABLED);
 #endif
 
 	 }
 	void OnLoop() {
+	 	if (millis() - lastBatteryCheck< 1000*20)
+	 	{
+			lastBatteryCheck = __ReadBatteryLevel();
+	 	}
 		if (disableAll) return;
 	 	//sleep only if there is no application turned on
 	 	if (sm->appsManager->currentApplication == nullptr && sm->appsManager->currentApplication == NULL)
