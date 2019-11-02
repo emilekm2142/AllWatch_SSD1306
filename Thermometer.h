@@ -15,7 +15,7 @@ class Thermometer
 
 
  public:
-	 virtual int getTemperatureC() = 0;
+	 virtual float getTemperatureC() = 0;
 	 
 };
 

@@ -58,10 +58,10 @@ private:
 #ifdef TEMPERATURE_AVAILABLE
 			snprintf_P(buffer,
 				200,
-				PSTR("My ip is: %s \n Temperature: %.1f*C \n Pressure: %.1f hPa \n Approx. altitude: %.2f"),
+				PSTR("IP: %s \nTmp: %.1f*C \nPressure: %.1f hPa \nAltitude: %.2f"),
 				this->app->settingsManager->w->localIP().toString().c_str(),
-				this->app->settingsManager->extraPeripheralsManager->barometer->getPressure(),
 				this->app->settingsManager->extraPeripheralsManager->thermometer->getTemperatureC(),
+				this->app->settingsManager->extraPeripheralsManager->barometer->getPressure(),
 				this->app->settingsManager->extraPeripheralsManager->barometer->getHeight()
 			);
 #else

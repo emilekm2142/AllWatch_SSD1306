@@ -37,8 +37,8 @@ class BME280Barometer:public Barometer, public Thermometer
 	 float getHeight() override {
 		 return bme.readAltitude(baseHeight);
 	 }
-	 int getTemperatureC() override {
-		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readHumidity());
+	 float getTemperatureC() override {
+		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature());
 		 return bme.readTemperature();
 	 }
 	void sleep() override
