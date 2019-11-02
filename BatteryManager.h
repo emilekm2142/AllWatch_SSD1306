@@ -33,6 +33,7 @@ class BatteryManager
 public:
 	SettingsManager* sm = nullptr;
 	UserInterfaceClass* UI;
+	TimeKepper* tk;
 	 BatteryManager(UserInterfaceClass* UI) {
 		 lastActivity = millis();
 		 this->UI = UI;
@@ -66,9 +67,8 @@ public:
 	}
 	int GetBatteryPercentage() {
 		int res1 = __GetBatteryPercentage();
-		int res2 = __GetBatteryPercentage();
-		int res3 = __GetBatteryPercentage();
-		return(min(res1, min(res2, res3)));
+		
+		return res1;
 	}
 
 	bool ShouldUsePowerSaverMode(){
@@ -81,6 +81,7 @@ public:
 	 }
 	void Sleep()
 	 {
+		//tk->Sleep();
 		UI->GetRenderer()->DisableScreen();
 		sm->extraPeripheralsManager->barometer->sleep();
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY

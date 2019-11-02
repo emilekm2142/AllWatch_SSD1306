@@ -45,7 +45,7 @@
 #include "Config.h"
 
 ADC_MODE(ADC_VCC);
-
+auto r = SSD1306Renderer();
 auto bm = BatteryManager(&UserInterface);
 
 extern "C" {
@@ -93,7 +93,7 @@ InputHandler inputHandler = InputHandler(
 BME280Barometer barometerBME280 = BME280Barometer();
 ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280);
 auto tk = TimeKepper(&UserInterface);
-auto r = SSD1306Renderer();
+
 
 auto home = HomeScreen(UserInterface, &tk);
 auto MainLayout = MainSlideLayout();
@@ -109,7 +109,7 @@ auto imageMenuScreen = ImagesMenu(&UserInterface);
 
 
 void setup() {
-
+	bm.tk = &tk;
 	bm.sm = &settingsManager;
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);

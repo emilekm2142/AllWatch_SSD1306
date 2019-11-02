@@ -44,7 +44,9 @@ private:
 		 d->flipScreenVertically();
 		 d->setContrast(100);
 		 d->setBrightness(100);
-		
+
+		 d->drawString(GetScreenWidth() / 2, GetScreenHeight() / 2, (const char*)F("Botting..."));
+		 d->display();
 	
 		
 	 };

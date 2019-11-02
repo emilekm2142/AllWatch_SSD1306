@@ -51,7 +51,7 @@ public:
 	virtual void Ok(Renderer& renderer) override {}
 	virtual void Back(Renderer& renderer) override {}
 
-	void DrawBattery(Renderer& renderer)
+	int DrawBattery(Renderer& renderer)
 	{
 		
 		const int batteryMiddleWidth = 15;
@@ -71,6 +71,7 @@ public:
 		const int width = renderer.GetStringWidth(b);
 		renderer.DrawString(leftOffset - (width+1), 0, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
+		return width;
 	}
 	void DrawChargingIndicator(Renderer& renderer)
 	{
@@ -87,7 +88,7 @@ public:
 		}else{
 			DrawBattery(renderer);
 		}*/
-		DrawBattery(renderer);
+		int batteryTextWidth = DrawBattery(renderer);
 		//renderer.DrawBitmap(0, 0, baseline_access_time_black_18dp_width, baseline_access_time_black_18dp_height, (const unsigned char*)UIAssets::baseline_access_time_black_18dp_bits);
 		
 		//if (bm->IsGoingToSleep()) renderer.DrawString(0, 0, "zzz");
@@ -107,9 +108,9 @@ public:
 
 			);
 
-			renderer.DrawAlignedString(renderer.GetScreenWidth() / 2, 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
+			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth > 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
 		}
-			if (sm->WiFiConnected()) renderer.DrawBitmap(renderer.GetScreenWidth() - 12, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
+			if (sm->WiFiConnected()) renderer.DrawBitmap(0, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
 		
 		//renderer.DrawAlignedString(renderer.GetScreenWidth(), 0, , renderer.GetScreenWidth(), renderer.Right);
 	}

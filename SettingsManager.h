@@ -81,6 +81,7 @@ private:
 			 HTTPClient* http = new HTTPClient();
 			 Serial.printf("\n Sending request: %s \n", url);
 			 http->begin(url);
+			 http->setTimeout(5000);
 			 int code = http->GET();
 		 	if (code<0)
 		 	{

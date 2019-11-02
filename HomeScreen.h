@@ -60,7 +60,7 @@ class HomeScreen: public CustomScreen
 		 );
 #endif
 		 r.SetFont((uint8_t *) Orbitron_Medium_10);
-		 r.DrawAlignedString(GlobalX+r.GetScreenWidth() / 2, GlobalY+0+offset, datestring, r.GetScreenWidth(), r.Center);
+		 r.DrawAlignedString(0, 0, datestring, r.GetScreenWidth(), r.Left);
 	 	//TOdo: font musi byc tutaj mniejszy jak jest display_seconds
 		 r.SetFont((uint8_t *)Orbitron_Medium_30);
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);

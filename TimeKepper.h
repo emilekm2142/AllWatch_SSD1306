@@ -34,11 +34,15 @@ private:
 		 //Wire.begin(RTC_SDA, RTC_SCL); // due to limited pins, use pin 0 and 2 for SDA, SCL
 		
 		 Rtc->Begin();
-	
+		 Rtc->SetIsRunning(true);
 		 now = Rtc->GetDateTime();
 		 
 		 //if (now.Year()<2019)
 		//	 Rtc->SetDateTime(compiled);
+	 }
+	void Sleep()
+	 {
+		Rtc->SetIsRunning(false);
 	 }
 	 RtcDateTime GetCurrentTime()
 	 {
