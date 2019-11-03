@@ -95,9 +95,10 @@ ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barom
 auto tk = TimeKepper(&UserInterface);
 
 
-auto home = HomeScreen(UserInterface, &tk);
+
 auto MainLayout = MainSlideLayout();
 auto settingsManager = SettingsManager(&WiFi, &SPIFFS, &tk, &extraPeripheralsManager);
+auto home = HomeScreen(UserInterface, &tk, &settingsManager);
 auto topBar = TopBar(&UserInterface, &bm, &tk, &settingsManager);
 auto imageMenuScreen = ImagesMenu(&UserInterface);
 //char* text = "mamamamam!!!$$@$@";

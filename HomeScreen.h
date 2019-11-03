@@ -13,19 +13,22 @@
 #include "UserInterface.h"
 #include "TimeKepper.h"
 #include "SSD1306Fonts.h"
+#include "SettingsManager.h"
 class HomeScreen: public CustomScreen
 {
  protected:
 	 UserInterfaceClass* UI;
 	 TimeKepper* tk;
+	 SettingsManager* sm;
  public:
 
-	 HomeScreen(UserInterfaceClass& ui, TimeKepper* tk) {
+	 HomeScreen(UserInterfaceClass& ui, TimeKepper* tk, SettingsManager* sm) {
 		 UI = &ui;
+		 this->sm = sm;
 		 this->tk = tk;
 	 }
 	 void Draw(Renderer& r) override {
-		 int offset = 8;
+		 int offset =6;
 		 char timestring[20];
 		 char datestring[20];
 		 char* days[] = { "Su","Mon", "Tue", "Wed", "Thu", "Fr", "Sa" };
@@ -37,7 +40,7 @@ class HomeScreen: public CustomScreen
 			 tk->now.Month()
 
 		 );
-#ifndef DISPLAY_SECONDS
+
 		 snprintf_P(timestring,
 			 20,
 			 PSTR("%02u:%02u"),
@@ -46,25 +49,44 @@ class HomeScreen: public CustomScreen
 			 tk->now.Minute()
 			 
 		 );
-#endif
 
+
+
+		 r.SetFont((uint8_t *) Orbitron_Medium_10);
+		 r.DrawAlignedString(0, 0, datestring, r.GetScreenWidth(), r.Left);
+		 r.SetFont((uint8_t *)Orbitron_Medium_30);
+		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2 -5, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
+		 const int bigTextWidth = r.GetStringWidth(timestring);
+		 r.SetFont((uint8_t *)Orbitron_Medium_10);
 #ifdef DISPLAY_SECONDS
-		 snprintf_P(timestring,
-			 20,
-			 PSTR("%02u:%02u:%02u"),
+		 char secondBuffer[5];
 
-			 tk->now.Hour(),
-			 tk->now.Minute(),
+		 snprintf_P(secondBuffer,
+			 5,
+			 PSTR("%02u"),
 			 tk->now.Second()
 
 		 );
+		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 5 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16, secondBuffer , r.GetScreenWidth(), r.Left);
 #endif
-		 r.SetFont((uint8_t *) Orbitron_Medium_10);
-		 r.DrawAlignedString(0, 0, datestring, r.GetScreenWidth(), r.Left);
-	 	//TOdo: font musi byc tutaj mniejszy jak jest display_seconds
-		 r.SetFont((uint8_t *)Orbitron_Medium_30);
-		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
-		 r.SetFont((uint8_t *)Orbitron_Medium_10);
+#if defined(HOME_SCREEN_TEMPERATURE_READINGS) && defined(TEMPERATURE_AVAILABLE) 
+		 const float pressure = sm->extraPeripheralsManager->barometer->getPressure();
+		 const float temperature = sm->extraPeripheralsManager->thermometer->getTemperatureC();
+		 char tmpBuffer[15];
+		 snprintf_P(tmpBuffer,
+			 15,
+			 PSTR(" %.1f*C"),
+			 temperature
+		 );
+		 char prsBuffer[15];
+		 snprintf_P(prsBuffer,
+			 15,
+			 PSTR(" %.1fhPa"),
+			 pressure
+		 );
+		 r.DrawString(GlobalX, GlobalY+r.GetScreenHeight() - 12, tmpBuffer);
+		 r.DrawString(GlobalX+r.GetScreenWidth()-65, GlobalY+r.GetScreenHeight() - 12, prsBuffer);
+#endif
 	 }
 	 virtual void Up(Renderer& renderer) override {
 

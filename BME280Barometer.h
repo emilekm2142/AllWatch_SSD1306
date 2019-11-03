@@ -31,15 +31,17 @@ class BME280Barometer:public Barometer, public Thermometer
 		// bme->begin();
 	}
 	 float getPressure() override {
-		 Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
+		 //Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
 		 return bme.readPressure() / 100.0F;
 	}
 	 float getHeight() override {
 		 return bme.readAltitude(baseHeight);
 	 }
 	 float getTemperatureC() override {
-		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature());
-		 return bme.readTemperature();
+
+	 	//Readings are a bit too high. 
+		// Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature()-3);
+		 return bme.readTemperature()-3;
 	 }
 	void sleep() override
 	 {
