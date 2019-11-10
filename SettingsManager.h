@@ -61,7 +61,7 @@ private:
 		 bool _Connect() {
 			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
 			 int wt = millis();
-		 	 while (!parent->wifiManager->WiFiConnected() || millis() - wt >3000)
+		 	 while (!parent->wifiManager->WiFiConnected() || millis() - wt < 3000)
 		 	 {
 				 Serial.println("waiting to connect!");
 				 delay(100);

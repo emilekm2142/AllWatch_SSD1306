@@ -26,7 +26,7 @@ class BatteryManager
 	 const int chargingPoint = 2965;
 	 const int inactivitySleepDelay = 30000;
 	 const int batteryCheckDelay=10000;
-	 int lastBatteryCheckTime = 0;
+	 unsigned long lastBatteryCheckTime = 0;
 	 int lastBatteryCheck = 0;
 	 bool alwaysWakeMode = false;
 	 bool isGoingToSleep = false;
@@ -94,7 +94,7 @@ public:
 
 	 }
 	void OnLoop() {
-	 	if (millis() - lastBatteryCheckTime < 1000*45)
+	 	if (millis() - lastBatteryCheckTime > 1000*45)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
 	 	}

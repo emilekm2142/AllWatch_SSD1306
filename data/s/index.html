@@ -17,22 +17,28 @@
         .container{
             width:80%;
             margin:auto;
-            font-family:Arial, Helvetica, sans-serif;
+            font-family:Verdana, Arial,sans-serif;
             max-width:1080px;
         }
         .btn{
             background-color: #4CAF50; /* Green */
   border: none;
   color: white;
+  
   padding: 7px 10px;
   text-align: center;
+  margin:2px;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+
   cursor: pointer;
             transition: .4s all;
             border-radius:2px;
  
+        }
+        .configure-btn{
+            height:50px;
+            background-color: #008CBA;
         }
         .btn:hover{
             transform: scale(1.04);
@@ -48,6 +54,12 @@
         .add-menu{
             margin:auto;
             width:60%;
+        }
+        .btn-outline-danger, .btn-danger{
+            background-color: #b0362e;
+        }
+        .btn-outline-danger{
+            border:1px solid #702521;
         }
         .badge{
             box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.5);
@@ -118,33 +130,18 @@
                          <!-- <div v-on:click="" class="btn  btn-outline-primary">App creator</div>
                            <div v-on:click="showAddAppModal=!showAddAppModal" class="btn  btn-outline-primary">Install new</div> -->
                     </h2>
-                        <div v-if="showAddAppModal" class="form-group">
-                            <div class="row">
-                               
-                                <div class="col-sm-10">
-                                    <input class="form-control " placeholder="app name" v-model="addAppName">
-                                </div>
-                                <div class="col-sm-2">
-                                        <div v-on:click="" class="btn  btn-outline-primary">Add new</div>
-               
-                                </div>
-                               
-                                        
-                            </div>
-                            <div class="row">
-                               
-                                    <div style="margin-top:1em;opacity:0.4" class="col-sm-10">
-                                        <input class="form-control " placeholder="request (optional)" v-model="appRequest">
-                                    </div>
-                                    </div>
+                     
                                    
                     <div class="app-entry" v-for="app in apps">
-                       <div style="display:flex;"> <h3 style="display:block">{{app.name}}</h3>  <button type="button" class="btn btn-outline-primary" style="margin-left:2em;" v-on:click="()=>{app.show=!app.show; getNetworkDetails(app);}">Configure</button></div>
+                       <div style="display:flex;"> <h3 style="display:block">{{app.name}}</h3>  <button type="button" class="btn btn-outline-primary configure-btn" style="margin-left:2em;" v-on:click="()=>{app.show=!app.show; getNetworkDetails(app);}">Configure</button></div>
                         <div  style="width:80%;margin:auto;margin-top:2em;" v-if="app.show">
                             <div v-for="entry in app.config" class="form-group row">
-                                <div  class="col-sm-2"> <input type="text" class="form-control-plaintext"  v-model="entry.label"></div>
+                                <div  class="col-sm-2">
+                                     <table><tr><td>Key name</td><td> <input type="text" class="form-control form-control-plaintext"  v-model="entry.label">   </td></tr></table></div>
                                 <div class="col-sm-8">
-                                  <input type="text" class="form-control-plaintext"  v-model="entry.value">
+                        <table><tr><td>Key value</td><td> <input type="text" class="form-control form-control-plaintext"  v-model="entry.value">   </td></tr></table></div>
+               
+                                  
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="button" v-on:click="()=>{deleteKey(app,entry)}" class="btn btn-outline-danger">Delete</button>
