@@ -60,7 +60,12 @@ private:
 	 public:
 		 bool _Connect() {
 			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
-			 delay(500);
+			 int wt = millis();
+		 	 while (!parent->wifiManager->WiFiConnected() || millis() - wt >3000)
+		 	 {
+				 Serial.println("waiting to connect!");
+				 delay(100);
+		 	 }
 			 return parent->wifiManager->WiFiConnected();
 		 }
 		 void _Disconnect() {
@@ -676,6 +681,7 @@ private:
 		 Serial.printf("Status: %d", st);		 
 	 }
 	 void OpenSettingsServer() {
+		 CloseSettingsServer();
 		 server = new AsyncWebServer(80);
 		 server->on("/addWifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 if (request->hasParam("ssid") && request->hasParam("password")) {
@@ -748,7 +754,7 @@ private:
 		 server->serveStatic("/apps", *SPIFFS, "/apps");
 		 server->serveStatic("/", *SPIFFS, "/s");
 		 server->begin();
-		 // server.begin();
+		
 
 		 isSettingsServerOpened = true;
 	 }

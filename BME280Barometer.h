@@ -22,12 +22,19 @@ class BME280Barometer:public Barometer, public Thermometer
 
  public:
 	 float baseHeight = SEALEVELPRESSURE_HPA;
-
+#ifdef BMP
 	 Adafruit_BMP280 bme;
+
+#else
+	 Adafruit_BME280 bme;
+#endif
+
 	 BME280Barometer() {
 	 
 		 Wire.begin(RTC_SDA, RTC_SCL);
+		 delay(100);
 		 bme.begin(118);
+	 	
 		 delay(100);
 		 
 		// bme->begin();
@@ -37,6 +44,7 @@ class BME280Barometer:public Barometer, public Thermometer
 		 return bme.readPressure() / 100.0F;
 	}
 	 float getHeight() override {
+	 	
 		 return bme.readAltitude(baseHeight);
 	 }
 	 float getTemperatureC() override {

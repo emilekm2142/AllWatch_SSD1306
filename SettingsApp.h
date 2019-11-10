@@ -115,7 +115,7 @@ private:
 				infoScreen->text = "Own Network........";
 				this->app->settingsManager->CreateNetwork();
 				this->app->settingsManager->OpenSettingsServer();
-				infoScreen->text = "Navigate to 192.168.1.4";
+				infoScreen->text = "Navigate to 192.168.4.1";
 				currentScreen = (Layout*)infoScreen;
 				Draw(*this->app->UI->GetRenderer());
 			});

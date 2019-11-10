@@ -57,7 +57,7 @@ class GenericTextScreen:CustomScreen
 	 virtual void Draw(Renderer& r) override {
 		 //Serial.println("Draw call in generic text screen");
 		 //Serial.println(this->text);
-		 r.DrawString(GlobalX + 0, GlobalY + offset, this->text);
+		 r.DrawAlignedString(GlobalX + 0, GlobalY + offset, this->text, r.GetScreenWidth(), r.Left);
 	 }
 	 virtual void DrawActiveIndicator(Renderer &renderer) override {
 		// Serial.println("Drawing generic text indicator");

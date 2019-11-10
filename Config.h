@@ -3,7 +3,8 @@
 
 //Uncomment lines that do not fulfill the preceding questions.
 
-
+//#define BME
+#define BMP
 
 
 //Do we USE SSD1306 or SSH1106?
