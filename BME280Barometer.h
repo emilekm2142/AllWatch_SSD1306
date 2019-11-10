@@ -10,6 +10,7 @@
 #endif
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <Adafruit_BMP280.h>
 #include "Config.h"
 #include "Barometer.h"
 #include "Thermometer.h"
@@ -22,7 +23,7 @@ class BME280Barometer:public Barometer, public Thermometer
  public:
 	 float baseHeight = SEALEVELPRESSURE_HPA;
 
-	 Adafruit_BME280 bme;
+	 Adafruit_BMP280 bme;
 	 BME280Barometer() {
 	 
 		 Wire.begin(RTC_SDA, RTC_SCL);
@@ -32,7 +33,7 @@ class BME280Barometer:public Barometer, public Thermometer
 		// bme->begin();
 	}
 	 float getPressure() override {
-		 Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
+		// Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
 		 return bme.readPressure() / 100.0F;
 	}
 	 float getHeight() override {
@@ -40,8 +41,9 @@ class BME280Barometer:public Barometer, public Thermometer
 	 }
 	 float getTemperatureC() override {
 
-	 	//Readings are a bit too high. 
-		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature()-3);
+	 	//Readings are a bit too high.
+		
+	//	 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readHumidity());
 		 return bme.readTemperature()-3;
 	 }
 	void sleep() override

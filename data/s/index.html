@@ -14,6 +14,55 @@
         }
         .app-entry{margin-top:2em;}
         .s{margin-top:2em;}
+        .container{
+            width:80%;
+            margin:auto;
+            font-family:Arial, Helvetica, sans-serif;
+            max-width:1080px;
+        }
+        .btn{
+            background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 7px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+            transition: .4s all;
+            border-radius:2px;
+ 
+        }
+        .btn:hover{
+            transform: scale(1.04);
+            border-radius:7px;
+        }
+        .form-control{
+            border:none;
+            margin:5px;
+            border-bottom: 1px solid #4CAF50;
+            padding: 7px 10px;
+            width:100%;
+        }
+        .add-menu{
+            margin:auto;
+            width:60%;
+        }
+        .badge{
+            box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.5);
+            background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 2px 2px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+            transition: .4s all;
+            border-radius:2px;
+        }
         </style>
     </head>
     <body>
@@ -35,7 +84,7 @@
                     <button type="button" class="btn btn-outline-primary" v-on:click="()=>{showAddMenu=!showAddMenu}">Add a new network</button>
                     <button type="button" class="btn btn-outline-danger btn-sm" v-on:click="()=>{removeAll()}">Remove all</button>
    
-                    <div v-if="showAddMenu" class="form-group">
+                    <div v-if="showAddMenu" class="form-group add-menu">
                     <div class="row">
                         <div class="col">
                             <input class="form-control " placeholder="network name" v-model="networkName">
@@ -54,18 +103,20 @@
                                   </div>
                     </div></div>
                     <div class="row">
-                            <button type="button" style="width:20%;margin:auto;" class="btn btn-outline-success" v-on:click="addNetwork">Add</button>
+                            <button type="button" style="width:100%;margin:auto;" class="btn btn-outline-success" v-on:click="addNetwork">Add</button>
                     </div>
                     </div>
                 </p>
                
             </section>
-            <section class="Alarms s">
+            <!-- <section class="Alarms s">
                 <h2>Alarms</h2>
                 Lista alarmów
-            </section>
+            </section> -->
             <section class="Apps s">
-                    <h2>Apps <div v-on:click="" class="btn  btn-outline-primary">App creator</div>  <div v-on:click="showAddAppModal=!showAddAppModal" class="btn  btn-outline-primary">Install new</div>
+                    <h2>Apps
+                         <!-- <div v-on:click="" class="btn  btn-outline-primary">App creator</div>
+                           <div v-on:click="showAddAppModal=!showAddAppModal" class="btn  btn-outline-primary">Install new</div> -->
                     </h2>
                         <div v-if="showAddAppModal" class="form-group">
                             <div class="row">
@@ -124,7 +175,7 @@
     networkPassword:"",
     autoDHCP:true,
  
-    networks: [],
+    networks: [{name:"joy"}, {name:"xd"}],
   },
   created: function(){
       let _this = this
