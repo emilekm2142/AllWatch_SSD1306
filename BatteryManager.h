@@ -94,7 +94,7 @@ public:
 
 	 }
 	void OnLoop() {
-	 	if (millis() - lastBatteryCheckTime< 1000*20)
+	 	if (millis() - lastBatteryCheckTime < 1000*45)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
 	 	}

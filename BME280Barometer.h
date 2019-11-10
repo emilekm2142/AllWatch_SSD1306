@@ -27,11 +27,12 @@ class BME280Barometer:public Barometer, public Thermometer
 	 
 		 Wire.begin(RTC_SDA, RTC_SCL);
 		 bme.begin(118);
+		 delay(100);
 		 
 		// bme->begin();
 	}
 	 float getPressure() override {
-		 //Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
+		 Serial.printf("\n Reading pressure from a barometer: %.1f", bme.readPressure());
 		 return bme.readPressure() / 100.0F;
 	}
 	 float getHeight() override {
@@ -40,7 +41,7 @@ class BME280Barometer:public Barometer, public Thermometer
 	 float getTemperatureC() override {
 
 	 	//Readings are a bit too high. 
-		// Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature()-3);
+		 Serial.printf("\n Reading tmp from a barometer: %.1f", bme.readTemperature()-3);
 		 return bme.readTemperature()-3;
 	 }
 	void sleep() override
