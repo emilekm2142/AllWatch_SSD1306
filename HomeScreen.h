@@ -58,6 +58,7 @@ class HomeScreen: public CustomScreen
 		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2 -5, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
 		 const int bigTextWidth = r.GetStringWidth(timestring);
 		 r.SetFont((uint8_t *)Orbitron_Medium_10);
+		
 #ifdef DISPLAY_SECONDS
 		 char secondBuffer[5];
 
@@ -86,6 +87,7 @@ class HomeScreen: public CustomScreen
 		 );
 		 r.DrawString(GlobalX, GlobalY+r.GetScreenHeight() - 12, tmpBuffer);
 		 r.DrawString(GlobalX+r.GetScreenWidth()-65, GlobalY+r.GetScreenHeight() - 12, prsBuffer);
+		 r.DrawRectangle(GlobalX, GlobalY + r.GetScreenHeight() - 15, 1, r.GetScreenWidth());
 #endif
 	 }
 	 virtual void Up(Renderer& renderer) override {

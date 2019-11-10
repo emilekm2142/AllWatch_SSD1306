@@ -110,6 +110,7 @@ public:
 
 			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth > 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
 		}
+		renderer.DrawRectangle(0, 12, 1, renderer.GetScreenWidth());
 			if (sm->WiFiConnected() && drawHour ) renderer.DrawBitmap(0, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
 		
 		//renderer.DrawAlignedString(renderer.GetScreenWidth(), 0, , renderer.GetScreenWidth(), renderer.Right);

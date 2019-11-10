@@ -26,6 +26,7 @@ class BatteryManager
 	 const int chargingPoint = 2965;
 	 const int inactivitySleepDelay = 30000;
 	 const int batteryCheckDelay=10000;
+	 int lastBatteryCheckTime = 0;
 	 int lastBatteryCheck = 0;
 	 bool alwaysWakeMode = false;
 	 bool isGoingToSleep = false;
@@ -37,7 +38,7 @@ public:
 	 BatteryManager(UserInterfaceClass* UI) {
 		 lastActivity = millis();
 		 this->UI = UI;
-		 lastBatteryCheck = millis();
+		 lastBatteryCheckTime = millis();
 		 lastBatteryCheck = __ReadBatteryLevel();
 	}
 
@@ -57,6 +58,7 @@ public:
 	 }
 	int __ReadBatteryLevel()
 	 {
+		lastBatteryCheckTime = millis();
 		return ESP.getVcc();
 	 }
 	int __GetBatteryPercentage() {
@@ -92,7 +94,7 @@ public:
 
 	 }
 	void OnLoop() {
-	 	if (millis() - lastBatteryCheck< 1000*20)
+	 	if (millis() - lastBatteryCheckTime< 1000*20)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
 	 	}
