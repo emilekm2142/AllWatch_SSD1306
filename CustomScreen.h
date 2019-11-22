@@ -39,7 +39,16 @@ public:
 	virtual void GetInFocusExecutesBeforeGetInFocusInhertedFromCustomScreen(Renderer& r) {
 
 	}
-
+	void DrawCurrentScreen(Renderer& r)
+	{
+		if (currentScreen != NULL) {
+			currentScreen->Draw(r);
+		}
+	}
+	virtual void Draw(Renderer& renderer) override
+	{
+		DrawCurrentScreen(renderer);
+	}
 	virtual void Up(Renderer& renderer) override {}
 	virtual void Down(Renderer& renderer) override {}
 	virtual void Ok(Renderer& renderer) override {}
@@ -58,6 +67,31 @@ public:
 
 	virtual void CalculateLayout(Renderer& renderer) override {
 		
+	}
+
+
+	Layout* currentScreen = NULL;
+	Layout* transitionTo = NULL;
+	void DisplayLoadingScreenBlocking(Layout* loadingScreen, Layout* transitionTo)
+	{
+		this->transitionTo = transitionTo;
+		DisplayScreen(loadingScreen);
+	
+	}
+	void HideLoadingScreen()
+	{
+		if (transitionTo != NULL)
+		{
+			DisplayScreen(transitionTo);
+		}
+	}
+	void DisplayScreen(Layout* s)
+	{
+		currentScreen = (Layout*)s;
+		if (this->UI!=NULL)
+		{
+			Draw(*this->UI->GetRenderer());
+		}
 	}
 };
 

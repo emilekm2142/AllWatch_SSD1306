@@ -13,6 +13,7 @@
 #include "Layout.h"
 #include "Renderer.h"
 #include "Animation.h"
+//#include "MainSlideLayout.h"
 
 //#include "DependenciesHolder.h"
 class UserInterfaceClass//:public Dependency
@@ -49,6 +50,8 @@ private:
 	 void EnableDrawing() {
 		 shouldDraw = true;
 	 }
+	
+	
 	 //	DependenciesHolder* dependencies;
 	 char currentScreenName[50];
 	 void RegisterAnimation(Animation* animation) {
@@ -162,6 +165,7 @@ private:
 
 		 renderer->Update();
 	 }
+
 	 void SetLayoutInFocues(Layout& layout) {
 		 focusedLayout = &layout;
 		 focusedLayout->OnGetInFocus(*renderer);

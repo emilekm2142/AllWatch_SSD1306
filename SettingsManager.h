@@ -59,13 +59,21 @@ private:
 		 SettingsManager* parent;
 	 public:
 		 bool _Connect() {
-			 parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
-			 int wt = millis();
-		 	 while (!parent->wifiManager->WiFiConnected() || millis() - wt < 3000)
-		 	 {
-				 Serial.println("waiting to connect!");
-				 delay(100);
-		 	 }
+			 bool foundNetwork = parent->wifiManager->ConnectToFirstFittingWiFiNetwork();
+			 if (foundNetwork) {
+				 int wt = millis();
+				 while (WiFi.status()!=WL_CONNECTED)
+				 {
+					 Serial.println(WiFi.status());
+					 // Serial.println("waiting to connect!");
+					 delay(400);
+				 }
+				 Serial.println("...");
+			 }
+			 else
+			 {
+				 Serial.println("No such network!");
+			 }
 			 return parent->wifiManager->WiFiConnected();
 		 }
 		 void _Disconnect() {
@@ -403,8 +411,10 @@ private:
 			 while (f.available()) {
 				 auto n = f.readStringUntil('\r');
 				 if (IsTheNetworkNearby(n, networksAmount)) {
+					 Serial.println("Found! "); Serial.println(n);
 					 auto p = f.readStringUntil('\n');
-					 if (ConnectToWifiSync((char*)n.c_str(), (char*)p.c_str())) return true;
+					 ConnectToWifiAsync((char*)n.c_str(), (char*)p.c_str());
+				 	 return true;
 				 }
 				 else {
 					 f.readStringUntil('\n');
@@ -514,6 +524,7 @@ private:
 
 		 }
 		 void ConnectToWifiAsync(char* ssid, char* pass) {
+			
 			 parent->w->begin(ssid, pass);
 		 }
 		 bool ConnectToWifiSync(char* ssid, char* pass) {
@@ -567,8 +578,8 @@ private:
 		 SPIFFS->begin();
 		
 		 w = WiFi;
-		WiFi->mode(WIFI_OFF);
-		WiFi->forceSleepBegin();
+		//WiFi->mode(WIFI_OFF);
+		//WiFi->forceSleepBegin();
 		w->setAutoReconnect(false);
 		
 

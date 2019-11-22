@@ -61,19 +61,18 @@ private:
 			menu =new GenericMenuScreen(app->UI);
 			menu->AddOption((char*)F("Sync time"), [this]() {
 				infoScreen->text = "Syncing...";
-				currentScreen = (Layout*)infoScreen;
-				Draw(*this->app->UI->GetRenderer());
+				DisplayLoadingScreenBlocking((Layout*)infoScreen, (Layout*)menu);
 				if (this->app->settingsManager->SyncTime()>=0)
 				{
-					currentScreen = (Layout*)menu;
+					HideLoadingScreen();
 				}
 				else
 				{
 					infoScreen->text = "Could not connect to a network...";
-					currentScreen = (Layout*)infoScreen;
+					DisplayLoadingScreenBlocking((Layout*)infoScreen, (Layout*)menu);
 					Run::After(1000,[this]
 					{
-						currentScreen = (Layout*)menu;
+						HideLoadingScreen();
 					});
 				}
 				

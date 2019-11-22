@@ -1,3 +1,5 @@
+
+#include "TestingEnv.h"
 #include "GenericLoadingScreen.h"
 
 #include "GenericDialogScreen.h"
@@ -43,7 +45,18 @@
 #include "FS.h"
 
 #include "Config.h"
+#include "GenericLoadingScreen.h"
 
+#ifdef RUN_TESTS
+#include "AUnit.h"
+#include "TestingEnv.h"
+//#include "tests.h"
+#endif
+
+
+using namespace aunit;
+
+GenericLoadingScreen loadingScreen = GenericLoadingScreen(&UserInterface);
 ADC_MODE(ADC_VCC);
 auto r = SSD1306Renderer();
 auto bm = BatteryManager(&UserInterface);
@@ -178,13 +191,26 @@ void setup() {
 	UserInterface.RedrawAll();
 	imageMenuScreen.setCurrentScroll();
 
+	
 
 #ifdef START_WITH_OTA_PORT
 	settingsManager.w->begin(OTA_WIFI_SSID, OTA_WIFI_PASSWORD);
 	settingsManager.SetupOTA();
 #endif
 	//settingsManager.TestSaveWiFi();
-	
+#ifdef RUN_TESTS
+	TestingEnv::UI = &UserInterface;
+	TestingEnv::sm = &settingsManager;
+	if (settingsManager.wifiManager->IsNetworkSaved(settingsManager.SPIFFS, TESTS_SSID))
+	{
+		settingsManager.wifiManager->RemoveWiFiNetwork(TESTS_SSID);
+	}
+	settingsManager.wifiManager->AppendWiFiNetwork(settingsManager.SPIFFS, TESTS_SSID, TESTS_PASSWORD);
+	delay(2000);
+	TestRunner::setVerbosity(Verbosity::kAll);
+	TestRunner::setTimeout(30);
+#endif
+
 }
 void loop() {
 	
@@ -198,5 +224,7 @@ void loop() {
 		
 		settingsManager.appsManager->currentApplication->OnLoop();
 	}
-	
+#ifdef RUN_TESTS
+	TestRunner::run();
+#endif
 }

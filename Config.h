@@ -53,3 +53,7 @@
 #define DISPLAY_SECONDS
 //#define ENERGY_SAVING
 //#define WAKE_UP_FROM_SLEEP_AUTOMATICALLY
+
+#define RUN_TESTS
+#define TESTS_SSID "VM2828377"
+#define TESTS_PASSWORD  "qjf4vbhqXpNr"

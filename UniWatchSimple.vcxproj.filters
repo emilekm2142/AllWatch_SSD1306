@@ -468,6 +468,12 @@
     <ClInclude Include="Mitov_BME280_TemperatureHumidity_I2C.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestingEnv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractInputHandler.cpp">
@@ -630,6 +636,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GenericLoadingScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestingEnv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

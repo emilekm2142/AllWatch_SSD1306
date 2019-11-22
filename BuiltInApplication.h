@@ -11,6 +11,7 @@
 #include "Layout.h"
 #include "UserInterface.h"
 #include "SettingsManager.h"
+#include "GenericLoadingScreen.h"
 class BuiltInApplication
 {
 private:
@@ -22,11 +23,12 @@ private:
 	 virtual const char* GetIcon() { return NULL; }
 	 char* name;
 	 Layout* layout;
-
+	
 	 BuiltInApplication(Layout* layout, UserInterfaceClass* UI, SettingsManager* sm) {
 		 this->layout = layout;
 		 this->UI = UI;
 		 this->settingsManager = sm;
+		
 	 }
 	 void Open() {
 		 settingsManager->appsManager->currentApplication = this;
@@ -45,6 +47,8 @@ private:
 	 virtual void Loop(Renderer& r) {
 
 	 }
+
+	
 	 void Exit() {
 		 Serial.println("Exiting app..");
 		 OnExit();

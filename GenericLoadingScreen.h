@@ -16,6 +16,7 @@
 #include "UserInterface.h"
 #include "StaticResources.h"
 #include "SettingsScreen.h"
+
 class GenericLoadingScreen:CustomScreen
 {
  protected:
@@ -44,6 +45,6 @@ class GenericLoadingScreen:CustomScreen
 	
 };
 
-
+extern GenericLoadingScreen loadingScreen;
 #endif
 
