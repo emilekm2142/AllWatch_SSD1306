@@ -53,18 +53,20 @@ public:
 
 	int DrawBattery(Renderer& renderer)
 	{
-		
-		const int batteryMiddleWidth = 15;
+		const int topOffset = 2;
+		const int batteryHeight = 7;
+		const int batteryMiddleWidth = 14;
 		const int batterySidesWidth = 1;
 		const int leftOffset = renderer.GetScreenWidth() - batterySidesWidth * 2 - batteryMiddleWidth;
-		int batBarWidth = (bm->GetBatteryPercentage() / 100.0) * batteryMiddleWidth;
+		int batBarWidth = .70//(bm->GetBatteryPercentage() / 100.0)
+		* batteryMiddleWidth;
 		if (batBarWidth < 0) batBarWidth = batteryMiddleWidth;
 		//sides
-		renderer.FillRectangle(leftOffset, 4, 3, batterySidesWidth);
-		renderer.FillRectangle(leftOffset+batteryMiddleWidth+batterySidesWidth, 4, 3, batterySidesWidth);
+		renderer.FillRectangle(leftOffset, topOffset+1, batteryHeight-2, batterySidesWidth);
+		renderer.FillRectangle(leftOffset+batteryMiddleWidth+batterySidesWidth, topOffset + 1, batteryHeight-2, batterySidesWidth);
 		//fill
-		renderer.DrawRectangle(leftOffset+batterySidesWidth, 3, 5, batteryMiddleWidth);
-		renderer.FillRectangle(leftOffset+batterySidesWidth, 3, 5, batBarWidth);
+		renderer.DrawRectangle(leftOffset+batterySidesWidth, topOffset, batteryHeight, batteryMiddleWidth);
+		renderer.FillRectangle(leftOffset+batterySidesWidth+2, topOffset+2, batteryHeight-4, batBarWidth-2);
 		char b[4];
 		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));

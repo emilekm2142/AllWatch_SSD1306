@@ -72,6 +72,7 @@ public:
 
 	Layout* currentScreen = NULL;
 	Layout* transitionTo = NULL;
+	Layout* previousScreen = NULL;
 	void DisplayLoadingScreenBlocking(Layout* loadingScreen, Layout* transitionTo)
 	{
 		this->transitionTo = transitionTo;
@@ -87,11 +88,17 @@ public:
 	}
 	void DisplayScreen(Layout* s)
 	{
+		previousScreen = currentScreen;
 		currentScreen = (Layout*)s;
 		if (this->UI!=NULL)
 		{
 			Draw(*this->UI->GetRenderer());
 		}
+	}
+	void ReturnToPreviousScreen()
+	{
+		if (previousScreen!=NULL)
+		DisplayScreen(previousScreen);
 	}
 };
 

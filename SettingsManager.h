@@ -834,7 +834,44 @@ private:
 		for (int i = 0; i < f2.size(); i++)
 			Serial.print(f2.read());
 	 }
+	 void SaveAlarmOne(int day, int hour, int minute, bool writeToRTC=true)
+	 {
+		 appsManager->DeleteConfigFile("AlarmOne");
+		 auto fileHandle = this->SPIFFS->open("/AlarmOne", "w+");
+		 fileHandle.write(hour);
+	
+		 fileHandle.write(minute);
+	
+		 fileHandle.close();
+		 tk->SetAlarmOne(day, hour, minute);
+	 }
+	void DeleteAlarmOne()
+	 {
+		
+		tk->DeleteAlarmOne();
+	 }
+	bool IsItTheTimeToTriggerAlarmOne()
+	 {
+		/*auto now = tk->GetCurrentTime();
+		auto alarm = tk->GetAlarmOne();
+		Serial.println(alarm.Hour());
+		return now.Hour() == alarm.Hour() && now.Minute() == alarm.Minute();*/
 
+	 	
+		if (this->SPIFFS->exists("/AlarmOne")) {
+			auto fileHandle = this->SPIFFS->open("/AlarmOne", "r");
+			uint8_t hour, minute;
+			fileHandle.read(&hour, sizeof(uint8_t));
+			fileHandle.read(&minute, sizeof(uint8_t));
+			Serial.println((uint8_t)hour);
+			Serial.println((uint8_t)minute);
+			fileHandle.close();
+			auto now = tk->GetCurrentTime();
+			return now.Hour() == (uint8_t)hour && now.Minute() == (uint8_t)minute;
+			
+		}
+		return false;
+	 }
 };
 
 

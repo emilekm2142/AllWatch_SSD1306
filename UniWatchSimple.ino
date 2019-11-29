@@ -51,11 +51,11 @@
 #include "AUnit.h"
 #include "TestingEnv.h"
 //#include "tests.h"
-#endif
+
 
 
 using namespace aunit;
-
+#endif
 GenericLoadingScreen loadingScreen = GenericLoadingScreen(&UserInterface);
 ADC_MODE(ADC_VCC);
 auto r = SSD1306Renderer();
@@ -147,10 +147,13 @@ void setup() {
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, FlashlightApp_icon::width, FlashlightApp_icon::height, FlashlightApp_icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Set time", []() {return new TimeConfiguratorApp(&UserInterface, &settingsManager, &tk); }, TimeConfiguratorApp_Icon::width, TimeConfiguratorApp_Icon::height, TimeConfiguratorApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Status", []() {return new StatusApp(&UserInterface, &settingsManager); }, StatusApp_Icon::width, StatusApp_Icon::height, StatusApp_Icon::icon_bits);
-	settingsManager.appsManager->RegisterApplication("Settings", []() {return new SettingsApp(&UserInterface, &settingsManager); }, SettingsApp_Icon::width, SettingsApp_Icon::height, SettingsApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Settings", []() {return new SettingsApp(&UserInterface, &settingsManager, &bm); }, SettingsApp_Icon::width, SettingsApp_Icon::height, SettingsApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("WiFi", []() {return new WiFiConnectApp(&UserInterface, &settingsManager); }, WiFiConnectApp_Icon::width, WiFiConnectApp_Icon::height, WiFiConnectApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("AppMarket", []() {return new AppMarketApp(&UserInterface, &settingsManager); }, AppMarketApp_Icon::width, AppMarketApp_Icon::height, AppMarketApp_Icon::icon_bits);
+	//reading from spiffs
+	bm.GetSleepTimeSeconds();
 
+	
 	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
 		settingsManager.appsManager->AppendKeyToConfig("IFTTT", "key", "type in the api key");
 	}
@@ -211,6 +214,9 @@ void setup() {
 	TestRunner::setTimeout(30);
 #endif
 
+
+
+	
 }
 void loop() {
 	

@@ -92,7 +92,6 @@ protected:
 
 public:
 	IFTTApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
-		Serial.println("Welcome to IFTTT app!");
 		this->l = new IFTTTMainLayout(this);
 		this->layout = l;
 		this->name = "IFTTT";
@@ -114,15 +113,15 @@ public:
 		}
 		auto configFile = sm->appsManager->GetConfigForApplication("IFTTT");
 		while (configFile.available()) {
-			Serial.println("Next char...");
+			//Serial.println("Next char...");
 			char name[50];
 			int sizeName = configFile.readBytesUntil('=', &name[0], 50);
 			name[sizeName] = '\0';
-			Serial.printf("Content: %s=", name);
+			//Serial.printf("Content: %s=", name);
 			char value[50];
 			int valueSize = configFile.readBytesUntil('\n', &value[0], 50);
 			value[valueSize] = '\0';
-			Serial.printf("Content: =%s",  value);
+			//Serial.printf("Content: =%s",  value);
 			if (strcmp(name, "key") != 0) {
 			   	AddMenuOption(name);
 			}
@@ -137,7 +136,7 @@ public:
 
 	}
 	void OnOpen() override {
-		Serial.println("IFTTT opened");
+		//Serial.println("IFTTT opened");
 	}
 	void OnExit() override {
 		

@@ -36,13 +36,31 @@ private:
 		 Rtc->Begin();
 		 Rtc->SetIsRunning(true);
 		 now = Rtc->GetDateTime();
-		 
+		
+	 	
 		 //if (now.Year()<2019)
 		//	 Rtc->SetDateTime(compiled);
 	 }
 	void Sleep()
 	 {
 		Rtc->SetIsRunning(false);
+	 }
+	void DeleteAlarmOne()
+	 {
+		const DS3231AlarmOne alarmOne = DS3231AlarmOne(50, 25, 61, 61, DS3231AlarmOneControl_MinutesSecondsMatch);
+		Rtc->SetAlarmOne(alarmOne);
+	 }
+	void SetAlarmOne(int day, int hour, int minute, DS3231AlarmOneControl mode=DS3231AlarmOneControl_MinutesSecondsMatch)
+	 {
+	 	
+		const DS3231AlarmOne alarmOne = DS3231AlarmOne(day,hour,minute, 00, mode);
+		Rtc->SetAlarmOne(alarmOne);
+	 }
+	
+	void SetAlarmTwo(int day, int hour, int minute, DS3231AlarmTwoControl mode)
+	 {
+		const DS3231AlarmTwo alarmTwo = DS3231AlarmTwo(day, hour, minute, mode);
+		Rtc->SetAlarmTwo(alarmTwo);
 	 }
 	 RtcDateTime GetCurrentTime()
 	 {

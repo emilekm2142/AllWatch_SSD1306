@@ -24,7 +24,7 @@ class BatteryManager
 	 const int lowBatteryPoint = 3300;
 	 const int deepSleepTime = 30*1000;
 	 const int chargingPoint = 2965;
-	 const int inactivitySleepDelay = 30000;
+	 int inactivitySleepDelay = 30000;
 	 const int batteryCheckDelay=10000;
 	 unsigned long lastBatteryCheckTime = 0;
 	 int lastBatteryCheck = 0;
@@ -87,12 +87,37 @@ public:
 		UI->GetRenderer()->DisableScreen();
 		sm->extraPeripheralsManager->barometer->sleep();
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
-		ESP.deepSleep(deepSleepTime, RFMode::RF_DISABLED);
+		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DISABLED);
 #else
 		ESP.deepSleep(0, RFMode::RF_DISABLED);
 #endif
 
 	 }
+	void SetSleepTimeSeconds(int time)
+	 {
+		fs::File a = sm->SPIFFS->open("/sleep", "w");
+		inactivitySleepDelay = time*1000;
+		a.write(time);
+		a.close();
+		
+	 }
+	int GetSleepTimeSeconds()
+	 {
+		if (sm->SPIFFS->exists("/sleep")) {
+			fs::File a = sm->SPIFFS->open("/sleep", "r");
+			uint8_t sec;
+			inactivitySleepDelay = sec * 1000;
+			a.read(&sec, sizeof(int8_t));
+			a.close();
+			return sec;
+			
+		}
+		else
+		{
+			return (int)(deepSleepTime/1000);
+		}
+	 }
+	
 	void OnLoop() {
 	 	if (millis() - lastBatteryCheckTime > 1000*45)
 	 	{

@@ -80,13 +80,42 @@ test(ShowWeather)
 	assertNotEqual(app->temperature, -999);
 	
 }
+test(FlappyBird)
+{
+	delay(1000);
+	ResetToMainScreen();
+	//on moze sie tylko wykraszowac
+	FlappyBirdApp* app = ((FlappyBirdApp*)sm->appsManager->getBuiltInApplicationByName("Flappy Bird")->creatingFunction());
+	app->Open();
+	UI->Ok();
+	UI->Up();
+	UI->Up();
+	Run::After(8000, [app]()
+	{
+		app->Exit();
+	});
+	delay(8000);
+}
+test(AlarmOne)
+{
+	sm->SaveAlarmOne(12, 12, 12, false);
+	sm->tk->SetDateTime(2019, 11, 12, 12, 12, 01);
+	assertTrue(sm->IsItTheTimeToTriggerAlarmOne());
+	sm->DeleteAlarmOne();
+	assertFalse(sm->IsItTheTimeToTriggerAlarmOne());
+}
 test(ChangeHour)
 {
+	auto timeBefore = sm->tk->GetCurrentTime();
+	sm->tk->SetDateTime(2019, 11, 11, 11, 11, 11);
+	auto timeNow = sm->tk->GetCurrentTime();
+	assertFalse(timeNow.Second() == timeBefore.Second() && timeNow.Minute() == timeBefore.Minute());
+	sm->tk->SetDateTime(timeBefore.Year(), timeBefore.Month(), timeBefore.Day(), timeBefore.Hour(), timeBefore.Minute(), timeBefore.Second());
 	
 }
 test(BarometerTest)
 {
-	
+	assertMoreOrEqual(sm->extraPeripheralsManager->barometer->getPressure(), 1.0f);
 }
 test(CompassTest)
 {

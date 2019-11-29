@@ -21,6 +21,9 @@
 #include "SettingsManager.h"
 #include "GenericMenuScreen.h"
 #include "GenericTextScreen.h"
+#include "SSD1306Fonts.h"
+#include <RtcDS3231.h>
+#include "BatteryManager.h"
 namespace SettingsApp_Icon{
 	const int width = 36;
 	const int height = 36;
@@ -46,12 +49,172 @@ namespace SettingsApp_Icon{
 class SettingsApp:public BuiltInApplication
 {
 private:
+	class SleepTimeLayout :public CustomScreen
+	{
+	public:
+
+		SettingsApp* app;
+		CustomScreen* parent;
+		int length;
+		SleepTimeLayout(SettingsApp* app, CustomScreen* parent)
+		{
+			this->app = app; this->parent = parent;
+			length=this->app->bm->GetSleepTimeSeconds();
+		}
+		void Draw(Renderer& r) override
+		{
+			auto strtemplate = PSTR("%02u s.");
+			r.SetFont((uint8_t *)Orbitron_Medium_30);
+			char bff[10];
+			snprintf_P(bff, 10, strtemplate, length);
+
+			r.DrawAlignedString(GlobalX + r.GetHorizontalCenter(), r.GetVerticalCenter() - 10, bff, r.GetScreenWidth(), r.Center);
+			r.SetFont((uint8_t *)Orbitron_Medium_10);
+		}
+		void DrawActiveIndicator(Renderer& renderer) override
+		{
+			
+		}
+		void Down(Renderer& renderer) override
+		{
+			length--;
+		}
+		void Up(Renderer& renderer) override
+		{
+			length++;
+		}
+		void Ok(Renderer& renderer) override
+		{
+			this->app->bm->SetSleepTimeSeconds(length);
+			Back(renderer);
+		}
+		void Back(Renderer& renderer) override
+		{
+			//Run::Cancel(blinkTask);
+			this->parent->ReturnToPreviousScreen();
+		}
+	};
+	class AlarmLayout:public CustomScreen
+	{
+	public:
+		
+		SettingsApp* app;
+		CustomScreen* parent;
+		int blinkCounter = 0;
+		bool shouldBlink=false;
+		int currentObject = 0;
+		
+		int localHour;
+		int localMinute;
+
+		Run::DelayedActionDataHolder* blinkTask;
+		AlarmLayout(SettingsApp* app, CustomScreen* parent, int alarmNumber=0)
+		{
+			this->app = app;
+			auto hour = app->settingsManager->tk->GetCurrentTime();
+			localHour = hour.Hour();
+			localMinute = hour.Minute();
+			this->parent = parent;
+			blinkTask = Run::Every(200,[this]()
+			{
+				shouldBlink = !shouldBlink;
+				this->parent->DrawCurrentScreen(*this->app->UI->GetRenderer());
+			});
+			
+		}
+		void Draw(Renderer& r) override
+		{
+			auto strtemplate = PSTR("%02u");
+			r.SetFont((uint8_t *)Orbitron_Medium_30);
+			char hourBuff[10];
+			snprintf_P(hourBuff, 10, strtemplate, localHour );
+			char minuteBuff[10];
+			snprintf_P(minuteBuff, 10, strtemplate, localMinute);
+
+			r.DrawString(GlobalX + r.GetHorizontalCenter() - 45, r.GetVerticalCenter()-10, hourBuff);
+			r.DrawString(GlobalX + r.GetHorizontalCenter() + 4, r.GetVerticalCenter()-10, minuteBuff);
+
+			if (shouldBlink && currentObject==0) r.FillRectangle(GlobalX + r.GetHorizontalCenter() - 45, r.GetVerticalCenter() - 10, 26, 35,true);
+			if (shouldBlink && currentObject==1) r.FillRectangle(GlobalX + r.GetHorizontalCenter() +4, r.GetVerticalCenter() - 10, 26, 35, true);
+			r.SetFont((uint8_t *)Orbitron_Medium_10);
+			r.DrawRectangle(GlobalX + r.GetHorizontalCenter() - 45/2, r.GetVerticalCenter() + 17, 13, 45);
+			r.DrawAlignedString(GlobalX + r.GetHorizontalCenter() , r.GetVerticalCenter()+20, "ok",45, r.Center);
+			
+		}
+		int GetSetHour()
+		{
+			return localHour;
+		}
+		int GetSetMinute()
+		{
+			return localMinute;
+		}
+		int GetSetSecond()
+		{
+			return 0;
+		}
+		void Back(Renderer& renderer) override
+		{
+			Run::Cancel(blinkTask);
+			this->parent->ReturnToPreviousScreen();
+		}
+		void Down(Renderer& renderer) override
+		{
+			if (currentObject==0)
+			{
+				localHour--;
+				if (localHour <= 0) localHour = 0;
+			}
+			else if (currentObject==1)
+			{
+				localMinute--;
+				if (localMinute <= 0) localMinute = 0;
+			}
+		}
+		void Up(Renderer& renderer) override
+		{
+			if (currentObject == 0)
+			{
+				localHour++;
+				if (localHour >= 23) localHour = 23;
+			}
+			else if (currentObject == 1)
+			{
+				localMinute++;
+				if (localMinute >= 60) localMinute = 60;
+			}
+		}
+		void Ok(Renderer& renderer) override
+		{
+			if (currentObject == 0) currentObject = 1;
+			if (currentObject == 1) currentObject = 2;
+			if (currentObject == 2)
+			{
+				auto now = this->app->settingsManager->tk->GetCurrentTime();
+				this->app->settingsManager->tk->SetAlarmOne(now.Day(), localHour, localMinute, DS3231AlarmOneControl_HoursMinutesSecondsMatch);
+				//TODO:
+				//Zapisywanie tego alarmu w pliku i wylaczanie czulosci na reset na 10 sekund przed nim jezeli zegarek chodzi! Nie da sie
+				//Jezeli nie to przy kazdym resecie sprawdzanie czy jestesmy w minucie z alarmem
+				Back(renderer);
+			}
+		}
+		void DrawActiveIndicator(Renderer& renderer) override
+		{
+			
+		}
+	
+		
+	};
 	class SettingsLayout:public CustomScreen {
 	public:
 		SettingsApp* app;
-		Layout* currentScreen; //TODO: move this to customScreen
 		GenericTextScreen* infoScreen;
 		GenericMenuScreen* menu;
+
+		AlarmLayout* alarmScreen;
+		SleepTimeLayout* sleepTimeScreen;
+
+		
 		SettingsLayout(SettingsApp* app) {
 		
 			this->app = app;
@@ -78,9 +241,29 @@ private:
 				
 			
 			});
+			menu->AddOption((char*)F("Set sleep timeout"), [this]() {
+
+				sleepTimeScreen = new SleepTimeLayout(this->app, (CustomScreen*)this);
+				DisplayScreen(sleepTimeScreen);
+
+
+			});
+			menu->AddOption((char*)F("Set alarm"), [this]() {
+
+				alarmScreen = new AlarmLayout(this->app, (CustomScreen*)this);
+				DisplayScreen(alarmScreen);
+				
+
+			});
+			menu->AddOption((char*)F("Delete alarm"), [this]() {
+
+				this->app->settingsManager->DeleteAlarmOne();
+
+
+			});
 			menu->AddOption((char*)F("Check for updates"), [this]() {
 				infoScreen->text = "Getting updates...";
-				currentScreen = (Layout*)infoScreen;
+				DisplayScreen((Layout*)infoScreen);
 				Draw(*this->app->UI->GetRenderer());
 				Run::After(1000, [this]() {
 					char urlBuffer[100];
@@ -115,7 +298,7 @@ private:
 				this->app->settingsManager->CreateNetwork();
 				this->app->settingsManager->OpenSettingsServer();
 				infoScreen->text = "Navigate to 192.168.4.1";
-				currentScreen = (Layout*)infoScreen;
+				DisplayScreen((Layout*)infoScreen);
 				Draw(*this->app->UI->GetRenderer());
 			});
 		
@@ -123,13 +306,13 @@ private:
 				//this->app->settingsManager->CloseNetwork();
 				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected()?(char*)"OK!":(char*)"You must connect to a network first";
 				
-				currentScreen = (Layout*)infoScreen;
+				DisplayScreen((Layout*)infoScreen);
 				Draw(*this->app->UI->GetRenderer());
 				Run::After(1000, [this]() {
-					currentScreen = (Layout*)menu;
+					DisplayScreen((Layout*)menu);
 					if (this->app->settingsManager->wifiManager->WiFiConnected()) {
 						auto o = new SettingsScreen(this->app->UI, this->app->settingsManager);
-						currentScreen = (Layout*)o;
+						DisplayScreen((Layout*)o);
 						this->app->settingsManager->OpenSettingsServer();
 					}
 					Draw(*this->app->UI->GetRenderer());
@@ -160,7 +343,12 @@ private:
 			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			this->app->Exit();
+			if (currentScreen==this)
+				this->app->Exit();
+			else
+			{
+				currentScreen->Back(r);
+			}
 		}
 		void Up(Renderer& r) override {
 			currentScreen->Up(r);
@@ -176,12 +364,12 @@ private:
 	 SettingsLayout* l = new SettingsLayout(this);
 
  public:
+	 BatteryManager* bm;
 
-
-	 SettingsApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
+	 SettingsApp(UserInterfaceClass* UI, SettingsManager* sm, BatteryManager* bm) : BuiltInApplication((Layout*)this->l, UI, sm) {
 		 this->layout = l;
 		 this->name = "Settings";
-
+		 this->bm = bm;
 
 	 }
 
