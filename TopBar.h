@@ -58,7 +58,7 @@ public:
 		const int batteryMiddleWidth = 14;
 		const int batterySidesWidth = 1;
 		const int leftOffset = renderer.GetScreenWidth() - batterySidesWidth * 2 - batteryMiddleWidth;
-		int batBarWidth = .70//(bm->GetBatteryPercentage() / 100.0)
+		int batBarWidth = (bm->GetBatteryPercentage() / 100.0)
 		* batteryMiddleWidth;
 		if (batBarWidth < 0) batBarWidth = batteryMiddleWidth;
 		//sides

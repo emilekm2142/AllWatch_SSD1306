@@ -21,7 +21,8 @@ class HomeScreen: public CustomScreen
 	 TimeKepper* tk;
 	 SettingsManager* sm;
  public:
-
+	 int currentSecondsOffset = 0;
+	 int prevSecond = 0;
 	 HomeScreen(UserInterfaceClass& ui, TimeKepper* tk, SettingsManager* sm) {
 		 UI = &ui;
 		 this->sm = sm;
@@ -60,15 +61,21 @@ class HomeScreen: public CustomScreen
 		 r.SetFont((uint8_t *)Orbitron_Medium_10);
 		
 #ifdef DISPLAY_SECONDS
+	 	
 		 char secondBuffer[5];
-
+		
 		 snprintf_P(secondBuffer,
 			 5,
 			 PSTR("%02u"),
 			 tk->now.Second()
 
 		 );
-		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 5 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16, secondBuffer , r.GetScreenWidth(), r.Left);
+		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 5 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16 +currentSecondsOffset, secondBuffer , r.GetScreenWidth(), r.Left);
+	 	if (prevSecond!=tk->now.Second())
+	 	{
+	 		
+	 	}
+		 prevSecond = tk->now.Second();
 #endif
 #if defined(HOME_SCREEN_TEMPERATURE_READINGS) && defined(TEMPERATURE_AVAILABLE) 
 		 const float pressure = sm->extraPeripheralsManager->barometer->getPressure();
