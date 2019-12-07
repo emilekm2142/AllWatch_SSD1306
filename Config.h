@@ -60,3 +60,6 @@
 
 #define BUZZER
 #define BUZZER_PIN 4
+
+
+#define IS_RUNNING_ON_BATTERY

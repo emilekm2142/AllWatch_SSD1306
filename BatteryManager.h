@@ -40,6 +40,13 @@ public:
 		 this->UI = UI;
 		 lastBatteryCheckTime = millis();
 		 lastBatteryCheck = __ReadBatteryLevel();
+#ifdef IS_RUNNING_ON_BATTERY
+	 	if (lastBatteryCheck < lowBatteryPoint)
+		 {
+
+			 ESP.deepSleep(0, RFMode::RF_DISABLED);
+		 }
+#endif
 	}
 
 	 void RegisterActivity() {
@@ -122,10 +129,13 @@ public:
 	 	if (millis() - lastBatteryCheckTime > 1000*45)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
+#ifdef IS_RUNNING_ON_BATTERY
 	 		if (lastBatteryCheck<lowBatteryPoint)
 	 		{
+	 		
 				ESP.deepSleep(0, RFMode::RF_DISABLED);
 	 		}
+#endif
 	 	}
 		if (disableAll) return;
 	 	//sleep only if there is no application turned on
