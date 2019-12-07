@@ -21,7 +21,7 @@ class BatteryManager
 	 bool disableAll = true;
 #endif
 	 const int highBatteryPoint = 4200;
-	 const int lowBatteryPoint = 3300;
+	 const int lowBatteryPoint = 3500;
 	 const int deepSleepTime = 30*1000;
 	 const int chargingPoint = 2965;
 	 int inactivitySleepDelay = 30000;
@@ -122,6 +122,10 @@ public:
 	 	if (millis() - lastBatteryCheckTime > 1000*45)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
+	 		if (lastBatteryCheck<lowBatteryPoint)
+	 		{
+				ESP.deepSleep(0, RFMode::RF_DISABLED);
+	 		}
 	 	}
 		if (disableAll) return;
 	 	//sleep only if there is no application turned on
