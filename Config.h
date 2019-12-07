@@ -57,3 +57,6 @@
 //#define RUN_TESTS
 #define TESTS_SSID "VM2828377"
 #define TESTS_PASSWORD  "qjf4vbhqXpNr"
+
+#define BUZZER
+#define BUZZER_PIN 4

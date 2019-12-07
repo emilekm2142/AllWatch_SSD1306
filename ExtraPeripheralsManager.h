@@ -10,15 +10,17 @@
 #endif
 #include "Thermometer.h"
 #include "Barometer.h"
+#include "Buzzer.h"
 class ExtraPeripheralsManager
 {
  protected:
 
 
  public:
-	 ExtraPeripheralsManager(Barometer* b, Thermometer* t) { this->barometer = b; this->thermometer = t; }
+	 ExtraPeripheralsManager(Barometer* b, Thermometer* t, Buzzer* buzzer) { this->barometer = b; this->thermometer = t; this->buzzer = buzzer; }
 	 Thermometer* thermometer;
 	 Barometer* barometer;
+	 Buzzer* buzzer;
 };
 
 

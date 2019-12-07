@@ -144,6 +144,7 @@
     <ClInclude Include="BuiltInApplication.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="Buzzer.h" />
     <ClInclude Include="CardAttributes_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -532,6 +533,7 @@
     <ClCompile Include="BatteryManager.cpp" />
     <ClCompile Include="BME280Barometer.cpp" />
     <ClCompile Include="BuiltInApplication.cpp" />
+    <ClCompile Include="Buzzer.cpp" />
     <ClCompile Include="Column.cpp" />
     <ClCompile Include="CommonActionsScreen.cpp" />
     <ClCompile Include="ConnectingScreen.cpp" />

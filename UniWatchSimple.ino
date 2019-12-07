@@ -1,4 +1,5 @@
 
+#include "Buzzer.h"
 #include "TestingEnv.h"
 #include "GenericLoadingScreen.h"
 
@@ -43,7 +44,7 @@
 #include <ESP8266WiFi.h>
 
 #include "FS.h"
-
+#include "Buzzer.h"
 #include "Config.h"
 #include "GenericLoadingScreen.h"
 
@@ -71,24 +72,30 @@ void light_sleep() {
 	wifi_fpm_do_sleep(0xFFFFFFF);
 	wifi_fpm_close();
 }
+
+Buzzer buzzer = Buzzer(BUZZER_PIN);
+
 void onOk() {
-	
+	buzzer.PlayLong();
 	UserInterface.Ok();
 	UserInterface.StageChanges();
 	bm.RegisterActivity();
 }
 void onUp() {
+	buzzer.PlayShort();
 	UserInterface.Up();
 	bm.RegisterActivity();
 	UserInterface.StageChanges();
 }
 void onDown() {
+	buzzer.PlayShort();
 	Serial.print("down");
 	bm.RegisterActivity();
 	UserInterface.Down();
 	UserInterface.StageChanges();
 }
 void onBack() {
+	buzzer.PlayLong();
 	bm.RegisterActivity();
 	UserInterface.StageChanges();
 	UserInterface.Back();
@@ -104,7 +111,7 @@ InputHandler inputHandler = InputHandler(
 
 
 BME280Barometer barometerBME280 = BME280Barometer();
-ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280);
+ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280, &buzzer);
 auto tk = TimeKepper(&UserInterface);
 
 
