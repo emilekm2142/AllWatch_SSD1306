@@ -226,7 +226,7 @@ void FlappyBird::playSound(int index) {
         soundDuration = 0.0f;
         break;
     }
-
+	espert->buzzer->Play((unsigned long)soundDuration, frequency);
    
   }
 }

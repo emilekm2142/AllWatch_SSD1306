@@ -70,7 +70,7 @@ private:
 		 Serial.println("opening flappy bird!");
 		 UI->DisableDrawing();
 		 this->layout = l;
-		 espertLayer =new ESPert(UserInterface.GetRenderer());
+		 espertLayer =new ESPert(UserInterface.GetRenderer(), sm->extraPeripheralsManager->buzzer);
 		 this->name = (char*)F("Flappy Bird");
 		 this->game = new flappyBird::FlappyBird();
 

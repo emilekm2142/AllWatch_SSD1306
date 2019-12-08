@@ -9,7 +9,7 @@
 	#include "WProgram.h"
 #endif
 #include "Renderer.h"
-
+#include "Buzzer.h"
 
 
 class OledCompatibility {
@@ -40,7 +40,9 @@ class ESPert
 	
  public:
 	 OledCompatibility oled;
-	 ESPert(Renderer* r) {
+	 Buzzer* buzzer;
+	 ESPert(Renderer* r, Buzzer* buzzer) {
+		 this->buzzer = buzzer;
 		 this->oled = OledCompatibility(r);
 	}
 };

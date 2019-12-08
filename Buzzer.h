@@ -21,15 +21,15 @@ class Buzzer
 	}
 	void PlayShort()
 	{
-		tone(pin, 500, 100);
+		tone(pin, 2500, 100);
 	}
 	void PlayLong()
 	{
-		tone(pin, 500, 500);
+		tone(pin, 2000, 500);
 	}
-	void Play(unsigned long length)
+	void Play(unsigned long length, int f=30)
 	{
-		tone(pin, 500, length);
+		tone(pin, f, length);
 	}
 	void StopAll()
 	{
