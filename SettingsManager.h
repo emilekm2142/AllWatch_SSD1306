@@ -24,6 +24,7 @@
 
 #include "ExtraPeripheralsManager.h"
 class BuiltInApplication;
+
 class ApplicationDataHolder {
 public:
 	char* name;
@@ -850,12 +851,10 @@ private:
 		
 		tk->DeleteAlarmOne();
 	 }
+
 	bool IsItTheTimeToTriggerAlarmOne()
 	 {
-		/*auto now = tk->GetCurrentTime();
-		auto alarm = tk->GetAlarmOne();
-		Serial.println(alarm.Hour());
-		return now.Hour() == alarm.Hour() && now.Minute() == alarm.Minute();*/
+	
 
 	 	
 		if (this->SPIFFS->exists("/AlarmOne")) {

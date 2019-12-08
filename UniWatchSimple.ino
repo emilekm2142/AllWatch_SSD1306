@@ -1,4 +1,5 @@
 
+#include "AlarmApp.h"
 #include "Buzzer.h"
 #include "TestingEnv.h"
 #include "GenericLoadingScreen.h"
@@ -47,12 +48,11 @@
 #include "Buzzer.h"
 #include "Config.h"
 #include "GenericLoadingScreen.h"
-
+#include "AlarmApp.h"
 #ifdef RUN_TESTS
 #include "AUnit.h"
 #include "TestingEnv.h"
 //#include "tests.h"
-
 
 
 using namespace aunit;
@@ -157,6 +157,8 @@ void setup() {
 	settingsManager.appsManager->RegisterApplication("Settings", []() {return new SettingsApp(&UserInterface, &settingsManager, &bm); }, SettingsApp_Icon::width, SettingsApp_Icon::height, SettingsApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("WiFi", []() {return new WiFiConnectApp(&UserInterface, &settingsManager); }, WiFiConnectApp_Icon::width, WiFiConnectApp_Icon::height, WiFiConnectApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("AppMarket", []() {return new AppMarketApp(&UserInterface, &settingsManager); }, AppMarketApp_Icon::width, AppMarketApp_Icon::height, AppMarketApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Alarm", []() {return new AlarmApp(&UserInterface, &settingsManager); }, AppMarketApp_Icon::width, AppMarketApp_Icon::height, AppMarketApp_Icon::icon_bits, false);
+
 	//reading from spiffs
 	bm.GetSleepTimeSeconds();
 
@@ -222,6 +224,24 @@ void setup() {
 #endif
 
 
+	//Alarm Checking
+	if (settingsManager.IsItTheTimeToTriggerAlarmOne())
+	{
+		if (settingsManager.appsManager->currentApplication == NULL)
+			settingsManager.appsManager->currentApplication->Exit();
+		settingsManager.appsManager->getBuiltInApplicationByName("Alarm")->getApplication()->Open();
+	}
+	//periodically
+	Run::Every(20*1000, []
+	{
+		if (settingsManager.IsItTheTimeToTriggerAlarmOne())
+		{
+			if (settingsManager.appsManager->currentApplication == NULL)
+				settingsManager.appsManager->currentApplication->Exit();
+			settingsManager.appsManager->getBuiltInApplicationByName("Alarm")->getApplication()->Open();
+		}
+	});
+	
 
 	
 }

@@ -31,7 +31,10 @@ class Buzzer
 	{
 		tone(pin, 500, length);
 	}
-	
+	void StopAll()
+	{
+		noTone(pin);
+	}
 };
 
 
