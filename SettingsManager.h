@@ -844,7 +844,7 @@ private:
 		 fileHandle.write(minute);
 	
 		 fileHandle.close();
-		 tk->SetAlarmOne(day, hour, minute);
+		 if (writeToRTC) tk->SetAlarmOne(day, hour, minute);
 	 }
 	void DeleteAlarmOne()
 	 {
@@ -866,7 +866,7 @@ private:
 			Serial.println((uint8_t)minute);
 			fileHandle.close();
 			auto now = tk->GetCurrentTime();
-			return now.Hour() == (uint8_t)hour && now.Minute() == (uint8_t)minute;
+			return now.hour == (uint8_t)hour && now.minute == (uint8_t)minute;
 			
 		}
 		return false;

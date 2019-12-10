@@ -102,9 +102,9 @@ public:
 				20,
 				PSTR("%02u:%02u"),
 
-				tk->now.Hour(),
+				tk->now.hour,
 
-				tk->now.Minute()
+				tk->now.minute
 				//,bm->GetBatteryLevel()
 
 

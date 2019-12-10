@@ -96,7 +96,7 @@ public:
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
 		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DISABLED);
 #else
-		ESP.deepSleep(0, RFMode::RF_DISABLED);
+		ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
 #endif
 
 	 }
@@ -132,8 +132,9 @@ public:
 #ifdef IS_RUNNING_ON_BATTERY
 	 		if (lastBatteryCheck<lowBatteryPoint)
 	 		{
-	 		
-				ESP.deepSleep(0, RFMode::RF_DISABLED);
+				UI->GetRenderer()->DisableScreen();
+				sm->extraPeripheralsManager->barometer->sleep();
+				ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
 	 		}
 #endif
 	 	}
@@ -148,7 +149,7 @@ public:
 			}
 			//If there was no activity at all in the current run
 			if (lastActivity == 0) {
-				if (currentTime > inactivitySleepDelay) { //TODO: Add a condition that makes the watch go to sleep only after the time just turned to next minute
+				if (currentTime > inactivitySleepDelay) { 
 					Sleep();
 				}
 			}

@@ -36,9 +36,9 @@ class HomeScreen: public CustomScreen
 		 snprintf_P(datestring,
 			 20,
 			 PSTR("%s, %02u.%02u"),
-			 days[tk->now.DayOfWeek()],
-			 tk->now.Day(),
-			 tk->now.Month()
+			 days[tk->now.dayOfWeek],
+			 tk->now.day,
+			 tk->now.month
 
 		 );
 
@@ -46,8 +46,8 @@ class HomeScreen: public CustomScreen
 			 20,
 			 PSTR("%02u:%02u"),
 
-			 tk->now.Hour(),
-			 tk->now.Minute()
+			 tk->now.hour,
+			 tk->now.minute
 			 
 		 );
 
@@ -67,15 +67,15 @@ class HomeScreen: public CustomScreen
 		 snprintf_P(secondBuffer,
 			 5,
 			 PSTR("%02u"),
-			 tk->now.Second()
+			 tk->now.second
 
 		 );
 		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 5 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16 +currentSecondsOffset, secondBuffer , r.GetScreenWidth(), r.Left);
-	 	if (prevSecond!=tk->now.Second())
+	 	if (prevSecond!=tk->now.second)
 	 	{
 	 		
 	 	}
-		 prevSecond = tk->now.Second();
+		 prevSecond = tk->now.second;
 #endif
 #if defined(HOME_SCREEN_TEMPERATURE_READINGS) && defined(TEMPERATURE_AVAILABLE) 
 		 const float pressure = sm->extraPeripheralsManager->barometer->getPressure();

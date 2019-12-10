@@ -102,9 +102,9 @@ public:
 		int sign = -1;
 		if (currentIndex < 0) { 
 			currentIndex = options->size() - 1;
-			sign = 1;
+			sign = 35;
 		}
-		auto aScroll = new Animation(scrollY, currentIndex * 10, 1, sign*step);
+		auto aScroll = new Animation(scrollY, currentIndex * (lineHeight+1), 1, sign*step);
 		UI->RegisterAnimation(aScroll);
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
 		UI->RegisterAnimation(a2);
@@ -136,9 +136,9 @@ public:
 		
 		Serial.printf("%d == %d", currentIndex, options->size());
 		int sign = 1;
-		if (currentIndex >= options->size()) { currentIndex = 0; sign = -1; }
+		if (currentIndex >= options->size()) { currentIndex = 0; sign = -35; }
 		
-		auto aScroll = new Animation(scrollY,currentIndex * 10, 1,sign*step);
+		auto aScroll = new Animation(scrollY,currentIndex *(lineHeight+1), 1,sign*step);
 		UI->RegisterAnimation(aScroll);
 		
 		auto a2 = new Animation(*(offsets->get(currentIndex)), maxOffset, delay, step);
@@ -165,7 +165,8 @@ public:
 		int y = offset;
 		int x = 0;
 		
-		for (int i = 0; i < this->options->size(); i++) {
+		for (int i = 0; i < min(currentIndex+3, options->size()); i++) {
+			if (i < currentIndex - 3) { y = y + lineHeight + spacing; continue;}
 			if (currentIndex != i) {
 				renderer.DrawString(x + GlobalX + *offsets->get(i), GlobalY + y -scrollY, options->get(i));
 				//renderer.DrawString(5, 50, options->get(i));

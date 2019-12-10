@@ -22,7 +22,7 @@
 #include "GenericMenuScreen.h"
 #include "GenericTextScreen.h"
 #include "SSD1306Fonts.h"
-#include <RtcDS3231.h>
+#include <DS3231.h>
 #include "BatteryManager.h"
 class AlarmApp:public BuiltInApplication
 {

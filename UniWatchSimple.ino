@@ -1,4 +1,5 @@
 
+#include "StopwatchApp.h"
 #include "AlarmApp.h"
 #include "Buzzer.h"
 #include "TestingEnv.h"
@@ -43,7 +44,7 @@
 #include "UserInterface.h"
 
 #include <ESP8266WiFi.h>
-
+#include "StopwatchApp.h"
 #include "FS.h"
 #include "Buzzer.h"
 #include "Config.h"
@@ -134,6 +135,7 @@ void setup() {
 	bm.sm = &settingsManager;
 #ifndef USE_TX_RX_AS_GPIO
 	Serial.begin(115200);
+	Serial.println("init...");
 #endif // !USE_TX_RX_AS_GPIO
 #ifdef APPEND_DEFAULT_WIFI
 	if (settingsManager.wifiManager->IsNetworkSaved(settingsManager.SPIFFS, DEFAULT_WIFI_SSID))
@@ -150,6 +152,7 @@ void setup() {
 
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); }, FlappyBirdApp_Icon::width, FlappyBirdApp_Icon::height, FlappyBirdApp_Icon::icon_bits,false);
 	settingsManager.appsManager->RegisterApplication("Games", []() {return new GamesApp(&UserInterface, &settingsManager); },GamesApp_Icon::width,GamesApp_Icon::height,GamesApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Stopwatch", []() {return new StopwatchApp(&UserInterface, &settingsManager); }, StopwatchApp_Icon::width,StopwatchApp_Icon::height, StopwatchApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("IFTTT", []() {return new IFTTApp(&UserInterface, &settingsManager); }, IFTTApp_icon::width, IFTTApp_icon::height, IFTTApp_icon::iftt_bits);
 	settingsManager.appsManager->RegisterApplication("Flashlight", []() {return new FlashlightApp(&UserInterface, &settingsManager); }, FlashlightApp_icon::width, FlashlightApp_icon::height, FlashlightApp_icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Set time", []() {return new TimeConfiguratorApp(&UserInterface, &settingsManager, &tk); }, TimeConfiguratorApp_Icon::width, TimeConfiguratorApp_Icon::height, TimeConfiguratorApp_Icon::icon_bits);
@@ -227,20 +230,11 @@ void setup() {
 	//Alarm Checking
 	if (settingsManager.IsItTheTimeToTriggerAlarmOne())
 	{
-		if (settingsManager.appsManager->currentApplication == NULL)
+		if (settingsManager.appsManager->currentApplication != NULL)
 			settingsManager.appsManager->currentApplication->Exit();
 		settingsManager.appsManager->getBuiltInApplicationByName("Alarm")->getApplication()->Open();
 	}
-	//periodically
-	Run::Every(20*1000, []
-	{
-		if (settingsManager.IsItTheTimeToTriggerAlarmOne())
-		{
-			if (settingsManager.appsManager->currentApplication == NULL)
-				settingsManager.appsManager->currentApplication->Exit();
-			settingsManager.appsManager->getBuiltInApplicationByName("Alarm")->getApplication()->Open();
-		}
-	});
+
 	
 
 	

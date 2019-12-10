@@ -22,7 +22,7 @@
 #include "GenericMenuScreen.h"
 #include "GenericTextScreen.h"
 #include "SSD1306Fonts.h"
-#include <RtcDS3231.h>
+#include <DS3231.h>
 #include "BatteryManager.h"
 namespace SettingsApp_Icon{
 	const int width = 36;
@@ -112,10 +112,10 @@ private:
 		{
 			this->app = app;
 			auto hour = app->settingsManager->tk->GetCurrentTime();
-			localHour = hour.Hour();
-			localMinute = hour.Minute();
+			localHour = hour.hour;
+			localMinute = hour.minute;
 			this->parent = parent;
-			blinkTask = Run::Every(200,[this]()
+			blinkTask = Run::Every(90,[this]()
 			{
 				shouldBlink = !shouldBlink;
 				this->parent->DrawCurrentScreen(*this->app->UI->GetRenderer());
@@ -135,10 +135,10 @@ private:
 			r.DrawString(GlobalX + r.GetHorizontalCenter() + 4, r.GetVerticalCenter()-10, minuteBuff);
 
 			if (shouldBlink && currentObject==0) r.FillRectangle(GlobalX + r.GetHorizontalCenter() - 45, r.GetVerticalCenter() - 10, 26, 35,true);
-			if (shouldBlink && currentObject==1) r.FillRectangle(GlobalX + r.GetHorizontalCenter() +4, r.GetVerticalCenter() - 10, 26, 35, true);
+			if (shouldBlink && currentObject==1) r.FillRectangle(GlobalX + r.GetHorizontalCenter() +4, r.GetVerticalCenter() - 10, 26,60, true);
 			r.SetFont((uint8_t *)Orbitron_Medium_10);
-			r.DrawRectangle(GlobalX + r.GetHorizontalCenter() - 45/2, r.GetVerticalCenter() + 17, 13, 45);
-			r.DrawAlignedString(GlobalX + r.GetHorizontalCenter() , r.GetVerticalCenter()+20, "ok",45, r.Center);
+			//r.DrawRectangle(GlobalX + r.GetHorizontalCenter() - 45/2, r.GetVerticalCenter() + 17, 13, 45);
+			//r.DrawAlignedString(GlobalX + r.GetHorizontalCenter() , r.GetVerticalCenter()+20, "ok",45, r.Center);
 			
 		}
 		int GetSetHour()
@@ -186,17 +186,20 @@ private:
 		}
 		void Ok(Renderer& renderer) override
 		{
-			if (currentObject == 0) currentObject = 1;
-			if (currentObject == 1) currentObject = 2;
-			if (currentObject == 2)
+			Serial.println("ok in ...");
+			if (currentObject == 1)
 			{
 				auto now = this->app->settingsManager->tk->GetCurrentTime();
-				this->app->settingsManager->tk->SetAlarmOne(now.Day(), localHour, localMinute, DS3231AlarmOneControl_HoursMinutesSecondsMatch);
+				this->app->settingsManager->SaveAlarmOne(now.day, localHour, localMinute, true);
 				//TODO:
 				//Zapisywanie tego alarmu w pliku i wylaczanie czulosci na reset na 10 sekund przed nim jezeli zegarek chodzi! Nie da sie
 				//Jezeli nie to przy kazdym resecie sprawdzanie czy jestesmy w minucie z alarmem
 				Back(renderer);
 			}
+			//if (currentObject == 1) currentObject = 2;
+			if (currentObject == 0) currentObject = 1;
+			
+			
 		}
 		void DrawActiveIndicator(Renderer& renderer) override
 		{
