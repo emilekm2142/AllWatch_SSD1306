@@ -115,10 +115,10 @@ private:
 			localHour = hour.hour;
 			localMinute = hour.minute;
 			this->parent = parent;
-			blinkTask = Run::Every(90,[this]()
+			blinkTask = Run::Every(300,[this]()
 			{
 				shouldBlink = !shouldBlink;
-				this->parent->DrawCurrentScreen(*this->app->UI->GetRenderer());
+				this->app->UI->RedrawAll();
 			});
 			
 		}
@@ -131,10 +131,10 @@ private:
 			char minuteBuff[10];
 			snprintf_P(minuteBuff, 10, strtemplate, localMinute);
 
-			r.DrawString(GlobalX + r.GetHorizontalCenter() - 45, r.GetVerticalCenter()-10, hourBuff);
-			r.DrawString(GlobalX + r.GetHorizontalCenter() + 4, r.GetVerticalCenter()-10, minuteBuff);
+			r.DrawString(GlobalX + r.GetHorizontalCenter() - 55, r.GetVerticalCenter()-10, hourBuff);
+			r.DrawString(GlobalX + r.GetHorizontalCenter() + 7, r.GetVerticalCenter()-10, minuteBuff);
 
-			if (shouldBlink && currentObject==0) r.FillRectangle(GlobalX + r.GetHorizontalCenter() - 45, r.GetVerticalCenter() - 10, 26, 35,true);
+			if (shouldBlink && currentObject==0) r.FillRectangle(0, r.GetVerticalCenter() - 10, 26, 59,true);
 			if (shouldBlink && currentObject==1) r.FillRectangle(GlobalX + r.GetHorizontalCenter() +4, r.GetVerticalCenter() - 10, 26,60, true);
 			r.SetFont((uint8_t *)Orbitron_Medium_10);
 			//r.DrawRectangle(GlobalX + r.GetHorizontalCenter() - 45/2, r.GetVerticalCenter() + 17, 13, 45);
@@ -346,7 +346,7 @@ private:
 			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			if (currentScreen==this)
+			if (currentScreen== (Layout*)menu)
 				this->app->Exit();
 			else
 			{

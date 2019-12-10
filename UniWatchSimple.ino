@@ -112,8 +112,9 @@ InputHandler inputHandler = InputHandler(
 
 
 BME280Barometer barometerBME280 = BME280Barometer();
-ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &barometerBME280, &buzzer);
 auto tk = TimeKepper(&UserInterface);
+
+ExtraPeripheralsManager extraPeripheralsManager = ExtraPeripheralsManager(&barometerBME280, &tk, &buzzer);
 
 
 

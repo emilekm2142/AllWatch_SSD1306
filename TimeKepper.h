@@ -12,8 +12,9 @@
 #include <Wire.h>
 #include "UserInterface.h"
 #include  "Config.h"
+#include "Thermometer.h"
 //#include "DependenciesHolder.h"
-class TimeKepper//:public Dependency
+class TimeKepper: public Thermometer //:public Dependency
 {
 private:
 
@@ -46,6 +47,11 @@ private:
 	void Sleep()
 	 {
 	
+	 }
+	float getTemperatureC() override
+	 {
+		return Rtc->readTemperature()-2.0f;
+	 	
 	 }
 	void DeleteAlarmOne()
 	 {
