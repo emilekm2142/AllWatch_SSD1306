@@ -17,15 +17,17 @@ class Buzzer
  public:
 	Buzzer(int pin)
 	{
+		pinMode(pin, OUTPUT);
 		this->pin = pin;
+		StopAll();
 	}
 	void PlayShort()
 	{
-		tone(pin, 2500, 100);
+		tone(pin, 2500, 20);
 	}
 	void PlayLong()
 	{
-		tone(pin, 2000, 500);
+		tone(pin, 2000, 100);
 	}
 	void Play(unsigned long length, int f=30)
 	{

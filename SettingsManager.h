@@ -575,8 +575,20 @@ private:
 		 extraPeripheralsManager = e;
 		 this->SPIFFS = SPIFFS;
 		 this->tk = tk;
-		// SPIFFS->format();
-		 SPIFFS->begin();
+		
+		 if (!SPIFFS->begin())
+		 {
+			 SPIFFS->format();
+			 if (!SPIFFS->begin())
+			 {
+				 Serial.println("SPIFFS nie bylo formatowane");
+				while(1)
+				{
+					Serial.println("Blad SPIFFS...");
+				}
+			 }
+		 }
+	 	
 		
 		 w = WiFi;
 		//WiFi->mode(WIFI_OFF);
