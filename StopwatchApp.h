@@ -93,15 +93,19 @@ private:
 		}
 		void Up(Renderer& renderer) override
 		{
-			if (displayScores) mid->Up(renderer);
-			else displayScores = true;
-			DisplayScreen((Layout*)mid);
+			if (displayScores) { if (mid->options->size() > 0) mid->Down(renderer); else displayScores = false; }
+			else {
+				displayScores = true;
+				DisplayScreen((Layout*)mid);
+			}
 		}
 		void Down(Renderer& renderer) override
 		{
-			if (displayScores) mid->Down(renderer);
-			else displayScores = true;
-			DisplayScreen((Layout*)mid);
+			if (displayScores) { if (mid->options->size() > 0) mid->Down(renderer); else displayScores = false; }
+			else {
+				displayScores = true;
+				DisplayScreen((Layout*)mid);
+			}
 		}
 		void Back(Renderer& renderer) override
 		{

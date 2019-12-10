@@ -93,6 +93,8 @@ public:
 		return renderer.GetScreenWidth();
 	}
 	virtual void Up(Renderer& renderer) override {
+		if (options->size() == 0) return;
+		
 		if (*(offsets->get(currentIndex)) != 0) {
 			auto a = new Animation(*(offsets->get(currentIndex)), 0, delay, -step);
 			UI->RegisterAnimation(a);
@@ -125,7 +127,7 @@ public:
 		}
 	}
 	virtual void Down(Renderer& renderer) override {
-		Serial.println("downnnn");
+		if (options->size() == 0) return;
 		if (*(offsets->get(currentIndex)) != 0) {
 			auto a = new Animation(*(offsets->get(currentIndex)), 0, delay, -step);
 			UI->RegisterAnimation(a);
