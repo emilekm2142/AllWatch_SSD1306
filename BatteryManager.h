@@ -40,11 +40,11 @@ public:
 		 this->UI = UI;
 		 lastBatteryCheckTime = millis();
 		 lastBatteryCheck = __ReadBatteryLevel();
-#ifdef IS_RUNNING_ON_BATTERY
+#ifdef SHUTDOWN_ON_LOW_VOLTAGE
 	 	if (lastBatteryCheck < lowBatteryPoint)
 		 {
 
-			 ESP.deepSleep(0, RFMode::RF_DISABLED);
+			// ESP.deepSleep(0, RFMode::RF_DISABLED);
 		 }
 #endif
 	}
@@ -129,12 +129,12 @@ public:
 	 	if (millis() - lastBatteryCheckTime > 1000*45)
 	 	{
 			lastBatteryCheck = __ReadBatteryLevel();
-#ifdef IS_RUNNING_ON_BATTERY
+#ifdef SHUTDOWN_ON_LOW_VOLTAGE
 	 		if (lastBatteryCheck<lowBatteryPoint)
 	 		{
 				UI->GetRenderer()->DisableScreen();
 				sm->extraPeripheralsManager->barometer->sleep();
-				ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
+			//	ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
 	 		}
 #endif
 	 	}
