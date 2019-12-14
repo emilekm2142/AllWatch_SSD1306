@@ -8,7 +8,7 @@
 #else
 	#include "WProgram.h"
 #endif
-#include <DS3231.h>
+#include <RtcDS3231.h>
 #include <Wire.h>
 #include "UserInterface.h"
 #include  "Config.h"
@@ -20,24 +20,21 @@ private:
 
  protected:
 	 long lastCheck=0;
-	 DS3231* Rtc;
+	 RtcDS3231<TwoWire>* Rtc;
 	
  public:
 	// DependenciesHolder* dependencies;
-	 RTCDateTime now;
+	 RtcDateTime now;
 	 UserInterfaceClass* UI;
 
 	 TimeKepper(UserInterfaceClass* _UI) {
 		this->UI = _UI;
-		Wire.begin(0, 2);
-		Rtc = new DS3231();
-		Rtc->begin();
-		Rtc->clearAlarm1();
-		Rtc->clearAlarm2();
-		Rtc->armAlarm1(false);
-		Rtc->armAlarm2(false);
-	 	Rtc->clearAlarm1();
-		Rtc->clearAlarm2();
+		
+		Rtc = new RtcDS3231<TwoWire>(Wire);
+		Rtc->Begin();
+		Rtc->SetIsRunning(true);
+		Rtc->Enable32kHzPin(false);
+		Rtc->SetSquareWavePin(DS3231SquareWavePin_ModeAlarmBoth);
 	 	
 
 
@@ -46,8 +43,8 @@ private:
 
 	 	
 		//Rtc->setDateTime(__DATE__, __TIME__);
-		now = Rtc->getDateTime();
-		Serial.printf("Time: %d", now.minute);
+		now = Rtc->GetDateTime();
+		//Serial.printf("Time: %d", now.minute);
 	 }
 	void Sleep()
 	 {
@@ -55,17 +52,18 @@ private:
 	 }
 	float getTemperatureC() override
 	 {
-		return Rtc->readTemperature()-2.0f;
+		return 0.0f;
 	 	
 	 }
 	void DeleteAlarmOne()
 	 {
-	 		Rtc->clearAlarm1();
+		const DS3231AlarmOne alarmOne = DS3231AlarmOne(50, 25, 61, 61, DS3231AlarmOneControl_MinutesSecondsMatch);
+		Rtc->SetAlarmOne(alarmOne);
 	 }
 	void SetAlarmOne(int day, int hour, int minute, int mode=0)
 	 {
-		Rtc->setAlarm1(day,hour,minute,0, DS3231_MATCH_H_M_S);
-
+		const DS3231AlarmOne alarmOne = DS3231AlarmOne(day, hour, minute, 00, DS3231AlarmOneControl_HoursMinutesSecondsMatch);
+		Rtc->SetAlarmOne(alarmOne);
 
 
 	 	
@@ -73,21 +71,25 @@ private:
 	
 	void SetAlarmTwo(int day, int hour, int minute, int mode=0)
 	 {
-		Rtc->setAlarm2(day, hour, minute,DS3231_alarm2_t::DS3231_MATCH_H_M);
+		const DS3231AlarmTwo alarmTwo = DS3231AlarmTwo(day, hour, minute, DS3231AlarmTwoControl_HoursMinutesMatch);
+	
+		Rtc->SetAlarmTwo(alarmTwo);
 	 }
-	 RTCDateTime GetCurrentTime()
+	 RtcDateTime GetCurrentTime()
 	 {
-		 return Rtc->getDateTime();
+		 return this->Rtc->GetDateTime();
 	 }
 	 void SetDateTime(int year, int month, int day, int hour, int minute, int second) {
 		 Serial.printf("setting datetime: %d/%d/%d, %d:%d:%d \n", year, month, day, hour, minute, second);
-		 Rtc->setDateTime(year, month, day, hour, minute, second);
+		 RtcDateTime n = RtcDateTime(year, month, day, hour, minute, second);
+		// Rtc->setDateTime(year, month, day, hour, minute, second);
+		 Rtc->SetDateTime(n);
 	 }
 	 void OnLoop() {
 	 	//TODO: usunac to z tego miejsca
 		 if (1000  <= millis() - lastCheck) {
 			// Serial.println("Getting new time");
-			 now = Rtc->getDateTime();
+			 now = Rtc->GetDateTime();
 			 lastCheck = millis();
 			 this->UI->RedrawAll();
 		 }

@@ -22,7 +22,7 @@
 #include "GenericMenuScreen.h"
 #include "GenericTextScreen.h"
 #include "SSD1306Fonts.h"
-#include <DS3231.h>
+#include <RtcDS3231.h>
 #include "BatteryManager.h"
 namespace SettingsApp_Icon{
 	const int width = 36;
@@ -112,8 +112,8 @@ private:
 		{
 			this->app = app;
 			auto hour = app->settingsManager->tk->GetCurrentTime();
-			localHour = hour.hour;
-			localMinute = hour.minute;
+			localHour = hour.Hour();
+			localMinute = hour.Minute();
 			this->parent = parent;
 			blinkTask = Run::Every(300,[this]()
 			{
@@ -190,7 +190,7 @@ private:
 			if (currentObject == 1)
 			{
 				auto now = this->app->settingsManager->tk->GetCurrentTime();
-				this->app->settingsManager->SaveAlarmOne(now.day, localHour, localMinute, true);
+				this->app->settingsManager->SaveAlarmOne(now.Day(), localHour, localMinute, true);
 				//TODO:
 				//Zapisywanie tego alarmu w pliku i wylaczanie czulosci na reset na 10 sekund przed nim jezeli zegarek chodzi! Nie da sie
 				//Jezeli nie to przy kazdym resecie sprawdzanie czy jestesmy w minucie z alarmem

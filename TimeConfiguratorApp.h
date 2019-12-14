@@ -11,7 +11,7 @@
 #include "BuiltInApplication.h"
 #include "Renderer.h"
 #include "CustomScreen.h"
-#include <DS3231.h>
+#include <RtcDS3231.h>
 
 #include "UserInterface.h"
 #include "TimeKepper.h"
@@ -257,10 +257,10 @@ public:
 		this->tk = tk;
 		auto n = tk->GetCurrentTime();
 
-		l->localDay =  n.day;
-		l->localMonth =  n.month;
-		l->localHour =  n.hour;
-		l->localMinute = n.minute;
+		l->localDay =  n.Day();
+		l->localMonth =  n.Month();
+		l->localHour =  n.Hour();
+		l->localMinute = n.Minute();
 		Serial.println("after constructor");
 	}
 	void OnOpen() override {
