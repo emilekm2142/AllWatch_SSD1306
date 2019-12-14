@@ -32,15 +32,20 @@ private:
 		Wire.begin(0, 2);
 		Rtc = new DS3231();
 		Rtc->begin();
-		// Wylaczamy wyjscie  32kHz
-		Rtc->enable32kHz(false);
+		Rtc->clearAlarm1();
+		Rtc->clearAlarm2();
+		Rtc->armAlarm1(false);
+		Rtc->armAlarm2(false);
+	 	Rtc->clearAlarm1();
+		Rtc->clearAlarm2();
+	 	
 
-		// Ustawiamy wyjscie SQW na sygnal 1Hz
-		Rtc->setOutput(DS3231_1HZ);
 
-		// Wlaczamy wyjsscie SQW
-		Rtc->enableOutput(true);
-		Rtc->setDateTime(__DATE__, __TIME__);
+
+
+
+	 	
+		//Rtc->setDateTime(__DATE__, __TIME__);
 		now = Rtc->getDateTime();
 		Serial.printf("Time: %d", now.minute);
 	 }

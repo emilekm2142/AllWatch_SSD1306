@@ -179,7 +179,7 @@ void setup() {
 	}
 	
 	
-	pinMode(A0, INPUT);
+	
 
 	Serial.println("start");
 	//Serial.println("UPDATED!!");

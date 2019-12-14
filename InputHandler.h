@@ -61,7 +61,7 @@ public:
 		pinMode(downPin, INPUT_PULLUP);
 		pinMode(upPin, INPUT_PULLUP);
 		
-		pinMode(5, INPUT_PULLUP);
+	
 		pinMode(0, INPUT_PULLUP);
 		pinMode(2, INPUT_PULLUP);
 

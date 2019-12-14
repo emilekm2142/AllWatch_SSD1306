@@ -20,7 +20,7 @@ class BatteryManager
 #else
 	 bool disableAll = true;
 #endif
-	 const int highBatteryPoint = 4200;
+	 const int highBatteryPoint = 4400;
 	 const int lowBatteryPoint = 3500;
 	 const int deepSleepTime = 30*1000;
 	 const int chargingPoint = 2965;
@@ -96,7 +96,7 @@ public:
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
 		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DISABLED);
 #else
-		ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
+		ESP.deepSleep(ESP.deepSleepMax(), RFMode::RF_DISABLED);
 #endif
 
 	 }
@@ -139,6 +139,7 @@ public:
 #endif
 	 	}
 		if (disableAll) return;
+		//Serial.println(ESP.getVcc());
 	 	//sleep only if there is no application turned on
 	 	if (sm->appsManager->currentApplication == nullptr && sm->appsManager->currentApplication == NULL)
 	 	{
