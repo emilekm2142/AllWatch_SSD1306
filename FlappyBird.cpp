@@ -186,14 +186,14 @@ bool FlappyBird::isHitPipe() {
 }
 
 void FlappyBird::jump() {
-	Serial.println("jumping");
   velocity = initialVelocity;
   isDropping = false;
 }
 
 void FlappyBird::playSound(int index) {
+	espert->buzzer->StopAll();
   if (!isAutoPlay && isSoundInterruptEnabled) {
-    isSoundInterruptEnabled = false;
+   // isSoundInterruptEnabled = false;
     nextSound = SOUND_NONE;
     nextSoundDelay = 0.0f;
     int frequency = 0;
@@ -226,7 +226,7 @@ void FlappyBird::playSound(int index) {
         soundDuration = 0.0f;
         break;
     }
-	espert->buzzer->Play((unsigned long)soundDuration, frequency);
+	espert->buzzer->ForcePlay((unsigned long)soundDuration, frequency);
    
   }
 }
@@ -425,7 +425,7 @@ void FlappyBird::setScorePanelImages(const uint8_t* digitImage[3], int value) {
 void FlappyBird::update() {
 	
 	updateGameTime();
-
+	ESP.wdtFeed();
   switch (gameMode) {
     case GAME_MODE_TITLE:
       updateBirdAnimation(false);

@@ -49,6 +49,46 @@ namespace SettingsApp_Icon{
 class SettingsApp:public BuiltInApplication
 {
 private:
+	class BrightnessLayout:public CustomScreen
+	{
+	public:
+		SettingsApp* app;
+		CustomScreen* parent;
+		int b = 100;
+		BrightnessLayout(SettingsApp* app, CustomScreen* parent)
+		{
+			this->app = app; this->parent = parent;
+			b = app->settingsManager->GetBrightness();
+			Serial.println("End...");
+		}
+		void Draw(Renderer &r) override
+		{
+			r.DrawRectangle(10, r.GetVerticalCenter(), 10, r.GetScreenWidth()-20);
+			r.FillRectangle(12, r.GetVerticalCenter()+2, 6,((float)b/100.0f) *(float)(r.GetScreenWidth() - 24));
+		}
+		void Up(Renderer& renderer) override
+		{
+			b += 5;
+			b = min(b, 100);
+			app->settingsManager->SetBrightness(b, renderer);
+			app->UI->RedrawAll();
+		}
+		void Down(Renderer& renderer) override
+		{
+			b -= 5;
+			b = max(b, 25);
+			app->settingsManager->SetBrightness(b, renderer);
+			app->UI->RedrawAll();
+		}
+		void Back(Renderer& renderer) override
+		{
+			this->parent->ReturnToPreviousScreen();
+		}
+		void Ok(Renderer& renderer) override
+		{
+			this->parent->ReturnToPreviousScreen();
+		}
+	};
 	class SleepTimeLayout :public CustomScreen
 	{
 	public:
@@ -216,7 +256,7 @@ private:
 
 		AlarmLayout* alarmScreen;
 		SleepTimeLayout* sleepTimeScreen;
-
+		BrightnessLayout* brighnessLayout;
 		
 		SettingsLayout(SettingsApp* app) {
 		
@@ -261,6 +301,13 @@ private:
 			menu->AddOption((char*)F("Delete alarm"), [this]() {
 
 				this->app->settingsManager->DeleteAlarmOne();
+
+
+			});
+			menu->AddOption((char*)F("Set screen brightness"), [this]() {
+
+				brighnessLayout= new BrightnessLayout(this->app, (CustomScreen*)this);
+				DisplayScreen(brighnessLayout);
 
 
 			});

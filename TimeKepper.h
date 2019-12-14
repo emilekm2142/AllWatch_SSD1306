@@ -52,7 +52,7 @@ private:
 	 }
 	float getTemperatureC() override
 	 {
-		return 0.0f;
+		return Rtc->GetTemperature().AsFloatDegC()-2.0f;
 	 	
 	 }
 	void DeleteAlarmOne()

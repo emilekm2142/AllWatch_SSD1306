@@ -33,6 +33,8 @@ class Renderer
 	virtual void SetFont(uint8_t * f) = 0;
 	virtual void DrawAlignedString(int x, int y, const char* string,int width, int side) = 0;
 	virtual void __SetColor(int color) = 0;
+	virtual int GetBrightness() = 0;
+	virtual void SetBrightness(int) = 0;
 };
 
 

@@ -44,7 +44,7 @@ private:
 		 d->flipScreenVertically();
 		 d->setContrast(100);
 		 d->setBrightness(100);
-
+		 
 		 d->drawString(GetScreenWidth() / 2, GetScreenHeight() / 2, (const char*)F("Botting..."));
 		 d->display();
 	
@@ -65,6 +65,16 @@ private:
 		d->fillRect(x, y, width, height);
 		if (backgroundColor) d->setColor(OLEDDISPLAY_COLOR::WHITE);
 	};
+	uint8_t brightness;
+	virtual int GetBrightness() override
+	{
+		return brightness;
+	}
+	virtual void SetBrightness(int b) override
+	{
+		brightness = b;
+		d->setBrightness(b);
+	}
 	virtual int GetVerticalCenter() override {
 		return GetScreenHeight() / 2;
 	}

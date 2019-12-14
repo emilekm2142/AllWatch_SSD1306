@@ -56,7 +56,7 @@ class HomeScreen: public CustomScreen
 		 r.SetFont((uint8_t *) Orbitron_Medium_10);
 		 r.DrawAlignedString(0, 0, datestring, r.GetScreenWidth(), r.Left);
 		 r.SetFont((uint8_t *)Orbitron_Medium_30);
-		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2 -5, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
+		 r.DrawAlignedString(GlobalX+r.GetScreenWidth()/2 -7, GlobalY+13+offset, timestring, r.GetScreenWidth(), r.Center);
 		 const int bigTextWidth = r.GetStringWidth(timestring);
 		 r.SetFont((uint8_t *)Orbitron_Medium_10);
 		
@@ -70,7 +70,7 @@ class HomeScreen: public CustomScreen
 			 tk->now.Second()
 
 		 );
-		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 5 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16 +currentSecondsOffset, secondBuffer , r.GetScreenWidth(), r.Left);
+		 r.DrawAlignedString(GlobalX + r.GetScreenWidth() / 2 - 7 + bigTextWidth/2 + 1, GlobalY + 13 + offset + 16 +currentSecondsOffset, secondBuffer , r.GetScreenWidth(), r.Left);
 	 	if (prevSecond!=tk->now.Second())
 	 	{
 	 		

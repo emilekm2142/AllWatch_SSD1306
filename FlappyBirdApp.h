@@ -63,14 +63,18 @@ private:
 	 };
 
  public:
+	 bool wasBuzzerEnabled;
 	 FlappyBirdLayout* l = new FlappyBirdLayout(this);
 	 flappyBird::FlappyBird* game;
 	 ESPert* espertLayer;
 	 FlappyBirdApp(UserInterfaceClass* UI, SettingsManager* sm) : BuiltInApplication((Layout*)this->l, UI, sm) {
+		 ESP.wdtDisable();
 		 Serial.println("opening flappy bird!");
 		 UI->DisableDrawing();
 		 this->layout = l;
 		 espertLayer =new ESPert(UserInterface.GetRenderer(), sm->extraPeripheralsManager->buzzer);
+		 wasBuzzerEnabled = espertLayer->buzzer->IsEnabled();
+		 espertLayer->buzzer->Disable();
 		 this->name = (char*)F("Flappy Bird");
 		 this->game = new flappyBird::FlappyBird();
 
@@ -82,7 +86,9 @@ private:
 	}
 	 void OnExit() override {
 		 delete game;
+		 if (wasBuzzerEnabled) espertLayer->buzzer->Enable();
 		 delete espertLayer;
+		 ESP.wdtEnable(1000);
 		 UI->EnableDrawing();
 	 }
 	 void Loop(Renderer& r) override {

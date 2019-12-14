@@ -858,6 +858,28 @@ private:
 		 fileHandle.close();
 		 if (writeToRTC) tk->SetAlarmOne(day, hour, minute);
 	 }
+	 void SetBrightness(uint8_t value, Renderer& r)
+	 {
+		 appsManager->DeleteConfigFile("Brightness");
+		 auto fileHandle = this->SPIFFS->open("/Brightness", "w+");
+		 fileHandle.write(value);
+
+		 fileHandle.close();
+		 r.SetBrightness(value);
+	 }
+	int GetBrightness()
+	 {
+		 if (this->SPIFFS->exists("/Brightness")) {
+			 auto fileHandle = this->SPIFFS->open("/Brightness", "r");
+			 uint8_t value;
+			 fileHandle.read(&value, sizeof(uint8_t));
+			 fileHandle.close();
+			 return value;
+			
+
+		 }
+		 return 100;
+	 }
 	void DeleteAlarmOne()
 	 {
 		

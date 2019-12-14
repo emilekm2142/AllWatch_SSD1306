@@ -165,7 +165,7 @@ void setup() {
 
 	//reading from spiffs
 	bm.GetSleepTimeSeconds();
-
+	
 	
 	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
 		settingsManager.appsManager->AppendKeyToConfig("IFTTT", "key", "type in the api key");
@@ -179,12 +179,9 @@ void setup() {
 	}
 	
 	
-	
 
-	Serial.println("start");
-	//Serial.println("UPDATED!!");
 
-	delay(1000);
+
 
 
 	r.init();
@@ -206,7 +203,7 @@ void setup() {
 	UserInterface.AddSecondaryLayout(&topBar);
 	UserInterface.RedrawAll();
 	imageMenuScreen.setCurrentScroll();
-
+	settingsManager.SetBrightness(settingsManager.GetBrightness(), r);
 	
 
 #ifdef START_WITH_OTA_PORT

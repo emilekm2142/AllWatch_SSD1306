@@ -13,9 +13,21 @@ class Buzzer
 {
  protected:
 	 int pin;
-	 bool enabled = false;
+	 bool enabled = true;
 
  public:
+	void Disable()
+	{
+		enabled = false;
+	}
+	void Enable()
+	{
+		enabled = true;
+	}
+	bool IsEnabled()
+	{
+		return enabled;
+	}
 	Buzzer(int pin)
 	{
 		if (!enabled) return;
@@ -26,16 +38,21 @@ class Buzzer
 	void PlayShort()
 	{
 		if (!enabled) return;
-		tone(pin, 2500, 20);
+		tone(pin, 2500, 10);
 	}
 	void PlayLong()
 	{
 		if (!enabled) return;
-		tone(pin, 2000, 100);
+		tone(pin, 2000, 50);
 	}
 	void Play(unsigned long length, int f=30)
 	{
 		if (!enabled) return;
+		tone(pin, f, length);
+	}
+	void ForcePlay(unsigned long length, int f = 30)
+	{
+		
 		tone(pin, f, length);
 	}
 	void StopAll()
