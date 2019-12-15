@@ -66,7 +66,7 @@ public:
 		renderer.FillRectangle(leftOffset+batteryMiddleWidth+batterySidesWidth, topOffset + 1, batteryHeight-2, batterySidesWidth);
 		//fill
 		renderer.DrawRectangle(leftOffset+batterySidesWidth, topOffset, batteryHeight, batteryMiddleWidth);
-		renderer.FillRectangle(leftOffset+batterySidesWidth+2, topOffset+2, batteryHeight-4, batBarWidth-2);
+		renderer.FillRectangle(leftOffset+batterySidesWidth+2, topOffset+2, batteryHeight-4, batBarWidth-4);
 		char b[4];
 		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
@@ -110,7 +110,7 @@ public:
 
 			);
 
-			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth > 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
+			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth - 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
 		}
 		renderer.DrawRectangle(0, 12, 1, renderer.GetScreenWidth());
 			if (sm->WiFiConnected() && drawHour ) renderer.DrawBitmap(0, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);

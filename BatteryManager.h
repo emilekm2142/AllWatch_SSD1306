@@ -11,6 +11,10 @@
 #include "FS.h"
 #include "SettingsManager.h"
 #include "Config.h"
+extern "C" {
+#include "user_interface.h"
+}
+
 
 class BatteryManager
 {
@@ -55,7 +59,13 @@ public:
 	bool IsGoingToSleep() {
 		 return isGoingToSleep;
 	 }
-
+	void light_sleep() {
+		wifi_fpm_set_sleep_type(LIGHT_SLEEP_T);
+		wifi_fpm_open();
+		wifi_enable_gpio_wakeup(3, GPIO_PIN_INTR_LOLEVEL);
+		wifi_fpm_do_sleep(0xFFFFFFF);
+		wifi_fpm_close();
+	}
 	 void SetAlwaysWakeMode(bool v) {
 		 alwaysWakeMode = v;
 		 if (!v) RegisterActivity();
@@ -96,7 +106,7 @@ public:
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
 		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DISABLED);
 #else
-		ESP.deepSleep(ESP.deepSleepMax(), RFMode::RF_DISABLED);
+		ESP.deepSleep(0, RFMode::RF_DISABLED);
 #endif
 
 	 }

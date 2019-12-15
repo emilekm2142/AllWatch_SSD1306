@@ -291,7 +291,8 @@ private:
 
 
 			});
-			menu->AddOption((char*)F("Set alarm"), [this]() {
+			//does not work currently due to bad wiring. Disabling it to the user.
+		/*	menu->AddOption((char*)F("Set alarm"), [this]() {
 
 				alarmScreen = new AlarmLayout(this->app, (CustomScreen*)this);
 				DisplayScreen(alarmScreen);
@@ -303,7 +304,7 @@ private:
 				this->app->settingsManager->DeleteAlarmOne();
 
 
-			});
+			});*/
 			menu->AddOption((char*)F("Set screen brightness"), [this]() {
 
 				brighnessLayout= new BrightnessLayout(this->app, (CustomScreen*)this);

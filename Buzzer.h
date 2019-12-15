@@ -13,7 +13,7 @@ class Buzzer
 {
  protected:
 	 int pin;
-	 bool enabled = true;
+	 bool enabled = false;
 
  public:
 	void Disable()

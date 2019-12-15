@@ -150,7 +150,7 @@ private:
 	 
 	 void DisplayToday() {
 		 char buffer[100];
-		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/?city=%s", config.city);
+		 sprintf(buffer, "http://serwer1969419.home.pl/watchservice/weather.php?city=%s", config.city);
 		 auto a = settingsManager->http->MakeGetRequest(buffer);
 	 	 if (a==nullptr)
 	 	 {
@@ -177,7 +177,7 @@ private:
 	 void DisplayTommorow() {
 		 //TODO: consolidate both functions
 		 char buffer[100];
-		 sprintf(buffer, "http://weather-watch-service.herokuapp.com/tommorow?city=%s", config.city);
+		 sprintf(buffer, "http://serwer1969419.home.pl/watchservice/weather.php?city=%s", config.city);
 		 auto a = settingsManager->http->MakeGetRequest(buffer);
 		 auto s = a->getStream();
 		 s.readBytesUntil('\n', state, 15);

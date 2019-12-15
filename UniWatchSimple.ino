@@ -69,7 +69,7 @@ extern "C" {
 void light_sleep() {
 	wifi_fpm_set_sleep_type(LIGHT_SLEEP_T);
 	wifi_fpm_open();
-	wifi_enable_gpio_wakeup(12, GPIO_PIN_INTR_LOLEVEL);
+	wifi_enable_gpio_wakeup(3, GPIO_PIN_INTR_LOLEVEL);
 	wifi_fpm_do_sleep(0xFFFFFFF);
 	wifi_fpm_close();
 }
@@ -204,6 +204,7 @@ void setup() {
 	UserInterface.RedrawAll();
 	imageMenuScreen.setCurrentScroll();
 	settingsManager.SetBrightness(settingsManager.GetBrightness(), r);
+	settingsManager.SetBuzzer(settingsManager.GetBuzzer());
 	
 
 #ifdef START_WITH_OTA_PORT

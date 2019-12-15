@@ -789,7 +789,7 @@ private:
 	 }
 	 int SyncTime() {
 		 //https://time-watch-service.herokuapp.com/datetime
-		 auto rsp = http->MakeGetRequest("http://time-watch-service.herokuapp.com/datetime");
+		 auto rsp = http->MakeGetRequest("http://serwer1969419.home.pl/watchservice/time.php");
 		 if (rsp == nullptr) { return -1; }
 		 auto s = rsp->getStream();
 		 char buff[10];
@@ -882,10 +882,35 @@ private:
 	 }
 	void DeleteAlarmOne()
 	 {
-		
+	 	
+		appsManager->DeleteConfigFile("AlarmOne");
 		tk->DeleteAlarmOne();
 	 }
+	void SetBuzzer(uint8_t value)
+	 {
+		appsManager->DeleteConfigFile("Sound");
+		auto fileHandle = this->SPIFFS->open("/Sound", "w+");
+		fileHandle.write(value);
 
+		fileHandle.close();
+		if (!value)
+			extraPeripheralsManager->buzzer->Disable();
+		else
+			extraPeripheralsManager->buzzer->Enable();
+	 }
+	bool GetBuzzer()
+	 {
+		if (this->SPIFFS->exists("/Sound")) {
+			auto fileHandle = this->SPIFFS->open("/Sound", "r");
+			uint8_t value;
+			fileHandle.read(&value, sizeof(bool));
+			fileHandle.close();
+			return value;
+
+
+		}
+		return true;
+	 }
 	bool IsItTheTimeToTriggerAlarmOne()
 	 {
 	
