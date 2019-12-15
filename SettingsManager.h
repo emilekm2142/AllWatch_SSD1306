@@ -79,12 +79,13 @@ private:
 		 }
 		 void _Disconnect() {
 			 parent->wifiManager->Disconnect();
+			 parent->w->mode(WIFI_OFF);
 		 }
 		 WatchHttpClient(SettingsManager* sm) {
 			 parent = sm;
 		 }
 		 HTTPClient* MakeGetRequest(char* url) {
-			 
+			 parent->w->mode(WIFI_STA);
 			 if (!parent->wifiManager->WiFiConnected()) {
 				bool success = _Connect();
 				if (!success) {
@@ -104,7 +105,7 @@ private:
 				if (code < 0) { return nullptr; }
 			
 		 	}
-			 Serial.printf("code: %d", code);
+			 Serial.printf("code: %d\n", code);
 			 return http;
 		 }
 		 void EndRequest(HTTPClient* r, bool disconnect=true) {
@@ -330,6 +331,7 @@ private:
 			 this->parent = parent;
 		 }
 		 int ScanNetworks() {
+			 parent->w->mode(WIFI_STA);
 			 return parent->w->scanNetworks();
 		 }
 	 	String GetIp()
@@ -405,6 +407,7 @@ private:
 			 return false;
 		 }
 		 bool ConnectToFirstFittingWiFiNetwork() {
+			 parent->w->mode(WIFI_STA);
 			 auto f = parent->SPIFFS->open(filename, "r");
 			 Serial.println(f.size());
 			 int networksAmount = parent->w->scanNetworks();
@@ -455,6 +458,7 @@ private:
 
 		 }
 		 bool ConnectToWiFiUsingSavedCredentials(char* ssid) {
+			 parent->w->mode(WIFI_STA);
 			 auto f = parent->SPIFFS->open(filename, "r");
 			 Serial.println(f.size());
 			 int i = 0;
@@ -795,21 +799,25 @@ private:
 		 char buff[10];
 		 int read;
 		 read = s.readBytesUntil('\n', buff, 10);
+		 Serial.printf("Pierwsze czytanie: %s", buff);
+	 	
+		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
 		 Serial.println(buff);
 		 int year = atoi(buff);
-
+		 Serial.println(year);
+	 	
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
 		 Serial.println(buff);
-
 		 int month = atoi(buff);
-
+		 Serial.println(month);
+	 	
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';
 		 Serial.println(buff);
-
 		 int day = atoi(buff);
+		 Serial.println(day);
 
 		 read = s.readBytesUntil('\n', buff, 10);
 		 buff[read] = '\0';

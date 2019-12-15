@@ -30,7 +30,6 @@ class Buzzer
 	}
 	Buzzer(int pin)
 	{
-		if (!enabled) return;
 		pinMode(pin, OUTPUT);
 		this->pin = pin;
 		StopAll();

@@ -88,7 +88,7 @@ private:
 			this->app->Up(r);
 		}
 		void Down(Renderer& r) override {
-			this->app->Down(r);
+			this->app->Exit();
 		}
 	};
  protected:
@@ -126,9 +126,10 @@ private:
 		 isTommorowBeingDisplayed = false;
 		 l->Draw(r);
 	 }
+
 	 void OnOpen() override {
 		
-		
+		 ESP.wdtDisable();
 		 Serial.println("opening weather, connected?");
 		 Serial.println(KeyExists("city"));
 		 if (KeyExists("city")) {			
@@ -141,7 +142,7 @@ private:
 		 else {
 			 l->configured = false;
 		 }
-		
+		 ESP.wdtEnable(1000);
 		
 	 }
 	 void OnExit() override {
@@ -159,6 +160,7 @@ private:
 	 	 }
 		 else {
 			 auto s = a->getStream();
+			 s.readBytesUntil('\n', state, 15);
 			 auto l = s.readBytesUntil('\n', state, 15);
 			 state[l] = '\0';
 			 char xd[3];

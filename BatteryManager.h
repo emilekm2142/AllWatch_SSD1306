@@ -48,7 +48,7 @@ public:
 	 	if (lastBatteryCheck < lowBatteryPoint)
 		 {
 
-			// ESP.deepSleep(0, RFMode::RF_DISABLED);
+			Sleep();
 		 }
 #endif
 	}
@@ -104,9 +104,9 @@ public:
 		UI->GetRenderer()->DisableScreen();
 		sm->extraPeripheralsManager->barometer->sleep();
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
-		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DISABLED);
+		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DEFAULT);
 #else
-		ESP.deepSleep(0, RFMode::RF_DISABLED);
+		ESP.deepSleep(0, RFMode::RF_DEFAULT);
 #endif
 
 	 }
@@ -142,9 +142,7 @@ public:
 #ifdef SHUTDOWN_ON_LOW_VOLTAGE
 	 		if (lastBatteryCheck<lowBatteryPoint)
 	 		{
-				UI->GetRenderer()->DisableScreen();
-				sm->extraPeripheralsManager->barometer->sleep();
-			//	ESP.deepSleep(6e+8, RFMode::RF_DISABLED);
+				Sleep();
 	 		}
 #endif
 	 	}

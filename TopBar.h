@@ -16,7 +16,7 @@
 #include "UserInterface.h"
 #include "StaticResources.h"
 #include "SSD1306Fonts.h"
-
+#include "SSD1306.h"
 #include "SettingsManager.h"
 #include "DependenciesHolder.h"
 
@@ -71,6 +71,7 @@ public:
 		//renderer.SetFont((uint8_t *)Orbitron_Medium_8);
 		sprintf(b, "%d%%", abs(bm->GetBatteryPercentage()));
 		const int width = renderer.GetStringWidth(b);
+		renderer.SetFont((uint8_t *)ArialMT_Plain_10);
 		renderer.DrawString(leftOffset - (width+1), 0, b);
 		renderer.SetFont((uint8_t *)Orbitron_Medium_10);
 		return width;
@@ -110,7 +111,7 @@ public:
 
 			);
 
-			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth - 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
+			renderer.DrawAlignedString((renderer.GetScreenWidth() / 2) -( (batteryTextWidth>10)? (batteryTextWidth > 10):0), 0, datestring, renderer.GetScreenWidth() / 2, renderer.Center);
 		}
 		renderer.DrawRectangle(0, 12, 1, renderer.GetScreenWidth());
 			if (sm->WiFiConnected() && drawHour ) renderer.DrawBitmap(0, -1, 12, 12, UIAssets::baseline_wifi_black_18dp_bits);
