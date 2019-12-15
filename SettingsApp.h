@@ -394,7 +394,7 @@ private:
 			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			if (currentScreen== (Layout*)menu)
+			if (currentScreen== (Layout*)menu || currentScreen==(Layout*)infoScreen)
 				this->app->Exit();
 			else
 			{
