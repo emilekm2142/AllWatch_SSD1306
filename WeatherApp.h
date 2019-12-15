@@ -135,7 +135,7 @@ private:
 		 if (KeyExists("city")) {			
 			GetKeyValue("city", config.city);
 			downloading = true;
-			this->l->Draw(*UI->GetRenderer());
+			UI->RedrawAll();
 			DisplayToday();
 			if (layout == nullptr) Serial.println("Pointer is null");
 		 }
@@ -170,7 +170,7 @@ private:
 			 Serial.println("Request done!");
 			 Serial.println(temperature);
 			 Serial.println(state);
-			 settingsManager->http->EndRequest(a);
+			 settingsManager->http->EndRequest(a, false);
 			 downloading = false;
 			 UI->RedrawAll();
 		 }

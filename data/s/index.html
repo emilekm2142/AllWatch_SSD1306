@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -175,7 +175,7 @@
   },
   created: function(){
       let _this = this
-    axios.get('/WiFi.list')
+      axios.get('/requestWiFi')
             .then(function (response) {
                 // handle success
                 let x = response.data;

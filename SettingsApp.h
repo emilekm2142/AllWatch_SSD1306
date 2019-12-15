@@ -394,8 +394,10 @@ private:
 			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override {
-			if (currentScreen== (Layout*)menu || currentScreen==(Layout*)infoScreen)
+			if (currentScreen == (Layout*)menu || currentScreen == (Layout*)infoScreen) {
+				Serial.println("Exit app...");
 				this->app->Exit();
+			}
 			else
 			{
 				currentScreen->Back(r);

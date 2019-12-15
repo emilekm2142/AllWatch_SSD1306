@@ -727,6 +727,13 @@ private:
 			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
 
 		 });
+		 server->on("/WiFi.list", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 //request->send()
+			 Serial.println("requestWifi");
+			 // request->send(200, "text/plain", "OK");
+			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
+
+		 });
 		 server->on("/removeAllNetworks", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 wifiManager->ClearList();
 			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
