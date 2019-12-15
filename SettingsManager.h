@@ -24,7 +24,7 @@
 
 #include "ExtraPeripheralsManager.h"
 class BuiltInApplication;
-
+class BatteryManager;
 class ApplicationDataHolder {
 public:
 	char* name;
@@ -723,7 +723,7 @@ private:
 		 server->on("/requestWiFi", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 //request->send()
 			 Serial.println("requestWifi");
-			 request->send(200, "text/plain", "OK");
+			// request->send(200, "text/plain", "OK");
 			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
 
 		 });
@@ -767,6 +767,7 @@ private:
 					 "/apps/%s",
 					 (char*)request->getParam("name")->value().c_str()
 				 );
+				 Serial.println(filePath);
 				 request->send(*SPIFFS, filePath, "text/plain");
 			 }
 
@@ -775,6 +776,7 @@ private:
 		 });
 		 server->on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 //request->send()
+			 Serial.println("requested index");
 			 request->send(*SPIFFS, "/s/index.html", "text/html");
 
 
@@ -919,6 +921,7 @@ private:
 		}
 		return true;
 	 }
+
 	bool IsItTheTimeToTriggerAlarmOne()
 	 {
 	

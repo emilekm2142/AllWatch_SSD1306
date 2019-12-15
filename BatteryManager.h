@@ -59,6 +59,7 @@ public:
 	bool IsGoingToSleep() {
 		 return isGoingToSleep;
 	 }
+
 	void light_sleep() {
 		wifi_fpm_set_sleep_type(LIGHT_SLEEP_T);
 		wifi_fpm_open();

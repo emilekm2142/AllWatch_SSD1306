@@ -164,7 +164,7 @@ void setup() {
 	settingsManager.appsManager->RegisterApplication("Alarm", []() {return new AlarmApp(&UserInterface, &settingsManager); }, AppMarketApp_Icon::width, AppMarketApp_Icon::height, AppMarketApp_Icon::icon_bits, false);
 
 	//reading from spiffs
-	bm.GetSleepTimeSeconds();
+	bm.SetSleepTimeSeconds(bm.GetSleepTimeSeconds());
 	
 	
 	if (!settingsManager.appsManager->KeyExists("IFTTT", "key")) {
