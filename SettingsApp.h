@@ -312,7 +312,8 @@ private:
 
 
 			});
-			menu->AddOption((char*)F("Check for updates"), [this]() {
+			//TODO: check if this works
+			/*menu->AddOption((char*)F("Check for updates"), [this]() {
 				infoScreen->text = "Getting updates...";
 				DisplayScreen((Layout*)infoScreen);
 				Draw(*this->app->UI->GetRenderer());
@@ -343,8 +344,8 @@ private:
 
 
 
-			});
-			menu->AddOption((char*)F("Own network"), [this]() {
+			});*/
+			menu->AddOption((char*)F("Settings, new network"), [this]() {
 				infoScreen->text = "Own Network........";
 				this->app->settingsManager->CreateNetwork();
 				this->app->settingsManager->OpenSettingsServer();
@@ -353,7 +354,7 @@ private:
 				Draw(*this->app->UI->GetRenderer());
 			});
 		
-			menu->AddOption((char*)F("Existing network"), [this]() {
+			menu->AddOption((char*)F("Host settings"), [this]() {
 				//this->app->settingsManager->CloseNetwork();
 				infoScreen->text = this->app->settingsManager->wifiManager->WiFiConnected()?(char*)"OK!":(char*)"You must connect to a network first";
 				

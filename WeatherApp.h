@@ -145,9 +145,7 @@ private:
 		 ESP.wdtEnable(1000);
 		
 	 }
-	 void OnExit() override {
-		 
-	 }
+
 	 
 	 void DisplayToday() {
 		 char buffer[100];
