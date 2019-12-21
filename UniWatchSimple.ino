@@ -1,4 +1,5 @@
 
+#include "LowBatteryLayout.h"
 #include "ShutdownAnimationLayout.h"
 #include "StopwatchApp.h"
 #include "AlarmApp.h"

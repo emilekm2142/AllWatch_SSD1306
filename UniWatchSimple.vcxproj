@@ -419,6 +419,7 @@
     <ClInclude Include="ListData_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="LowBatteryLayout.h" />
     <ClInclude Include="MainSlideLayout.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -561,6 +562,7 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Layout.cpp" />
+    <ClCompile Include="LowBatteryLayout.cpp" />
     <ClCompile Include="MainSlideLayout.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SettingsApp.cpp" />

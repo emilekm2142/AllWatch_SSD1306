@@ -12,6 +12,7 @@
 #include "ShutdownAnimationLayout.h"
 #include "SettingsManager.h"
 #include "Config.h"
+#include "LowBatteryLayout.h"
 extern "C" {
 #include "user_interface.h"
 }
@@ -25,7 +26,7 @@ class BatteryManager
 #else
 	 bool disableAll = true;
 #endif
-	 const int highBatteryPoint = 4400;
+	 const int highBatteryPoint = 4270;
 	 const int lowBatteryPoint = 3500;
 	 const int deepSleepTime = 30*1000;
 	 const int chargingPoint = 2965;
@@ -48,8 +49,11 @@ public:
 #ifdef SHUTDOWN_ON_LOW_VOLTAGE
 	 	if (lastBatteryCheck < lowBatteryPoint)
 		 {
-
-			Sleep();
+			auto a = new LowBatteryLayout(&UserInterface);
+			//No need to delete the layout since we shutdown the device.
+			UserInterface.AddSecondaryLayout(a);
+			Run::After(2000, [this] {Sleep(); });
+			
 		 }
 #endif
 	}
