@@ -54,6 +54,10 @@ private:
 		d->drawRect(x, y, width, height);
 	
 	};
+	virtual void FillCircle(int x, int y, int radius) override
+	{
+		d->fillCircle(x, y, radius);
+	}
 	virtual void DrawCircle(int x, int y, int radius) override {
 		d->drawCircle(x, y, radius);
 	};

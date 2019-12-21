@@ -17,7 +17,8 @@ class Renderer
 	 int Left = 0, Center = 1, Right = 2;
 	 virtual void init() = 0;
 	virtual void DrawRectangle(int x, int y, int height, int width)=0;
-	virtual void DrawCircle(int x, int y, int radius)=0;
+	virtual void DrawCircle(int x, int y, int radius) = 0;
+	virtual void FillCircle(int x, int y, int radius)=0;
 	virtual void FillRectangle(int x, int y, int height, int width, bool backgroundColor = false)=0;
 	virtual void DrawBitmap(int x, int y, int width, int height, const unsigned char* bitmap)=0;
 	virtual void DrawXBM(int x, int y, int width, int height, unsigned char* xbm)=0;

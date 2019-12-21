@@ -32,14 +32,16 @@ public:
 	bool showOnAppsList = true;
 	int iconHeight = NULL;
 	int iconWidth = NULL;
+	bool publicConfig = false;
 	const unsigned char* icon = NULL;
 	ApplicationDataHolder() {
 
 	}
-	ApplicationDataHolder(char* name, std::function<BuiltInApplication*()>  creatingFunction, bool show=true) {
+	ApplicationDataHolder(char* name, std::function<BuiltInApplication*()>  creatingFunction, bool show=true, bool publicConfig=false) {
 		this->name = name;
 		this->creatingFunction = creatingFunction;
 		this->showOnAppsList = show;
+		this->publicConfig = publicConfig;
 	}
 	BuiltInApplication* getApplication() {
 		return creatingFunction();
@@ -138,6 +140,18 @@ private:
 				 s.println(appsDir.fileName());
 			 }
 		 }
+		 void RedirectStreamOfPublicApps(Print& s) {
+			for (int i=0; i<builtInApps->size(); i++)
+			{
+				char filePath[32];
+				snprintf_P(filePath,
+					32,
+					"/apps/%s",
+				    builtInApps->get(i)->name
+				);
+				s.println(filePath);
+			}
+		 }
 	 	void DeleteConfigFile(const char* name)
 		 {
 			char filePath[32];
@@ -166,9 +180,9 @@ private:
 				 f.close();
 			 }
 		 }
-		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, int iconWidth=NULL, int iconHeight=NULL, const unsigned char* icon=NULL, bool show=true) {
+		 void RegisterApplication(char* name, std::function<BuiltInApplication*()> creatingFunction, int iconWidth=NULL, int iconHeight=NULL, const unsigned char* icon=NULL, bool show=true, bool publicConfig=false) {
 			 MakeConfigFile(name);
-			 auto m = new ApplicationDataHolder(name, creatingFunction, show);
+			 auto m = new ApplicationDataHolder(name, creatingFunction, show, publicConfig);
 			 m->iconHeight = iconHeight;
 			 m->iconWidth = iconWidth;
 			 m->icon = icon;
@@ -742,9 +756,14 @@ private:
 			 wifiManager->RemoveWiFiNetwork((char*)request->getParam("name")->value().c_str());
 			 request->send(*SPIFFS, wifiManager->filename, "text/plain");
 		 });
-		 server->on("/requestApps", HTTP_GET, [this](AsyncWebServerRequest *request) {
+		 server->on("/requestAllApps", HTTP_GET, [this](AsyncWebServerRequest *request) {
 			 AsyncResponseStream *response = request->beginResponseStream("text/html");
 			 appsManager->RedirectStreamOfApps(*response);
+			 request->send(response);
+		 });
+		 server->on("/requestApps", HTTP_GET, [this](AsyncWebServerRequest *request) {
+			 AsyncResponseStream *response = request->beginResponseStream("text/html");
+			 appsManager->RedirectStreamOfPublicApps(*response);
 			 request->send(response);
 		 });
 		 server->on("/updateAppConfig", HTTP_POST, [this](AsyncWebServerRequest *request) {

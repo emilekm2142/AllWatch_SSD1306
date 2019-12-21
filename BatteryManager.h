@@ -9,6 +9,7 @@
 #endif
 #include "UserInterface.h"
 #include "FS.h"
+#include "ShutdownAnimationLayout.h"
 #include "SettingsManager.h"
 #include "Config.h"
 extern "C" {
@@ -101,14 +102,22 @@ public:
 	 }
 	void Sleep()
 	 {
-		//tk->Sleep();
-		UI->GetRenderer()->DisableScreen();
-		sm->extraPeripheralsManager->barometer->sleep();
+		auto a = new ShutdownAnimationLayout(&UserInterface);
+		//No need to delete the layout since we shutdown the device.
+		UserInterface.AddSecondaryLayout(a);
+		a->PlayShutdownAnimation(*UserInterface.GetRenderer());
+	 	Run::After(a->GetAnimationLength(), [this]
+	 	{
+			UI->GetRenderer()->DisableScreen();
+			sm->extraPeripheralsManager->barometer->sleep();
 #ifdef WAKE_UP_FROM_SLEEP_AUTOMATICALLY
-		ESP.deepSleep(GetSleepTimeSeconds()*1000, RFMode::RF_DEFAULT);
+			ESP.deepSleep(GetSleepTimeSeconds() * 1000, RFMode::RF_DEFAULT);
 #else
-		ESP.deepSleep(0, RFMode::RF_DEFAULT);
+			ESP.deepSleep(0, RFMode::RF_DEFAULT);
 #endif
+		});
+		//tk->Sleep();
+	
 
 	 }
 	void SetSleepTimeSeconds(int time)
