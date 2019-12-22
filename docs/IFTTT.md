@@ -6,7 +6,9 @@ With the help of IFTTT it is possible to automate various tasks from the watch, 
 An IFTTT event may trigger on any action that you specify. In our case it is going to be a signal coming from the watch you can activate by hand. The list of available services is shown at https://ifttt.com/services
 
 1. Create an account on https://ifttt.com/join
+
 2. Go to - https://ifttt.com/create/
+
 3. Click `+This`, a new menu shall open. Type `webhooks` in the search bar. Click a tile 
 
 ![webhooks]( webhooks.png )
@@ -20,9 +22,13 @@ Next, click
 ![webhooks]( name.png )
 
 Type in any name that comes to your mind, such as `garage_door` (do not use spaces though!). Remember that name.
+
 5. Click `Create trigger`
+
 6. Click `+That`
+
 7. A new window will open. Here, you can select from a number of available services. In most cases, you would have to connect your IFTTT account to an account on external service. For instance: you can order pizza, open a phone app or send a HTTP request.
+
 8. For demonstration, I made the simplest thing possible - a web request. 
 
 ![webhooks]( final.png )
