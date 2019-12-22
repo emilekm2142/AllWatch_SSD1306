@@ -8,11 +8,17 @@ An IFTTT event may trigger on any action that you specify. In our case it is goi
 1. Create an account on https://ifttt.com/join
 2. Go to - https://ifttt.com/create/
 3. Click `+This`, a new menu shall open. Type `webhooks` in the search bar. Click a tile 
+
 ![webhooks]( webhooks.png )
+
 Next, click 
+
 ![webhooks]( receive.png )
+
 4. The following window should open
+
 ![webhooks]( name.png )
+
 Type in any name that comes to your mind, such as `garage_door` (do not use spaces though!). Remember that name.
 5. Click `Create trigger`
 6. Click `+That`
