@@ -1,4 +1,56 @@
-## IFTTT
+# Retro watch user guide
+
+
+
+## Home screen
+
+The home screen is divided into 3 vertical sections. The upper part always stays visible, just like the notification bar in smartphones.
+
+Foto z zaznaczonym upper
+
+The middle section displays actual time
+
+Foto z zaznaczonym middle
+
+The lower part displays misc data such as temperature and air pressure
+
+Foto z zaznaczonym dolnym
+
+## Navigation
+
+There are only three buttons. 
+
+Foto z zaznaczonymi strzałkami opisami przycisków
+
+To select an option press the "Up" key for a little longer, we will refer to this as "OK". To go back to the previous screen or cancel, press "Down" for a little longer. This gesture is going to be refered to as "Back"
+
+To make things more obvious - "Back" works just like the "back" button in the browser, while "Ok" works just like "Enter" on regular PCs.
+
+The watch has two main views - you can change them by pressing either "Up" or "Down" from any of these views. 
+
+On a `Home screen`, there are no interactive components.
+
+On the second screen
+
+Tutaj foto z widokiem z menu
+
+by pressing "Ok" (long press "Up"), you will select the current screen as an active one. This is indicated by a long horizontal line at the bottom of the screen
+
+Tutaj foto z zaznaczonym
+
+To go back to the home screen, press "Back" (long press "Down") and "Down".
+
+While having the menu selected, you can browse through the list of available apps. Use "Up" and "Down" buttons.
+
+## Menu
+
+### Weather
+
+### Stopwatch
+
+### Games
+
+### IFTTT
 
 IFTTT is an application that connects multiple services together.
 With the help of IFTTT it is possible to automate various tasks from the watch, for instance smart home light, sending mails, opening the garage gate and much more.
@@ -38,9 +90,9 @@ You can access the list of active events at https://ifttt.com/my_applets
 
 You can read more about webhooks at: https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ
 
-## Linking to the watch
+#### Linking to the watch
 
-### IFTTT
+#### IFTTT
 
 Go to https://ifttt.com/maker_webhooks/ and click `Documentation`
 
@@ -52,7 +104,7 @@ A new page will open.
 
 You need to copy the key or write it down on a paper so you can provide it later.
 
-### Watch
+#### Watch
 
 Enter the watch config, click `configure` next to IFTTT in the section `apps`
 
@@ -64,3 +116,12 @@ If you forget the name, go to https://ifttt.com/my_applets
 
 ![webhooks]( eventtile.png ) `garage_door` is the name you should provide.
 
+
+### Status
+
+### WiFi
+
+### Settings
+
+
+## Web config

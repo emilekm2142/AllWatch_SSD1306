@@ -1,4 +1,5 @@
 
+#include "Keyboard.h"
 #include "LowBatteryLayout.h"
 #include "ShutdownAnimationLayout.h"
 #include "StopwatchApp.h"
@@ -203,6 +204,7 @@ void setup() {
 	UserInterface.SetMainLayout(MainLayout);
 
 	UserInterface.AddSecondaryLayout(&topBar);
+	UserInterface.InitKeyboard();
 	UserInterface.RedrawAll();
 	imageMenuScreen.setCurrentScroll();
 	settingsManager.SetBrightness(settingsManager.GetBrightness(), r);

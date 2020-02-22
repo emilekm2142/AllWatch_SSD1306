@@ -12,6 +12,7 @@
 #include "Widget.h"
 #include "Layout.h"
 #include "Renderer.h"
+#include "Keyboard.h"
 #include "Animation.h"
 #include "DelayedAction.h"
 //#include "MainSlideLayout.h"
@@ -20,6 +21,7 @@
 class UserInterfaceClass//:public Dependency
 {
 private:
+    Keyboard keyboard = Keyboard();
 	boolean shouldDraw = true;
 	Renderer* renderer;
 	Layout* mainLayout;
@@ -43,7 +45,18 @@ private:
 	 
  public:
 	 
-
+     void InitKeyboard() {
+         layouts.add(&keyboard);
+         ReinitKeyboard();
+    }
+    int ReinitKeyboard(int x = 0, int y = 0, int w = 0, int h = 0) {
+		 keyboard.y = GetRenderer()->GetLineHeight() + 3;
+		 keyboard.x = 0;
+		 keyboard.w = w == 0 ? GetRenderer()->GetScreenWidth() : w;
+		 keyboard.h = h == 0 ? 20 : h;
+		 int targetY = y == 0 ? GetRenderer()->GetScreenHeight() - keyboard.h : y;
+         return targetY;
+     }
 	boolean GetShouldDraw() {
 		 return shouldDraw;
 	 }
@@ -67,6 +80,20 @@ private:
 	 void StageChanges() {
 		 anyChangesStaged = true;
 	 }
+   
+     void DisplayKeyboard(int x=0, int y=0, int w=0, int h=0) {
+         int targetY = ReinitKeyboard();
+         auto a = new Animation(keyboard.y, targetY, 1, -2);
+         RegisterAnimation(a);
+		 keyboard.Show();
+        
+     }
+     void HideKeyboard() {
+         this->keyboard.Close();
+     }
+     Keyboard* GetKeyboard() {
+         return &this->keyboard;
+     }
 	 void AddSecondaryLayout(Layout* l) {
 		 layouts.add(l);
 	 }
@@ -143,23 +170,35 @@ private:
 	 Renderer* GetRenderer() {
 		 return this->renderer;
 	 }
-	 void Down() {
+     void Down() {
+         if (this->keyboard.visible)
+             this->keyboard.Down(*renderer);
+         else
 		 if (IsAnyLayoutDisplayed()) {
 			 focusedLayout->Down(*renderer);
 		 }
 		 
 	 }
 	 void Up() {
+		 if (this->keyboard.visible)
+			 this->keyboard.Up(*renderer);
+		 else
 		 if (IsAnyLayoutDisplayed()) {
 			 focusedLayout->Up(*renderer);
 		 }
 	 }
 	 void Ok() {
+		 if (this->keyboard.visible)
+			 this->keyboard.Ok(*renderer);
+		 else
 		 if (IsAnyLayoutDisplayed()) {
 			 focusedLayout->Ok(*renderer);
 		 }
 	 }
 	 void Back() {
+		 if (this->keyboard.visible)
+			 this->keyboard.Back(*renderer);
+		 else
 		 if (IsAnyLayoutDisplayed()) {
 			 focusedLayout->Back(*renderer);
 		 }

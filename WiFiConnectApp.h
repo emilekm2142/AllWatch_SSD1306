@@ -105,13 +105,53 @@ private:
 							currentScreen = (Layout*)infoScreen;
 							Draw(*this->app->UI->GetRenderer());
 							Serial.println("...");
-							int status = this->app->settingsManager->wifiManager->ConnectToWiFiUsingSavedCredentials(names[d]);
-							Run::After(2000, [this,status]()
-							{
+							bool saved = this->app->settingsManager->wifiManager->IsNetworkSaved(this->app->settingsManager->SPIFFS, names[i]);
+							if (!saved) {
+								infoScreen->text = PSTR("Type in password");
 								
-							currentScreen = (Layout*)menu;
+								this->app->UI->DisplayKeyboard();
+								
+								this->app->UI->RedrawAll();
+								this->app->UI->GetKeyboard()->onType = [this] {
 									
-							});
+									infoScreen->text = this->app->UI->GetKeyboard()->target;
+								};
+								this->app->UI->GetKeyboard()->onClose = [this, names, i] {
+									auto kbrd = this->app->UI->GetKeyboard();
+									infoScreen->text = PSTR("Connecting...");
+									this->app->UI->RedrawAll();
+									this->app->settingsManager->wifiManager->AppendWiFiNetwork(this->app->settingsManager->SPIFFS, names[i], (char*)kbrd->target);
+									int status = this->app->settingsManager->wifiManager->ConnectToWiFiUsingSavedCredentials(names[i]);
+									Run::After(2000, [this, status, names, i]()
+										{
+											if (!status) {
+												infoScreen->text = PSTR("Could not connect...");
+												//remove the credentials then
+												this->app->settingsManager->wifiManager->RemoveWiFiNetwork(names[i]);
+
+											}
+											else {
+												infoScreen->text = PSTR("It is working!");
+
+											}
+											this->app->UI->RedrawAll();
+											Run::After(2000, [this, status]()
+												{currentScreen = (Layout*)menu;
+
+
+												});
+										});
+								};
+							}
+							else {
+								int status = this->app->settingsManager->wifiManager->ConnectToWiFiUsingSavedCredentials(names[d]);
+								Run::After(2000, [this, status]()
+									{
+
+										currentScreen = (Layout*)menu;
+
+									});
+							}
 						
 						});
 					}
