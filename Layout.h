@@ -17,22 +17,26 @@ private:
 	LinkedList<Widget*> widgets = LinkedList<Widget*>();
 	char* name;
 protected:
-	std::function<void()> onBackCallback = nullptr;
- public:
 	
+ public:
+	 std::function<void()> onBackCallback = nullptr;
+	 std::function<void()> onDownCallback = nullptr;
+	 std::function<void()> onUpCallback = nullptr;
+	 std::function<void()> onOkCallback = nullptr;
+
 	 virtual void GetInFocus(Renderer& renderer) {}
 	 virtual void OnGetInFocus(Renderer& renderer) {
 		 GetInFocus(renderer);
 		 DrawActiveIndicator(renderer);
 	 };
-	virtual void Down(Renderer& renderer) = 0;
-	virtual void Up(Renderer& renderer) = 0;
-	virtual void Ok(Renderer& renderer) = 0;
+	 virtual void Down(Renderer& renderer) { if (onDownCallback != nullptr) onDownCallback(); }
+	virtual void Up(Renderer& renderer) { if (onUpCallback != nullptr) onUpCallback(); }
+	virtual void Ok(Renderer& renderer) { if (onOkCallback != nullptr) onOkCallback(); }
 	virtual void DrawActiveIndicator(Renderer& renderer) {
 		
 	}
 	virtual void Draw(Renderer& renderer) = 0;
-	virtual void Back(Renderer& renderer) = 0;
+	virtual void Back(Renderer& renderer) { if (onBackCallback != nullptr) onBackCallback(); };
 	void Add(Widget* w) {
 		widgets.add(w);
 	}

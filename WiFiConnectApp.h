@@ -58,36 +58,8 @@ private:
 			this->app = app;
 			infoScreen = new GenericTextScreen(this->app->UI, (char*)F("Connecting..."), true);
 			choiceMenu = new GenericMenuScreen(app->UI);
-			choiceMenu->AddOption("Disconnect", [this]() {
-				infoScreen->text = (char*)F("Disconnecting...");
-				currentScreen = (Layout*)infoScreen;
-				Draw(*this->app->UI->GetRenderer());
-				this->app->settingsManager->wifiManager->Disconnect();
-				infoScreen->text = (char*)F("OK!");
-				Draw(*this->app->UI->GetRenderer());
-				Run::After(2000, [this]() {
-					currentScreen = (Layout*)choiceMenu;
-				});
-			});
-			choiceMenu->AddOption("Connect to any", [this]() {
-				bool status = this->app->settingsManager->wifiManager->ConnectToFirstFittingWiFiNetwork();
-				if (status) {
-					infoScreen->text = (char*)F("OK!");
-					Draw(*this->app->UI->GetRenderer());
-					Run::After(2000, [this]() {
-						currentScreen = (Layout*)choiceMenu;
-					});
-				}
-				else {
-					infoScreen->text = (char*)F("Could not connect to any network :(");
-					Draw(*this->app->UI->GetRenderer());
-					Run::After(2000, [this]() {
-						currentScreen = (Layout*)choiceMenu;
-					});
-				}
-			});
 			choiceMenu->AddOption("List networks", [this]() {
-				char** names = new char*[25];
+				char** names = new char* [25];
 				for (int x = 0; x < 25; x++) names[x] = NULL;
 				taskRef = Run::After(100, [this, names]() {
 					int len = this->app->settingsManager->wifiManager->ScanNetworks();
@@ -108,12 +80,12 @@ private:
 							bool saved = this->app->settingsManager->wifiManager->IsNetworkSaved(this->app->settingsManager->SPIFFS, names[i]);
 							if (!saved) {
 								infoScreen->text = PSTR("Type in password");
-								
+
 								this->app->UI->DisplayKeyboard();
-								
+
 								this->app->UI->RedrawAll();
 								this->app->UI->GetKeyboard()->onType = [this] {
-									
+
 									infoScreen->text = this->app->UI->GetKeyboard()->target;
 								};
 								this->app->UI->GetKeyboard()->onClose = [this, names, i] {
@@ -152,13 +124,42 @@ private:
 
 									});
 							}
-						
-						});
+
+							});
 					}
-				});
+					});
 				currentScreen = (Layout*)menu;
 				Draw(*this->app->UI->GetRenderer());
+				});
+			choiceMenu->AddOption("Disconnect", [this]() {
+				infoScreen->text = (char*)F("Disconnecting...");
+				currentScreen = (Layout*)infoScreen;
+				Draw(*this->app->UI->GetRenderer());
+				this->app->settingsManager->wifiManager->Disconnect();
+				infoScreen->text = (char*)F("OK!");
+				Draw(*this->app->UI->GetRenderer());
+				Run::After(2000, [this]() {
+					currentScreen = (Layout*)choiceMenu;
+				});
 			});
+			choiceMenu->AddOption("Connect to any", [this]() {
+				bool status = this->app->settingsManager->wifiManager->ConnectToFirstFittingWiFiNetwork();
+				if (status) {
+					infoScreen->text = (char*)F("OK!");
+					Draw(*this->app->UI->GetRenderer());
+					Run::After(6000, [this]() {
+						currentScreen = (Layout*)choiceMenu;
+					});
+				}
+				else {
+					infoScreen->text = (char*)F("Could not connect to any network :(");
+					Draw(*this->app->UI->GetRenderer());
+					Run::After(2000, [this]() {
+						currentScreen = (Layout*)choiceMenu;
+					});
+				}
+			});
+			
 			menu = new GenericMenuScreen(app->UI);
 			menu->setOnBackCallbackAction([this]() {Run::Cancel(taskRef); this->currentScreen = (Layout*)choiceMenu; });
 			

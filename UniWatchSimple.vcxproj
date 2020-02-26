@@ -430,6 +430,7 @@
     <ClInclude Include="MessagingData_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="NotesApp.h" />
     <ClInclude Include="Open_reader.h">
       <FileType>CppCode</FileType>
     </ClInclude>

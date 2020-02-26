@@ -17,7 +17,7 @@
 class Keyboard :public Layout
 {
 protected:
-	char* signs = "qwertyuiopasdfghjklkzxcvbnm1234567890-=!@#$%^&*()_+[];'\\\"|,./><?~`";
+	char* signs = "abcdefghijklmnoprstuwyxz 1234567890-=!@#$%^&*()_+[];'\\\"|,./><?~`ABCDEFGHIJKLMNOPRSTUWYXZ";
 public:
 	bool visible = false;
 	std::function<void()> onClose = nullptr;
@@ -73,16 +73,6 @@ public:
 	char target[50];
 	Keyboard() {
 	
-	}
-	int GetAnimationLength()
-	{
-		return 1100;
-	}
-
-
-	void PlayShutdownAnimation(Renderer& renderer)
-	{
-		
 	}
 	int positionInWord = 0;
 	int currentIndex = 0;

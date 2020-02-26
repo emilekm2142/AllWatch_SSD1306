@@ -49,13 +49,11 @@ public:
 	{
 		DrawCurrentScreen(renderer);
 	}
-	virtual void Up(Renderer& renderer) override {}
-	virtual void Down(Renderer& renderer) override {}
-	virtual void Ok(Renderer& renderer) override {}
+	virtual void Up(Renderer& renderer) override { Layout::Up(renderer); }
+	virtual void Down(Renderer& renderer) override { Layout::Down(renderer); }
+	virtual void Ok(Renderer& renderer) override { Layout::Ok(renderer); }
 	virtual void Back(Renderer& renderer) override {
-		if (this->onBackCallback != nullptr) {
-			this->onBackCallback();
-	}
+		Layout::Back(renderer);
 	}
 	
 	

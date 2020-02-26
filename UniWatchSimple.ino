@@ -7,7 +7,7 @@
 #include "Buzzer.h"
 #include "TestingEnv.h"
 #include "GenericLoadingScreen.h"
-
+#include "NotesApp.h"
 #include "GenericDialogScreen.h"
 #include "AppMarketApp.h"
 #include "GamesApp.h"
@@ -153,6 +153,7 @@ void setup() {
 
 	settingsManager.appsManager->RegisterApplication("Weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); }, WeatherApp_Icon::width, WeatherApp_Icon::height, WeatherApp_Icon::icon_bits, true,true);
 	//settingsManager.appsManager->RegisterApplication("Stars", []() {return new StarsApp(&UserInterface, &settingsManager); }, StarsApp_Icon::width, StarsApp_Icon::height, StarsApp_Icon::icon_bits);
+	settingsManager.appsManager->RegisterApplication("Notes", []() {return new NotesApp(&UserInterface, &settingsManager); }, NotesApp_Icon::width, NotesApp_Icon::height, NotesApp_Icon::icon_bits, true, false);
 
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); }, FlappyBirdApp_Icon::width, FlappyBirdApp_Icon::height, FlappyBirdApp_Icon::icon_bits,false, false);
 	settingsManager.appsManager->RegisterApplication("Games", []() {return new GamesApp(&UserInterface, &settingsManager); },GamesApp_Icon::width,GamesApp_Icon::height,GamesApp_Icon::icon_bits, true,false);

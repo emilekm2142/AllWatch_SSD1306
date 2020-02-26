@@ -16,18 +16,19 @@
 #include "UserInterface.h"
 #include "StaticResources.h"
 #include "SettingsScreen.h"
-class GenericTextScreen:CustomScreen
+class GenericTextScreen:public CustomScreen
 {
  protected:
-	 bool scrollable = true;
+	
 	 bool headerScroll = true;
 	 int offset = 15;
 	 
  public:
 	 const char* text;
 	 char* header;
+	 bool scrollable = true;
 	
-	 GenericTextScreen(UserInterfaceClass* UI, const char* text, bool scrollable, char* header = nullptr, bool headerScroll=true ) {
+	 GenericTextScreen(UserInterfaceClass* UI, const char* text="", bool scrollable=false, char* header = nullptr, bool headerScroll=true ) {
 		 this->text = text;
 		 this -> scrollable = scrollable;
 		 this->UI = UI;
@@ -36,19 +37,21 @@ class GenericTextScreen:CustomScreen
 	 }
 	 UserInterfaceClass* UI;
 	 virtual void Back(Renderer& r) override {
-		 
+		 CustomScreen::Back(r);
 		 UI->SetLayoutInFocues(*UI->GetMainLayout());
 	 }
 	 virtual void Ok(Renderer& r) override {
-
+		 CustomScreen::Ok(r);
 	 }
 	 virtual void Down(Renderer& r) override {
+		 CustomScreen::Down(r);
 		 if (scrollable) {
 			 auto a = new Animation(this->offset, offset - 10, 50, -1);
 			 UI->RegisterAnimation(a);
 		 }
 	 }
 	 virtual void Up(Renderer& r) override {
+		 CustomScreen::Up(r);
 		 if (scrollable) {
 			 auto a = new Animation(this->offset, offset + 10, 50, 1);
 			 UI->RegisterAnimation(a);

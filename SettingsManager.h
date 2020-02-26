@@ -274,6 +274,7 @@ private:
 			 RemoveKeyInConfig(appName, key);
 			 AppendKeyToConfig(appName, key, value);
 		 }
+		
 		 void RemoveKeyInConfig(char* appName, char* key ) {
 			 auto f = GetConfigForApplication(appName);
 			 char filePath[32];
