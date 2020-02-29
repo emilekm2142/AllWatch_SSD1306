@@ -89,7 +89,7 @@ private:
         
      }
      void HideKeyboard() {
-         this->keyboard.Close();
+         this->keyboard.Close(*GetRenderer());
      }
      Keyboard* GetKeyboard() {
          return &this->keyboard;

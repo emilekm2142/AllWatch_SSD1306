@@ -1,4 +1,6 @@
 
+
+#include "GenericInputScreen.h"
 #include "Keyboard.h"
 #include "LowBatteryLayout.h"
 #include "ShutdownAnimationLayout.h"
@@ -14,13 +16,14 @@
 #include "WiFiConnectApp.h"
 #include "DelayedAction.h"
 #include "SettingsApp.h"
-
+#include "DosimeterApp.h"
 #include "ImagesMenu.h"
 #include "TimeConfiguratorApp.h"
 #include "FlappyBirdApp.h"
 #include "ESPert.h"
 #include "IFTTApp.h"
 #include "StatusApp.h"
+#include "DosimeterApp.h"
 #include "FlashlightApp.h"
 #include "ExtraPeripheralsManager.h"
 #include "BME280Barometer.h"
@@ -154,6 +157,7 @@ void setup() {
 	settingsManager.appsManager->RegisterApplication("Weather", []() {return new WeatherApp(&UserInterface, &settingsManager, &tk); }, WeatherApp_Icon::width, WeatherApp_Icon::height, WeatherApp_Icon::icon_bits, true,true);
 	//settingsManager.appsManager->RegisterApplication("Stars", []() {return new StarsApp(&UserInterface, &settingsManager); }, StarsApp_Icon::width, StarsApp_Icon::height, StarsApp_Icon::icon_bits);
 	settingsManager.appsManager->RegisterApplication("Notes", []() {return new NotesApp(&UserInterface, &settingsManager); }, NotesApp_Icon::width, NotesApp_Icon::height, NotesApp_Icon::icon_bits, true, false);
+	settingsManager.appsManager->RegisterApplication("Toy dosimeter", []() {return new DosimeterApp(&UserInterface, &settingsManager, &extraPeripheralsManager); }, DosimeterApp_Icon::width, DosimeterApp_Icon::height, DosimeterApp_Icon::icon_bits, true, false);
 
 	settingsManager.appsManager->RegisterApplication("Flappy Bird", []() {return new FlappyBirdApp(&UserInterface, &settingsManager); }, FlappyBirdApp_Icon::width, FlappyBirdApp_Icon::height, FlappyBirdApp_Icon::icon_bits,false, false);
 	settingsManager.appsManager->RegisterApplication("Games", []() {return new GamesApp(&UserInterface, &settingsManager); },GamesApp_Icon::width,GamesApp_Icon::height,GamesApp_Icon::icon_bits, true,false);

@@ -91,6 +91,7 @@ public:
 		if (this->UI!=NULL)
 		{
 			Draw(*this->UI->GetRenderer());
+			
 		}
 	}
 	void ReturnToPreviousScreen()

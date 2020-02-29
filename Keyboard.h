@@ -24,7 +24,8 @@ public:
 	std::function<void()> onType = nullptr;
 
 
-	void Close() {
+	void Close(Renderer& r) {
+		r.SetFont((uint8_t*)Orbitron_Medium_10);
 		visible = false;
 		if (onClose!=nullptr) onClose();
 		onClose = nullptr;
@@ -60,7 +61,7 @@ public:
 	virtual void Back(Renderer& r) override {
 		if (!visible) return;
 		if (target!=NULL) target[positionInWord] = '\0';
-		Close();
+		Close(r);
 	}
 	virtual int CalculateHeight(Renderer& renderer) override {
 		return 18;
@@ -79,8 +80,9 @@ public:
 	int x, y,h,w = 0;
 	void Draw(Renderer& renderer) override
 	{
-		renderer.SetFont((uint8_t*)&ArialMT_Plain_10);
+		
 		if (!visible) return;
+		renderer.SetFont((uint8_t*)&ArialMT_Plain_10);
 		renderer.FillRectangle(x, y, h, w, true);
 		int order = 0;
 		for (int i = currentIndex - 7; i < currentIndex + 7 + 1; i++) {

@@ -11,7 +11,8 @@
 #include "BuiltInApplication.h"
 #include "Renderer.h"
 #include "CustomScreen.h"
-
+#include "GenericTextScreen.h"
+#include "GenericInputScreen.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include "Layout.h"
@@ -45,54 +46,78 @@ namespace WeatherApp_Icon {
 class WeatherApp:public BuiltInApplication
 {
 private:
-	class WeatherLayout :public CustomScreen {
+	class ForecastLayout :public CustomScreen {
 	public:
-		char header[25];
-		bool configured = true;
-		bool noData = false;
-		WeatherApp* app;
 		int offset = 15;
-		WeatherLayout(WeatherApp* app) {
+		char header[25];
+		Layout* parent;
+		WeatherApp* app;
+		ForecastLayout(Layout*parent, WeatherApp* app) {
 			this->app = app;
-			
-			
+			this->parent = parent;
+		}
+		void Back(Renderer& r) override {
+			this->app->Exit();
+			//((CustomScreen*)this->parent)->ReturnToPreviousScreen();
 		}
 		void Draw(Renderer& r) {
-			//Serial.println("DRWAING!!!");
-			//r.DrawXBM(25, 25, 32, 32, app->icon);
-			if (this->app->downloading)
-			{
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, "Downloading...", r.GetScreenWidth(), r.Center);
-			}
-			else if (configured) {
-				sprintf(header, "Weather in %s", this->app->config.city);
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, header, r.GetScreenWidth(), r.Center);
-				r.SetFont((uint8_t *)ArialMT_Plain_10);
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + 0 + GlobalX, 13 + offset + GlobalY, this->app->state, r.GetScreenWidth(), r.Center);
-				char str[4];
-				r.SetFont((uint8_t *)ArialMT_Plain_16);
-				sprintf(str, "%d C", this->app->temperature);
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, 25 + offset + GlobalY, str, r.GetScreenWidth(), r.Center);
-				r.SetFont((uint8_t *)ArialMT_Plain_10);
-			}
-			
-			else if (!configured) {
-				r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, "Application is not configured, check settings!", r.GetScreenWidth(), r.Center);
-			}
+			sprintf(header, "Weather in %s", this->app->cityName);
+			r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, offset + GlobalY, header, r.GetScreenWidth(), r.Center);
+			r.SetFont((uint8_t*)ArialMT_Plain_10);
+			r.DrawAlignedString(r.GetScreenWidth() / 2 + 0 + GlobalX, 13 + offset + GlobalY, this->app->state, r.GetScreenWidth(), r.Center);
+			char str[4];
+			r.SetFont((uint8_t*)ArialMT_Plain_16);
+			sprintf(str, "%d C", this->app->temperature);
+			r.DrawAlignedString(r.GetScreenWidth() / 2 + GlobalX, 25 + offset + GlobalY, str, r.GetScreenWidth(), r.Center);
+			r.SetFont((uint8_t*)ArialMT_Plain_10);
+		}
+	};
+	class WeatherLayout :public CustomScreen {
+	public:
+		
+		bool configured = true;
+		WeatherApp* app;
+		ForecastLayout* forecastLayout;
+		GenericInputScreen* textInput;
+		
+		WeatherLayout(WeatherApp* app) {
+			this->UI = app->UI;
+			this->app = app;
+			this->forecastLayout = new ForecastLayout((Layout*)this, app);
+			this->textInput = new GenericInputScreen(this->app->UI, "City:");
+		
+			this->textInput->onOkCallback = [this] {
+				this->app->UpdateKeyInConfig("city", textInput->GetText());
+				auto sm = this->app->settingsManager;
+				this->app->OnOpen();
+				DisplayScreen((Layout*)this->forecastLayout);
+			};
+		}
+		void Draw(Renderer& r)override {
+			currentScreen->Draw(r);
 		}
 		void Back(Renderer& r) override{
-			//app->UI->ReturnToParentLayout();
-			this->app->Exit();
+			currentScreen->Back(r);
 		}
 		void Up(Renderer& r) override {
-			this->app->Up(r);
+			currentScreen->Up(r);
 		}
 		void Down(Renderer& r) override {
-			this->app->Exit();
+			currentScreen->Down(r);
+		}
+		void Ok(Renderer& renderer) override {
+			currentScreen->Ok(renderer);
+		}
+		void ShowInputScreen() {
+			DisplayScreen(textInput);
+			textInput->OpenKeyboard();
+			this->textInput->GetKeyboard()->onClose = [this] {
+				this->textInput->Ok(*UI->GetRenderer());
+			};
 		}
 	};
  protected:
-	 WeatherLayout* l = new WeatherLayout(this);
+	 WeatherLayout* l;
 
  public:
 	 int temperature=-999;
@@ -100,60 +125,52 @@ private:
 
 	 bool downloading = true;
 	 TimeKepper* tk;
-	  struct WeatherAppConfig config = {"London","xd"};
-	 
+	 char cityName[25];
 	 WeatherApp(UserInterfaceClass* UI, SettingsManager* sm, TimeKepper* tk): BuiltInApplication((Layout*)this->l, UI, sm){
+		 l= new WeatherLayout(this);
 		 this->layout = l;
 		 this->tk = tk;
 		 this->name = "Weather";
-		 if (!KeyExists("city"))
-			AppendKey("city", "Warszawa");
+		 if (!KeyExists("city")) {
+			 Serial.println("nie istnieje taki key");
+			 ((WeatherLayout*)this->layout)->ShowInputScreen();
+		 }
+		 else {
+			 ((WeatherLayout*)this->layout)->DisplayScreen(((WeatherLayout*)this->layout)->forecastLayout);
+		 }
 		 
 		
 	 }
 	 bool isTommorowBeingDisplayed = false;
-	 void Down(Renderer& r) {
-		 if (!isTommorowBeingDisplayed) {
-			 DisplayTommorow();
-		 }
-		 isTommorowBeingDisplayed = true;
-		 l->Draw(r);
-	 }
-	 void Up(Renderer& r) {
-		 if (isTommorowBeingDisplayed) {
-			 DisplayToday();
-		 }
-		 isTommorowBeingDisplayed = false;
-		 l->Draw(r);
-	 }
 
 	 void OnOpen() override {
-		
 		 ESP.wdtDisable();
+		 GetKeyValue("city", cityName);
 		 Serial.println("opening weather, connected?");
 		 Serial.println(KeyExists("city"));
 		 if (KeyExists("city")) {			
-			GetKeyValue("city", config.city);
 			downloading = true;
 			UI->RedrawAll();
 			DisplayToday();
 			if (layout == nullptr) Serial.println("Pointer is null");
 		 }
 		 else {
-			 l->configured = false;
+			 
 		 }
 		 ESP.wdtEnable(1000);
-		
+	
 	 }
 
 	 
 	 void DisplayToday() {
 		 char buffer[100];
-		 sprintf(buffer, "http://serwer1969419.home.pl/watchservice/weather.php?city=%s", config.city);
+		 GetKeyValue("city", cityName);
+		
+		 sprintf(buffer, "http://serwer1969419.home.pl/watchservice/weather.php?city=%s", cityName);
 		 auto a = settingsManager->http->MakeGetRequest(buffer);
 	 	 if (a==nullptr)
 	 	 {
-			 Exit();
+			// Exit();
 			 Serial.println("closed!");
 	 	 }
 		 else {
@@ -174,23 +191,7 @@ private:
 		 }
 		 
 	 }
-	 void DisplayTommorow() {
-		 //TODO: consolidate both functions
-		 char buffer[100];
-		 sprintf(buffer, "http://serwer1969419.home.pl/watchservice/weather.php?city=%s", config.city);
-		 auto a = settingsManager->http->MakeGetRequest(buffer);
-		 auto s = a->getStream();
-		 s.readBytesUntil('\n', state, 15);
-		 state[strlen(state)] = '\0';
-		 char xd[3];
-		 s.readBytesUntil('\n', xd, 3);
-		 temperature = atoi(xd);
-		 settingsManager->appsManager->UpdateKeyInConfig("weather", "tmpCacheTommorow", xd);
-		 Serial.println("Request done!");
-		 Serial.println(temperature);
-		 Serial.println(state);
-		 settingsManager->http->EndRequest(a);
-	 }
+
 };
 
 

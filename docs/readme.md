@@ -6,15 +6,15 @@
 
 The home screen is divided into 3 vertical sections. The upper part always stays visible, just like the notification bar in smartphones.
 
-Foto z zaznaczonym upper
+![webhooks]( 1.png )
 
 The middle section displays actual time
 
-Foto z zaznaczonym middle
+![webhooks]( 2.png )
 
 The lower part displays misc data such as temperature and air pressure
 
-Foto z zaznaczonym dolnym
+![webhooks]( 3.png )
 
 ## Navigation
 
@@ -29,14 +29,13 @@ To make things more obvious - "Back" works just like the "back" button in the br
 The watch has two main views - you can change them by pressing either "Up" or "Down" from any of these views. 
 
 On a `Home screen`, there are no interactive components.
-
+![webhooks]( 4.png )
 On the second screen
 
-Tutaj foto z widokiem z menu
-
+![webhooks]( 5.png )
 by pressing "Ok" (long press "Up"), you will select the current screen as an active one. This is indicated by a long horizontal line at the bottom of the screen
 
-Tutaj foto z zaznaczonym
+![webhooks]( 6.png )
 
 To go back to the home screen, press "Back" (long press "Down") and "Down".
 
@@ -45,7 +44,8 @@ While having the menu selected, you can browse through the list of available app
 ## Menu
 
 ### Weather
-
+Given internet access, weather app can download the weather for your location.
+When entering the app for the first time you will be asked to type in the name of your city. 
 ### Stopwatch
 
 ### Games
