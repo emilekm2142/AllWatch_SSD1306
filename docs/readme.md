@@ -4,11 +4,11 @@
 
 ## Home screen
 
-The home screen is divided into 3 vertical sections. The upper part always stays visible, just like the notification bar in smartphones.
+The home screen is divided into 3 horizontal sections. The upper part always stays visible, just like the notification bar in smartphones.
 
 ![webhooks]( 1.png )
 
-The middle section displays actual time
+The middle section displays current time
 
 ![webhooks]( 2.png )
 
@@ -33,11 +33,11 @@ On a `Home screen`, there are no interactive components.
 On the second screen
 
 ![webhooks]( 5.png )
-by pressing "Ok" (long press "Up"), you will select the current screen as an active one. This is indicated by a long horizontal line at the bottom of the screen
+There is a menu. To browse applications here press "Ok". Your press should be indicated by a long horizontal line at the bottom.
 
 ![webhooks]( 6.png )
 
-To go back to the home screen, press "Back" (long press "Down") and "Down".
+To go back to the home screen, press "Back" and "Down".
 
 While having the menu selected, you can browse through the list of available apps. Use "Up" and "Down" buttons.
 
