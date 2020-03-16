@@ -121,6 +121,38 @@ If you forget the name, go to https://ifttt.com/my_applets
 
 ### WiFi
 
+Establishing a connection with a WiFi network is important to let other functions work properly. There are two ways to connect
+
+#### Using only the watch
+
+1. Open WiFi from main menu.
+2. Select "list networks" from the menu
+3. Wait a moment while the scan is being done
+4. Once networks are listed, scroll to network you want to connect to
+5. Press "ok" (long press "up")
+6. Use the built-in keyboard to provide the password.
+7. If the password is correct, the watch would connect and save the credentials for later use.
+
+#### With the help of settings
+
+1. Open Settings from main menu
+2. Select option "Settings, new network" - This will create a new WiFi network named "Watch". There is no password required to connect.
+3. Find any other device such as a phone or laptop, connect to the newly created network ("Watch")
+4. Open a web browser and navigate to webpage: 192.168.4.1
+5. Wait a while. You will see a settings panel.
+6. Click a huge button "Add a new network"
+7. Provide name and password (just ignore the field "Automatic DHCP"). Click "Add".
+8. You will see a new network added to the list. Everything is setup and ready. You can close the Settings by pressing "Back" on the watch (long press "down").
+
+To test if network works:
+
+1. Open WiFi from main menu.
+2. Select "list networks" from the menu
+3. Wait a moment while the scan is being done
+4. Once networks are listed, scroll to network you want to connect to
+5. Press "ok" (long press "up")
+
+
 ### Settings
 
 
