@@ -83,6 +83,7 @@ void light_sleep() {
 Buzzer buzzer = Buzzer(BUZZER_PIN);
 
 void onOk() {
+	Serial.println("on ok");
 	buzzer.PlayLong();
 	UserInterface.Ok();
 	UserInterface.StageChanges();

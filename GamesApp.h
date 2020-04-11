@@ -58,7 +58,7 @@ private:
 
 			menu = new GenericMenuScreen(app->UI);
 			menu->AddOption((char*)F("Flappy Bird"), [this]() {
-				this->app->Exit();
+				//this->app->Exit();
 				this->app->settingsManager->appsManager->getBuiltInApplicationByName("Flappy Bird")->getApplication()->Open();
 
 			});

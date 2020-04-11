@@ -61,7 +61,7 @@ private:
 
 		void Draw(Renderer& r) {
 			int d = -5;
-			r.DrawAlignedString(r.GetHorizontalCenter(), r.GetScreenHeight() - 17 + d, "Adjust the radioactivity!",r.GetScreenWidth(), r.Center);
+			r.DrawAlignedString(r.GetHorizontalCenter(), r.GetScreenHeight() - 17 + d, "Set the radioactivity!",r.GetScreenWidth(), r.Center);
 
 			r.DrawXBM(r.GetHorizontalCenter() - 18, r.GetVerticalCenter() - 18 + d, 36, 36, DosimeterApp_Icon::icon_bits);
 			r.DrawRectangle(10, r.GetScreenHeight()-5 + d, 6, r.GetScreenWidth() - 20);
