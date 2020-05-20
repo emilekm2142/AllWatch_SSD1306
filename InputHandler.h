@@ -14,8 +14,10 @@ class InputHandler:public AbstractInputHandler
 {
 private:
 	int debounceDelay = DEBOUNCE_TIME;
-
-
+  long buttons[2][4]={
+    {PIN_UP, 0, 0, 0},
+    {PIN_DOWN, 0, 0, 0}
+    };
 	int lastDownDebounceTime = 0;
 	int lastUpDebounceTime = 0;
 
@@ -69,69 +71,66 @@ public:
 		this->Serial2 = &Serial;
 
 	}
+  int ignoreFirstXImpulses=7;
+	int ignored=0;
+
 	void OnLoop() override
 	{
-		downPressed = digitalRead(downPin) ? false : true;
-		upPressed = digitalRead(upPin) ? false : true;
-#ifdef INVERT
-		downPressed = !downPressed;
-		upPressed = !upPressed;
-#endif // DEBUG
+    if (ignored<ignoreFirstXImpulses){
+      ignored++;
+      return;
+    }
 
+    for (int i=0; i<=0; i++){
+      
+      Serial.println(i);
+      buttons[i][1] = digitalRead(buttons[i][0]);
+    }
+      for (int i=0; i<=0; i++){
+      
+      //if (i==1) Serial.println(buttons[i][1]); 
+      if (buttons[i][1] && !buttons[i][2]){
+         Serial.println("register new");
+          buttons[i][3] = millis();
+      }
 
-		//debounce
-		if (downPressed != wasDownPressed) {
-			// reset the debouncing timer
-			lastDownDebounceTime = millis();
-		}
-		if (upPressed != wasUpPressed) {
-			// reset the debouncing timer
-			lastUpDebounceTime = millis();
-		}
-		//(millis() - lastDownDebounceTime) > debounceDelay && (millis() - lastUpDebounceTime) > debounceDelay
-		if (true) {
+      if (buttons[i][1]){
+        long timeDifference = abs(buttons[i][3] - millis());
+        Serial.println(timeDifference);
+        if (timeDifference > longPressLimit){
+          Serial.println("long press");
+          int buttonID = i;
 
+           switch(buttonID){
+           // case 0: this->OnOk();break;
+            case 0:
+              this->OnBack();
+             break;
+            }
+            ignored=0;
+             block=true;
+             return;
+        }
+      }
+     
+      if (!buttons[i][1] && buttons[i][2] && !block){    
+          Serial.println("short press");
+          int buttonID = i;
 
-
-			if (block && !downPressed && !upPressed) {
-				block = false;
-				wasDownPressed = false;
-				downPressed = false;
-				wasUpPressed = false;
-				upPressed = false;
-				goto breaked;
-			}
-			if (!block) {
-
-				if (downPressed && !wasDownPressed) { downPressedStartTime = millis(); }
-				if (upPressed && !wasUpPressed) { upPressedStartTime = millis(); }
-
-
-
-				if (downPressed && wasDownPressed && isLongDownPress()) {
-					OnOk();
-					wasDownPressed = false;
-					downPressed = false;
-					block = true;
-					goto breaked;
-				}
-				if (upPressed && wasUpPressed && isLongUpPress()) {
-					OnBack();
-					wasUpPressed = false;
-					upPressed = false;
-					block = true;
-					goto breaked;
-				}
-				if (!downPressed && wasDownPressed) {
-					OnDown();
-				}
-				if (!upPressed && wasUpPressed) {
-					OnUp();
-				}
-			}
-		}
-		wasDownPressed = downPressed;
-		wasUpPressed = upPressed;
+           switch(buttonID){
+           // case 0: this->OnUp();break;
+            case 0: this->OnDown();ignored=0;break;
+            }
+          }
+          if (!buttons[0][1] && !buttons[1][1] && block){block=false;}
+          buttons[i][2] = buttons[i][1];
+          goto breaked;
+        
+      
+      buttons[i][2] = buttons[i][1];
+      
+    }
+    	
 		breaked:
 		if (Serial.available() > 0) {
 			auto d = (char)Serial.read();
@@ -156,4 +155,3 @@ public:
 
 
 #endif
-

@@ -18,11 +18,15 @@
 #define __ets__
 #define ICACHE_FLASH
 #define NONOSDK22x_190703 1
-#define F_CPU {build.f_cpu}
+#define F_CPU 80000000L
 #define LWIP_OPEN_SRC
+#define TCP_MSS 536
+#define LWIP_FEATURES 1
+#define LWIP_IPV6 0
 #define ARDUINO 108012
 #define ARDUINO_ESP8266_ESP01
 #define ARDUINO_ARCH_ESP8266
+#define LED_BUILTIN 2
 #define FLASHMODE_DOUT
 #define ESP8266
 #define __cplusplus 201103L
@@ -112,5 +116,6 @@ typedef long __PTRDIFF_TYPE__;
 #define interrupts() sei()
 #define noInterrupts() cli()
 
+#include "AllWatch_SSD1306.ino"
 #endif
 #endif

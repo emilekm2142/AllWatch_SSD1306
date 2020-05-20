@@ -30,7 +30,7 @@
 //uncomment if you intend to use a RX or TX pin as a button
 
 
-//#define USE_TX_RX_AS_GPIO
+#define USE_TX_RX_AS_GPIO
 #define PIN_DOWN  1	
 #define PIN_UP  3
 //uncomment if you want to inverse HIGH to LOW
