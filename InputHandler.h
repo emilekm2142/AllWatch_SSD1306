@@ -102,8 +102,8 @@ public:
           int buttonID = i;
 
            switch(buttonID){
-           // case 0: this->OnOk();break;
-            case 0:
+           case 0: this->OnOk();break;
+            case 1:
               this->OnBack();
              break;
             }
@@ -118,8 +118,8 @@ public:
           int buttonID = i;
 
            switch(buttonID){
-           // case 0: this->OnUp();break;
-            case 0: this->OnDown();ignored=0;break;
+            case 0: this->OnUp();ignored=0;break;
+            case 1: this->OnDown();ignored=0;break;
             }
           }
           if (!buttons[0][1] && !buttons[1][1] && block){block=false;}
