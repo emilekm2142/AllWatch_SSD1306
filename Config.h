@@ -34,7 +34,7 @@
 #define PIN_DOWN  1	
 #define PIN_UP  3
 //uncomment if you want to inverse HIGH to LOW
-//#define INVERT
+#define INVERT
 
 #define RTC_AVAILABLE
 #define RTC_SDA 0
@@ -58,7 +58,7 @@
 #define TESTS_SSID "VM2828377"
 #define TESTS_PASSWORD  "qjf4vbhqXpNr"
 
-#define BUZZER
+//#define BUZZER
 #define BUZZER_PIN 4
 
 //#define SHUTDOWN_ON_LOW_VOLTAGE

@@ -81,12 +81,15 @@ public:
       return;
     }
 
-    for (int i=0; i<=0; i++){
+    for (int i=0; i<=1; i++){
       
       Serial.println(i);
       buttons[i][1] = digitalRead(buttons[i][0]);
+      #ifdef INVERT
+      buttons[i][1] = !buttons[i][1];
+      #endif
     }
-      for (int i=0; i<=0; i++){
+      for (int i=0; i<=1; i++){
       
       //if (i==1) Serial.println(buttons[i][1]); 
       if (buttons[i][1] && !buttons[i][2]){
