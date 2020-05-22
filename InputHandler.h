@@ -83,7 +83,7 @@ public:
 
     for (int i=0; i<=1; i++){
       
-      Serial.println(i);
+      //Serial.println(i);
       buttons[i][1] = digitalRead(buttons[i][0]);
       #ifdef INVERT
       buttons[i][1] = !buttons[i][1];
@@ -99,7 +99,7 @@ public:
 
       if (buttons[i][1]){
         long timeDifference = abs(buttons[i][3] - millis());
-        Serial.println(timeDifference);
+       // Serial.println(timeDifference);
         if (timeDifference > longPressLimit){
           Serial.println("long press");
           int buttonID = i;
