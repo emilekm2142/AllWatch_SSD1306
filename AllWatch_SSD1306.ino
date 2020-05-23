@@ -114,7 +114,8 @@ InputHandler inputHandler = InputHandler(
 	&onUp,
 	&onDown,
 	&onBack,
-	Serial
+	Serial,
+ &r
 );
 
 

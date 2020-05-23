@@ -30,9 +30,13 @@ class Buzzer
 	}
 	Buzzer(int pin)
 	{
+    this->Disable();
+    #ifdef BUZZER
 		pinMode(pin, OUTPUT);
 		this->pin = pin;
 		StopAll();
+    this->Enable();
+    #endif
 	}
 	void PlayShort()
 	{
@@ -51,7 +55,7 @@ class Buzzer
 	}
 	void ForcePlay(unsigned long length, int f = 30)
 	{
-		
+		if (!enabled) return;
 		tone(pin, f, length);
 	}
 	void StopAll()
@@ -64,4 +68,3 @@ class Buzzer
 
 
 #endif
-

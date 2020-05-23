@@ -10,13 +10,15 @@
 #endif
 //Implementation
 #include "Config.h"
+#include "Renderer.h"
 class InputHandler:public AbstractInputHandler
 {
 private:
 	int debounceDelay = DEBOUNCE_TIME;
   long buttons[2][4]={
-    {PIN_UP, 0, 0, 0},
-    {PIN_DOWN, 0, 0, 0}
+       {PIN_DOWN, 0, 0, 0},
+    {PIN_UP, 0, 0, 0}
+ 
     };
 	int lastDownDebounceTime = 0;
 	int lastUpDebounceTime = 0;
@@ -47,7 +49,7 @@ private:
 	}
 
 public:
-	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)(), Stream& Serial) :AbstractInputHandler(OnOk, OnUp, OnDown, OnBack) {
+	InputHandler(void(*OnOk)(), void(*OnUp)(), void(*OnDown)(), void(*OnBack)(), Stream& Serial, Renderer* r) :AbstractInputHandler(OnOk, OnUp, OnDown, OnBack, r) {
 		
 #ifdef USE_TX_RX_AS_GPIO
 		//https://arduino.stackexchange.com/questions/29938/how-to-i-make-the-tx-and-rx-pins-on-an-esp-8266-01-into-gpio-pins?rq=1
@@ -59,10 +61,13 @@ public:
 		pinMode(upPin, FUNCTION_3);
 		//**************************************************
 #endif
-		
+		#ifdef BUTTON_MODE_PULLUP
 		pinMode(downPin, INPUT_PULLUP);
 		pinMode(upPin, INPUT_PULLUP);
-		
+		#else
+    pinMode(downPin, INPUT);
+    pinMode(upPin, INPUT);
+    #endif
 	
 		pinMode(0, INPUT_PULLUP);
 		pinMode(2, INPUT_PULLUP);
@@ -73,7 +78,18 @@ public:
 	}
   int ignoreFirstXImpulses=7;
 	int ignored=0;
-
+  void LongPress(int buttonID){
+    switch(buttonID){
+      case 1: this->OnOk(); break;
+      case 0: this->OnBack(); break;
+      }
+  }
+  void ShortPress(int buttonID){
+  switch(buttonID){
+      case 1: this->OnUp(); break;
+      case 0: this->OnDown(); break;
+      }
+  }
 	void OnLoop() override
 	{
     if (ignored<ignoreFirstXImpulses){
@@ -81,60 +97,48 @@ public:
       return;
     }
 
-    for (int i=0; i<=1; i++){
+    for (int j=0; j<2; j++){
       
-      //Serial.println(i);
-      buttons[i][1] = digitalRead(buttons[i][0]);
+      buttons[j][2] = buttons[j][1];
+      buttons[j][1] = digitalRead(buttons[j][0]);
+    
       #ifdef INVERT
-      buttons[i][1] = !buttons[i][1];
+      buttons[j][1] = !buttons[j][1];
       #endif
+      //if (buttons[j][1]) Serial.printf("%d \n", j);
     }
-      for (int i=0; i<=1; i++){
-      
-      //if (i==1) Serial.println(buttons[i][1]); 
-      if (buttons[i][1] && !buttons[i][2]){
+    
+    
+      for (int i=0; i<2; i++){
+     // Serial.printf("%d, %d \n", buttons[i][1],buttons[i][2]);
+      if (buttons[i][1] && !buttons[i][2] &&!block){
          Serial.println("register new");
           buttons[i][3] = millis();
       }
-
-      if (buttons[i][1]){
+    
+         
+      if (buttons[i][1] && !block){
         long timeDifference = abs(buttons[i][3] - millis());
-       // Serial.println(timeDifference);
-        if (timeDifference > longPressLimit){
-          Serial.println("long press");
-          int buttonID = i;
-
-           switch(buttonID){
-           case 0: this->OnOk();break;
-            case 1:
-              this->OnBack();
-             break;
-            }
-            ignored=0;
-             block=true;
-             return;
-        }
-      }
-     
-      if (!buttons[i][1] && buttons[i][2] && !block){    
-          Serial.println("short press");
-          int buttonID = i;
-
-           switch(buttonID){
-            case 0: this->OnUp();ignored=0;break;
-            case 1: this->OnDown();ignored=0;break;
-            }
+        if (timeDifference>500){
+            block = true;
+            Serial.println("long press");
+            LongPress(i);
+           
           }
-          if (!buttons[0][1] && !buttons[1][1] && block){block=false;}
-          buttons[i][2] = buttons[i][1];
-          goto breaked;
-        
-      
-      buttons[i][2] = buttons[i][1];
+      }
+      else if (!buttons[i][1] && !block && buttons[i][2]){
+        block=true;
+        Serial.println("short press");
+        ShortPress(i);
+       
+      } 
       
     }
-    	
-		breaked:
+    	  if (!buttons[0][1] && !buttons[1][1]){
+        block=false;  
+      } 
+   
+    
 		if (Serial.available() > 0) {
 			auto d = (char)Serial.read();
 			if (d == 'd') {
