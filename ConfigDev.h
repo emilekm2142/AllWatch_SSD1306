@@ -23,8 +23,8 @@
 //comment if you do not wish to add any default wifi network
 #define APPEND_DEFAULT_WIFI
 //set the values accordingly
-#define DEFAULT_WIFI_SSID  "VM2828377"
-#define DEFAULT_WIFI_PASSWORD  "qjf4vbhqXpNr"
+//#define DEFAULT_WIFI_SSID  "Litwo ojczyzno moja"
+//#define DEFAULT_WIFI_PASSWORD  "tyjestesjakzdrowie"
 
 
 //uncomment if you intend to use a RX or TX pin as a button
@@ -59,7 +59,9 @@
 #define TESTS_SSID "VM2828377"
 #define TESTS_PASSWORD  "qjf4vbhqXpNr"
 
-#undef BUZZER
-#define BUZZER_PIN 4
+#define BUZZER
+#define BUZZER_PIN 12
 
-//#define SHUTDOWN_ON_LOW_VOLTAGE
+#undef SHUTDOWN_ON_LOW_VOLTAGE
+
+//#define LOOP_MAIN_MENU

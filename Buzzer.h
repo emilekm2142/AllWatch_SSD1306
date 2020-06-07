@@ -35,7 +35,7 @@ class Buzzer
 		pinMode(pin, OUTPUT);
 		this->pin = pin;
 		StopAll();
-    this->Enable();
+		this->Enable();
     #endif
 	}
 	void PlayShort()

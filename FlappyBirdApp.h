@@ -74,7 +74,7 @@ private:
 		 this->layout = l;
 		 espertLayer =new ESPert(UserInterface.GetRenderer(), sm->extraPeripheralsManager->buzzer);
 		 wasBuzzerEnabled = espertLayer->buzzer->IsEnabled();
-		 espertLayer->buzzer->Disable();
+		 //espertLayer->buzzer->Disable();
 		 this->name = (char*)F("Flappy Bird");
 		 this->game = new flappyBird::FlappyBird();
 

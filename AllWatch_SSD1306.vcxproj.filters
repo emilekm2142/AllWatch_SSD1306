@@ -243,9 +243,6 @@
     <ClInclude Include="SSD1306Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SSH1106Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StarsApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -313,6 +310,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WiFiConnectApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigDev.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -459,9 +459,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SSD1306Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SSH1106Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarsApp.cpp">

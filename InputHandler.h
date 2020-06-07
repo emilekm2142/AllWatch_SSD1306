@@ -119,7 +119,7 @@ public:
          
       if (buttons[i][1] && !block){
         long timeDifference = abs(buttons[i][3] - millis());
-        if (timeDifference>500){
+        if (timeDifference>700){
             block = true;
             Serial.println("long press");
             LongPress(i);

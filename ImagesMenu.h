@@ -96,12 +96,13 @@ public:
 		}
 		else {
 			
-			
+#ifdef LOOP_MAIN_MENU
 			
 			currentIndex = entries->size() - 1;
 			targetScroll = getCurrentScrollValue(renderer.GetHorizontalCenter());
 			auto anim = new Animation(scrollX, targetScroll, animTime, -stepSize*5);
 			UI->RegisterAnimation(anim);
+#endif
 		}
 		
 	}
@@ -145,10 +146,12 @@ public:
 			UI->RegisterAnimation(anim);
 		}
 		else {
+#ifdef LOOP_MAIN_MENU
 			currentIndex = 0;
 			targetScroll = getCurrentScrollValue(renderer.GetHorizontalCenter());
 			auto anim = new Animation(scrollX, targetScroll, animTime, stepSize*5);
 			UI->RegisterAnimation(anim);
+#endif
 		}
 		
 

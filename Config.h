@@ -31,8 +31,8 @@
 
 
 #define USE_TX_RX_AS_GPIO
-#define PIN_DOWN  1	
-#define PIN_UP  3
+#define PIN_DOWN  3
+#define PIN_UP  1
 //uncomment if you want to inverse HIGH to LOW
 //#define INVERT
 
@@ -51,7 +51,7 @@
 #define HOME_SCREEN_TEMPERATURE_READINGS
 
 #define DISPLAY_SECONDS
-//#define ENERGY_SAVING
+#define ENERGY_SAVING
 //#define WAKE_UP_FROM_SLEEP_AUTOMATICALLY
 
 //#define RUN_TESTS
@@ -63,4 +63,7 @@
 
 //#define SHUTDOWN_ON_LOW_VOLTAGE
 
-//#include "ConfigDev.h"
+//#define  LOOP_MAIN_MENU
+
+
+#include "ConfigDev.h"
